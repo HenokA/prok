@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Random;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
@@ -10,12 +11,18 @@ public class Enemy {
 	public Point position;
 	private BulletPattern[] patterns;
 	private Point[] patternPos;
-	private Point destination;
 	private Point vector;
 	private Image img;
 	private float maxHP = 1000;
 	public float currentHP = maxHP;
 	private Color hpbar  = new Color(Color.black);
+	private float speed = .5f;
+	private int timer = 0;
+	private Random r = new Random();
+	private static int XLOWERBOUND = 50;
+	private static int XUPPERBOUND = 350;
+	private static int YLOWERBOUND = 50;
+	private static int YUPPERBOUND = 350;
 
 	public Enemy(Point position, BulletPattern[] p, Point[] patternPos, Image img){
 		this.position = position;
@@ -24,6 +31,7 @@ public class Enemy {
 		updatePatternPos();
 		this.img = img;
 		setHPBarColor();
+		rollNewDirection();
 	}
 
 	public void updatePatternPos(){
@@ -35,6 +43,21 @@ public class Enemy {
 	public void addPatterns(ArrayList<BulletPattern> bp){
 		for(int i=0; i<patterns.length; i++){
 			bp.add(patterns[i]);
+		}
+	}
+	
+	public void rollNewDirection(){
+		vector = new Point(0,1).rotate(r.nextDouble()*360.0);
+		timer = 1000 + r.nextInt(4000); 
+	}
+	
+	public void update(int delta){
+		timer -=delta;
+		System.out.println(timer);
+		position = position.addVector(vector.mult(speed));
+		if( timer <= 0 || position.x < XLOWERBOUND || position.x > XUPPERBOUND || 
+				position.y < YLOWERBOUND || position.y > YUPPERBOUND){
+			rollNewDirection();
 		}
 	}
 

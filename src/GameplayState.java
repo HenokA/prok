@@ -216,6 +216,9 @@ public class GameplayState extends BasicGameState {
 				else
 					respawnTimer -= delta;
 			}
+			
+			if(enemy != null)
+				enemy.update(delta);
 
 			for(BulletPattern p : patterns){
 				p.update(ebullets, delta);

@@ -30,4 +30,17 @@ public class Point {
 		double yp = x*Math.sin(d*Math.PI/180) + y*Math.cos(d*Math.PI/180);
 		return new Point(xp, yp);
 	}
+	
+	public double getMagnitude(){
+		return Math.sqrt(x*x+y*y);
+	}
+	
+	public Point getUnitVector(){
+		return new Point(x/getMagnitude(), y/getMagnitude());
+	}
+	
+	public Point vectorTo(Point other){
+		Point v = new Point(other.x-x, other.y-y);
+		return v.getUnitVector();
+	}
 }
