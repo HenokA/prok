@@ -11,6 +11,7 @@ public class BulletCircle implements BulletPattern {
 	 * Expanding circle pattern
 	 */
 
+	private int PATTERNID = 0;
 	private int time=0;
 	private int delay=(int) (1000/GameplayState.BULLETRATE);
 	private Point position;
@@ -52,5 +53,10 @@ public class BulletCircle implements BulletPattern {
 	 */
 	public void setPosition(Point position) {
 		this.position = position;
+	}
+
+	
+	public int getPatternID() {
+		return PATTERNID;
 	}
 }

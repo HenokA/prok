@@ -76,7 +76,7 @@ public class GameplayState extends BasicGameState {
 	 */
 	public void loadImages(){
 		String[] files = {"ship2.png", "BulletGreen.png", "BulletBlue.png", "BulletRed.png", 
-				"samusship.png", "BulletOrange.png","BulletPurple.png", "gameplaybg.png" };
+				"samusship.png", "BulletOrange.png","BulletPurple.png", "gameplaybg.png", "PDot.png" };
 		images = new Image[files.length];
 		try {
 			for(int i=0; i<files.length; i++){
@@ -217,9 +217,11 @@ public class GameplayState extends BasicGameState {
 					respawnTimer -= delta;
 			}
 			
-			if(enemy != null)
+			if(enemy != null){
 				enemy.update(delta);
-
+				enemy.updatePatternPos(patterns);
+			}
+			
 			for(BulletPattern p : patterns){
 				p.update(ebullets, delta);
 			}
@@ -277,6 +279,7 @@ public class GameplayState extends BasicGameState {
 	 */
 	public void render(GameContainer container,StateBasedGame sbg, Graphics g)  {
 		g.drawImage(images[7], 0, 0);
+		player.drawShip(g);
 		if(enemy!=null) enemy.draw(g);
 		for(Bullet b : ebullets){
 			b.draw(g);
@@ -284,7 +287,7 @@ public class GameplayState extends BasicGameState {
 		for(Bullet b : pbullets){
 			b.draw(g); //draws bullets
 		}
-		player.draw(g);		
+		player.drawHitBox(g);		
 		g.setColor(new Color(255, 200, 0));
 		g.drawString((int)score+"", 0, 0);
 		if(enemy!=null) enemy.drawHPBar(g);
@@ -300,7 +303,8 @@ public class GameplayState extends BasicGameState {
 			g.setColor(trans);
 			g.fillRect(0,0, BulletHellGame.WIDTH, BulletHellGame.HEIGHT);
 			Player died=new Player(new Point(deadx,deady));
-			died.draw(g);
+			died.drawShip(g);
+			died.drawHitBox(g);
 			deadBullet.draw(g);
 		}
 	}

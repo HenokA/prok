@@ -9,6 +9,7 @@ public class BulletSpiral implements BulletPattern{
 	 * Spiral bullet pattern
 	 */
 	
+	private int PATTERNID = 4;
 	public Point position;
 	private int angle;
 	private int time=0;
@@ -55,4 +56,7 @@ public class BulletSpiral implements BulletPattern{
 		this.position = position;
 	}
 
+	public int getPatternID() {
+		return PATTERNID;
+	}
 }

@@ -10,6 +10,7 @@ public class BulletCurve implements BulletPattern{
 	 * Curving bullet pattern
 	 */
 
+	private int PATTERNID = 1;
 	private int time=0;
 	private int bulletDelay = (int) (100/GameplayState.BULLETRATE);
 	private int bulletTimer=0;
@@ -73,5 +74,7 @@ public class BulletCurve implements BulletPattern{
 		this.position = position;
 	}
 
-
+	public int getPatternID() {
+		return PATTERNID;
+	}
 }
