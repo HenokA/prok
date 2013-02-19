@@ -4,7 +4,7 @@ import java.util.Random;
 import org.newdawn.slick.Image;
 
 
-public class BulletQuadSpiral implements BulletPattern{
+public class PatternQuadSpiral implements Pattern{
 	
 	/**
 	 * Literally the same as BulletSpiral but creates 4 bullets in update() per call instead of 1
@@ -21,13 +21,13 @@ public class BulletQuadSpiral implements BulletPattern{
 	Random r = new Random();
 	Image img;
 
-	public BulletQuadSpiral(Point position){
+	public PatternQuadSpiral(Point position){
 		this.position = position;
 		nextPosition = position;
 		img = GameplayState.images[3];
 	}
 	
-	public BulletQuadSpiral(){
+	public PatternQuadSpiral(){
 		img = GameplayState.images[3];
 	}
 	

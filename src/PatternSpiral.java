@@ -3,7 +3,7 @@ import java.util.ArrayList;
 import org.newdawn.slick.Image;
 
 
-public class BulletSpiral implements BulletPattern{
+public class PatternSpiral implements Pattern{
 
 	/**
 	 * Spiral bullet pattern
@@ -20,7 +20,7 @@ public class BulletSpiral implements BulletPattern{
 	 * Constructor
 	 * @param position
 	 */
-	public BulletSpiral(Point position){
+	public PatternSpiral(Point position){
 		this.position = position;
 		img = GameplayState.images[3];
 	}
@@ -28,7 +28,7 @@ public class BulletSpiral implements BulletPattern{
 	/**
 	 * Constructor
 	 */
-	public BulletSpiral(){
+	public PatternSpiral(){
 		img = GameplayState.images[3];
 	}
 	

@@ -5,7 +5,7 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.Image;
 
 
-public class BulletCircle implements BulletPattern {
+public class PatternCircle implements Pattern {
 	
 	/**
 	 * Expanding circle pattern
@@ -22,7 +22,7 @@ public class BulletCircle implements BulletPattern {
 	 * Constructor
 	 * @param position
 	 */
-	public BulletCircle(Point position){
+	public PatternCircle(Point position){
 		this.position = position;
 		img = GameplayState.images[1];
 	}
@@ -30,7 +30,7 @@ public class BulletCircle implements BulletPattern {
 	/**
 	 * Constructor
 	 */
-	public BulletCircle(){
+	public PatternCircle(){
 		img = GameplayState.images[1];
 	}
 	

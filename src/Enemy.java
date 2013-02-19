@@ -9,9 +9,9 @@ import org.newdawn.slick.Image;
 public class Enemy {
 
 	public Point position;
-	private BulletPattern[] patterns;
-	private Point[] patternPos;
+	private Pattern[] patterns;
 	private Point vector;
+	private double dAngle;
 	private Image img;
 	private float maxHP = 1000;
 	public float currentHP = maxHP;
@@ -22,48 +22,55 @@ public class Enemy {
 	private static int XLOWERBOUND = 100;
 	private static int XUPPERBOUND = 300;
 	private static int YLOWERBOUND = 50;
-	private static int YUPPERBOUND = 300;
+	private static int YUPPERBOUND = 200;
 
-	public Enemy(Point position, BulletPattern[] p, Point[] patternPos, Image img){
+	public Enemy(Point position, Pattern[] p, Point[] patternPos, Image img){
 		this.position = position;
 		this.patterns = p;
-		this.patternPos = patternPos;
-		updatePatternPos();
-		this.img = img;
-		setHPBarColor();
-		rollNewDirection();
-	}
-
-	public void updatePatternPos(){
 		for(int i=0; i<patterns.length; i++){
 			patterns[i].setPosition(patternPos[i]);
 		}
+		this.img = img;
+		setHPBarColor();
+		rollNewDirection(0, 360);
 	}
 
-	public void updatePatternPos(ArrayList<BulletPattern> bp){
-		for(BulletPattern p : bp){
+	public void updatePatternPos(ArrayList<Pattern> bp){
+		for(Pattern p : bp){
 			p.setPosition(position);
 		}
 	}
 
-	public void addPatterns(ArrayList<BulletPattern> bp){
+	public void addPatterns(ArrayList<Pattern> bp){
 		for(int i=0; i<patterns.length; i++){
 			bp.add(patterns[i]);
 		}
 	}
-
-	public void rollNewDirection(){
-		vector = new Point(0,1).rotate(r.nextDouble()*360.0);
+	
+	/**
+	 * Randomly chooses a direction between min and max degrees
+	 * @param min
+	 * @param max
+	 */
+	public void rollNewDirection(double min, double max){
+		dAngle = min+r.nextDouble()*(max-min);
+		vector = new Point(0,1).rotate(dAngle);
 		mvtimer = 1000 + r.nextInt(4000); 
 	}
 
 	public void update(int delta){
 		mvtimer -=delta;
 		position = position.addVector(vector.mult(speed));
-
-		if( mvtimer <= 0 || position.x < XLOWERBOUND || position.x > XUPPERBOUND || 
-				position.y < YLOWERBOUND || position.y > YUPPERBOUND){
-			rollNewDirection();
+		if( mvtimer <= 0){
+			rollNewDirection(0, 360);
+		}else if(position.x <= XLOWERBOUND){
+			rollNewDirection(225, 315);
+		}else if(position.x >= XUPPERBOUND){
+			rollNewDirection(45, 135);
+		}else if(position.y <= YLOWERBOUND){
+			rollNewDirection(315, 405);
+		}else if(position.y >= YUPPERBOUND){
+			rollNewDirection(135, 225);
 		}
 	}
 

@@ -9,9 +9,9 @@ public class Bullet {
 	 * Bullet class - contains data for projectile position, speed, direction, and image
 	 */
 
-	private Point position;	//position
-	private Point vector;	//directional vector
-	private float speed = 1;
+	protected Point position;	//position
+	protected Point vector;	//directional vector
+	protected float speed = 1;
 	private int radius;
 	Image img;
 	

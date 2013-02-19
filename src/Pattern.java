@@ -9,7 +9,7 @@ import org.newdawn.slick.Image;
  */
 
 
-public interface BulletPattern {
+public interface Pattern {
 
 	public void update(ArrayList<Bullet> bullets, int delta);
 	

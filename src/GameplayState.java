@@ -1,14 +1,10 @@
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
 
-import org.newdawn.slick.AppGameContainer;
-import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -17,10 +13,8 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
-import org.newdawn.slick.state.transition.BlobbyTransition;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
-import org.newdawn.slick.state.transition.HorizontalSplitTransition;
 /**
  * This class is the game play class where the actual game is played.
  * @author 912606
@@ -31,10 +25,12 @@ public class GameplayState extends BasicGameState {
 
 	ArrayList<Bullet> ebullets;
 	ArrayList<Bullet> pbullets;
-	ArrayList<BulletPattern> patterns;
+	ArrayList<Pattern> patterns;
 	ArrayList<Double> highscores;
-	int[] positionsx= {100,200,250,300,350};
-	int[] positionsy = {50,100,150,200, 250};
+//	int[] positionsx= {100,200,250,300,325};
+//	int[] positionsy = {75,100,150,200, 250};
+	int[] positionsx = {200};
+	int[] positionsy = {200};
 	Player player;
 	double score = 0;
 	double multiplier = 1;
@@ -100,7 +96,7 @@ public class GameplayState extends BasicGameState {
 		player = new Player(new Point(200,500));
 		ebullets = new ArrayList<Bullet>();
 		pbullets = new ArrayList<Bullet>();
-		patterns = new ArrayList<BulletPattern>();
+		patterns = new ArrayList<Pattern>();
 		createEnemy();
 		paused = false;
 		dead = false;
@@ -121,7 +117,8 @@ public class GameplayState extends BasicGameState {
 	 */
 	public int createPositions(){
 		Random random = new Random();
-		int randomInt=random.nextInt(5); //creates random position for boss
+		int randomInt = 0;
+		//int randomInt=random.nextInt(5); //creates random position for boss
 		return randomInt;
 	}
 
@@ -131,8 +128,8 @@ public class GameplayState extends BasicGameState {
 	public void createEnemy(){
 		int posx=positionsx[createPositions()];
 		int posy=positionsy[createPositions()];
-		enemy = new Enemy(new Point(posx, posy), new BulletPattern[]{new BulletQuadSpiral(), new BulletReverseCurve(),
-			new BulletCurve(), new BulletCircle()}, new Point[]{new Point(posx,posy), new Point(posx-100, posy), new Point(posx+100,posy), new Point(posx,posy)}, images[4]);
+		enemy = new Enemy(new Point(posx, posy), new Pattern[]{new PatternQuadSpiral(), new PatternReverseCurve(),
+			new PatternCurve(), new PatternCircle()}, new Point[]{new Point(posx,posy), new Point(posx-100, posy), new Point(posx+100,posy), new Point(posx,posy)}, images[4]);
 		enemy.addPatterns(patterns); //adds patterns to the enemy
 	}
 /**
@@ -222,7 +219,7 @@ public class GameplayState extends BasicGameState {
 				enemy.updatePatternPos(patterns);
 			}
 			
-			for(BulletPattern p : patterns){
+			for(Pattern p : patterns){
 				p.update(ebullets, delta);
 			}
 
@@ -266,7 +263,7 @@ public class GameplayState extends BasicGameState {
 			if(enemy != null && enemy.currentHP<=0){
 				multiplier+=.5;
 				enemy = null;
-				patterns = new ArrayList<BulletPattern>();
+				patterns = new ArrayList<Pattern>();
 				respawnTimer = 5000;
 			}
 

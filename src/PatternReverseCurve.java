@@ -4,7 +4,7 @@ import java.util.Random;
 import org.newdawn.slick.Image;
 
 
-public class BulletReverseCurve implements BulletPattern{
+public class PatternReverseCurve implements Pattern{
 
 	/**
 	 * The same as BulletCurve, but directions are reversed
@@ -21,15 +21,14 @@ public class BulletReverseCurve implements BulletPattern{
 	private Point position;
 	Image img;
 	Random r = new Random();
-	ArrayList<Bullet> cBullets = new ArrayList<Bullet>();
 
-	public BulletReverseCurve(Point position){
+	public PatternReverseCurve(Point position){
 		this.position = position;
 		img = GameplayState.images[5];
 		startAngle = r.nextInt(90);
 	}
 
-	public BulletReverseCurve(){
+	public PatternReverseCurve(){
 		img = GameplayState.images[5];
 		startAngle = r.nextInt(90);
 	}
@@ -40,9 +39,7 @@ public class BulletReverseCurve implements BulletPattern{
 		if(time>delay){
 			if(count<max){
 				if(bulletTimer>bulletDelay){
-					Bullet b = new Bullet(position, new Point(0,1).rotate(-startAngle+45), img, 4);
-					bullets.add(b);
-					cBullets.add(b);
+					bullets.add(new BulletCurve(position, new Point(0,1).rotate(-startAngle+45), img, 4, -1));
 					count++;
 					bulletTimer = 0;
 				}
@@ -51,9 +48,6 @@ public class BulletReverseCurve implements BulletPattern{
 				count=0;
 				startAngle = r.nextInt(90);
 			}
-		}		
-		for(int i=0; i<cBullets.size(); i++){
-			cBullets.get(i).setVector(cBullets.get(i).getVector().rotate(-1));
 		}
 	}
 
