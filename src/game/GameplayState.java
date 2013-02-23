@@ -23,6 +23,8 @@ import pattern.PatternCurve;
 import pattern.PatternQuadSpiral;
 import pattern.PatternReverseCurve;
 
+import ability.Ability;
+import ability.AbilityLockOnMissiles;
 import bullet.Bullet;
 /**
  * This class is the game play class where the actual game is played.
@@ -36,11 +38,12 @@ public class GameplayState extends BasicGameState {
 	ArrayList<Bullet> pbullets;
 	ArrayList<Pattern> patterns;
 	ArrayList<Double> highscores;
+	ArrayList<Ability> abilities;
 //	int[] positionsx= {100,200,250,300,325};
 //	int[] positionsy = {75,100,150,200, 250};
 	int[] positionsx = {200};
 	int[] positionsy = {200};
-	Player player;
+	public static Player player;
 	double score = 0;
 	double multiplier = 1;
 	public static Image[] images;
@@ -106,6 +109,7 @@ public class GameplayState extends BasicGameState {
 		ebullets = new ArrayList<Bullet>();
 		pbullets = new ArrayList<Bullet>();
 		patterns = new ArrayList<Pattern>();
+		abilities = new ArrayList<Ability>();
 		createEnemy();
 		paused = false;
 		dead = false;
@@ -125,7 +129,7 @@ public class GameplayState extends BasicGameState {
 	 * creates positions for the enemies
 	 */
 	public int createPositions(){
-		Random random = new Random();
+		//Random random = new Random();
 		int randomInt = 0;
 		//int randomInt=random.nextInt(5); //creates random position for boss
 		return randomInt;
@@ -139,7 +143,8 @@ public class GameplayState extends BasicGameState {
 		int posy=positionsy[createPositions()];
 		enemy = new Enemy(new Point(posx, posy), new Pattern[]{new PatternQuadSpiral(), new PatternReverseCurve(),
 			new PatternCurve(), new PatternCircle()}, new Point[]{new Point(posx,posy), new Point(posx-100, posy), new Point(posx+100,posy), new Point(posx,posy)}, images[4]);
-		enemy.addPatterns(patterns); //adds patterns to the enemy
+		//enemy.addPatterns(patterns); //adds patterns to the enemy
+		abilities.add(new AbilityLockOnMissiles(new Point(posx, posy)));
 	}
 /**
  * Allows the program to increase in difficulty by increasing bullet speed
@@ -231,6 +236,13 @@ public class GameplayState extends BasicGameState {
 			for(Pattern p : patterns){
 				p.update(ebullets, delta);
 			}
+			
+			Iterator<Ability> iAbility = abilities.iterator();
+			while(iAbility.hasNext()){
+				Ability a = iAbility.next();
+				if(!a.update(delta))
+					iAbility.remove();
+			}
 
 			Iterator<Bullet> i = ebullets.iterator(); 
 			while(i.hasNext()) {
@@ -292,6 +304,9 @@ public class GameplayState extends BasicGameState {
 		}
 		for(Bullet b : pbullets){
 			b.draw(g); //draws bullets
+		}
+		for(Ability a: abilities){
+			a.draw(g);
 		}
 		player.drawHitBox(g);		
 		g.setColor(new Color(255, 200, 0));

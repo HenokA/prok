@@ -44,4 +44,8 @@ public class Point {
 		Point v = new Point(other.x-x, other.y-y);
 		return v.getUnitVector();
 	}
+	
+	public String toString(){
+		return x+", "+y;
+	}
 }
