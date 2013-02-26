@@ -22,6 +22,8 @@ import pattern.PatternCircle;
 import pattern.PatternCurve;
 import pattern.PatternQuadSpiral;
 import pattern.PatternReverseCurve;
+import pattern.PatternReverseSinCurve;
+import pattern.PatternSinCurve;
 
 import ability.Ability;
 import ability.AbilityLockOnMissiles;
@@ -48,7 +50,7 @@ public class GameplayState extends BasicGameState {
 	double multiplier = 1;
 	public static Image[] images;
 	public static float BULLETSPEED = 1f;
-	public static float BULLETRATE = 1f;
+	public static float BULLETRATE = 2f;
 	int[] levelUps = {3, 6, 10, 15, 21};
 	int level = 0, lvlIndex = 0;
 	int nextTier = levelUps[lvlIndex];
@@ -141,9 +143,9 @@ public class GameplayState extends BasicGameState {
 	public void createEnemy(){
 		int posx=positionsx[createPositions()];
 		int posy=positionsy[createPositions()];
-		enemy = new Enemy(new Point(posx, posy), new Pattern[]{new PatternQuadSpiral(), new PatternReverseCurve(),
-			new PatternCurve(), new PatternCircle()}, new Point[]{new Point(posx,posy), new Point(posx-100, posy), new Point(posx+100,posy), new Point(posx,posy)}, images[4]);
-		//enemy.addPatterns(patterns); //adds patterns to the enemy
+		enemy = new Enemy(new Point(posx, posy), new Pattern[]{new PatternQuadSpiral(), new PatternReverseSinCurve(),
+			new PatternSinCurve(), new PatternCircle()}, new Point[]{new Point(posx,posy), new Point(posx-100, posy), new Point(posx+100,posy), new Point(posx,posy)}, images[4]);
+		enemy.addPatterns(patterns); //adds patterns to the enemy
 		abilities.add(new AbilityLockOnMissiles(new Point(posx, posy)));
 	}
 /**
@@ -214,13 +216,14 @@ public class GameplayState extends BasicGameState {
 			}
 
 		}
-		if(!paused && !dead){			
-			if (container.getInput().isKeyDown(Input.KEY_LEFT) && player.position.x!=0) {player.position.x-=2;} // move player left
-			if (container.getInput().isKeyDown(Input.KEY_RIGHT) && player.position.x!=400) {player.position.x+=2;} //move player right
-			if (container.getInput().isKeyDown(Input.KEY_UP) && player.position.y!=0) {player.position.y-=2;} //move player up
-			if (container.getInput().isKeyDown(Input.KEY_DOWN) && player.position.y!=640) {player.position.y+=2;} //move player down
+		if(!paused && !dead){		
+			if (container.getInput().isKeyDown(Input.KEY_LSHIFT)){player.setSpeed(1f);}
+			if (container.getInput().isKeyDown(Input.KEY_LEFT) && player.position.x!=0) {player.increment(Player.LEFT);} // move player left
+			if (container.getInput().isKeyDown(Input.KEY_RIGHT) && player.position.x!=400) {player.increment(Player.RIGHT);} //move player right
+			if (container.getInput().isKeyDown(Input.KEY_UP) && player.position.y!=0) {player.increment(Player.UP);} //move player up
+			if (container.getInput().isKeyDown(Input.KEY_DOWN) && player.position.y!=640) {player.increment(Player.DOWN);} //move player down
 			if (container.getInput().isKeyDown(Input.KEY_SPACE)) {player.shoot(pbullets);}
-
+			player.setSpeed(2);
 			if(enemy == null){
 				if(respawnTimer <= 0)
 					createEnemy(); //creates enemy
