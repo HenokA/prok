@@ -172,6 +172,7 @@ public class GameplayState extends BasicGameState {
 		if(dead){
 			deathTimer -= delta;
 			if(deathTimer <= 0){
+				GameOverState.setCheckScore(true);
 				sbg.enterState(BulletHellGame.GAMEOVERSTATE, new FadeOutTransition(),new FadeInTransition());
 			}
 		}
@@ -314,7 +315,7 @@ public class GameplayState extends BasicGameState {
 		}
 		player.drawHitBox(g);		
 		g.setColor(new Color(255, 200, 0));
-		g.drawString((int)score+"", 0, 0);
+		g.drawString(Math.floor(score)+"", 0, 0);
 		if(enemy!=null) enemy.drawHPBar(g);
 		if (paused) {
 			Color trans = new Color(0f,0f,0f,0.7f);

@@ -11,7 +11,7 @@ import game.Point;
 public class AbilityLockOnMissiles implements Ability {
 
 	private static int ABILITYID = 0;
-	private int NUMMISSILES = 5;
+	private int NUMMISSILES = 10;
 	private int fireRate = 250;
 	private int timer=0;
 	private ArrayList<Missile> missiles = new ArrayList<Missile>();

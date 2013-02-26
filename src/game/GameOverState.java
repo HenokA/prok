@@ -58,7 +58,7 @@ public class GameOverState extends BasicGameState{
 	boolean starting=true;
 	int[] hsposy= {300, 320, 340, 360, 380, 400, 420, 440,460,480,500};
 	Double currentScore;
-	boolean checkScore=true;
+	private static boolean checkScore=true;
 	BufferedWriter out;
 	ArrayList<Double> highscores;
 	boolean highscore=false;
@@ -74,7 +74,9 @@ public class GameOverState extends BasicGameState{
 	public int getID() {
 		return stateID;
 	}
-
+public static void setCheckScore(boolean x){
+	checkScore=x;
+}
 /**
  * run at the beginning of the program to instantiate everything
  */
@@ -121,7 +123,7 @@ public class GameOverState extends BasicGameState{
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 		// render the background
 		background.draw(0, 0);
-
+System.out.println(checkScore);
 		//Draw menu
 		getHighscores();
 		if(checkScore){
@@ -191,7 +193,7 @@ public class GameOverState extends BasicGameState{
 	 */
 	public void compare(){
 		for(int i=0;i<10;i++){
-			if((currentScore)==highscores.get(i)){
+			if(Math.floor(currentScore)==highscores.get(i)){
 				if(i!=10){
 					highscores.add(i,(currentScore));
 					highscore=true;
@@ -278,6 +280,7 @@ public class GameOverState extends BasicGameState{
 			if ( input.isMouseButtonDown(Input.MOUSE_LEFT_BUTTON) ){
 				//fx1.stop();
 				//fx1.loop();	
+				
 				GameplayState gs = (GameplayState) sbg.getState(BulletHellGame.GAMEPLAYSTATE);
 				gs.newGame();
 				sbg.enterState(BulletHellGame.GAMEPLAYSTATE, new FadeOutTransition(Color.black,1000), new FadeInTransition(Color.black,500));
