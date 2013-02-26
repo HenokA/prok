@@ -23,6 +23,7 @@ import pattern.PatternCurve;
 import pattern.PatternQuadSpiral;
 import pattern.PatternReverseCurve;
 import pattern.PatternReverseSinCurve;
+import pattern.PatternSinCircle;
 import pattern.PatternSinCurve;
 
 import ability.Ability;
@@ -144,9 +145,9 @@ public class GameplayState extends BasicGameState {
 		int posx=positionsx[createPositions()];
 		int posy=positionsy[createPositions()];
 		enemy = new Enemy(new Point(posx, posy), new Pattern[]{new PatternQuadSpiral(), new PatternReverseSinCurve(),
-			new PatternSinCurve(), new PatternCircle()}, new Point[]{new Point(posx,posy), new Point(posx-100, posy), new Point(posx+100,posy), new Point(posx,posy)}, images[4]);
+			new PatternSinCurve(), new PatternSinCircle()}, new Point[]{new Point(posx,posy), new Point(posx-100, posy), new Point(posx+100,posy), new Point(posx,posy)}, images[4]);
 		enemy.addPatterns(patterns); //adds patterns to the enemy
-		abilities.add(new AbilityLockOnMissiles(new Point(posx, posy)));
+		//abilities.add(new AbilityLockOnMissiles(new Point(posx, posy)));
 	}
 /**
  * Allows the program to increase in difficulty by increasing bullet speed
