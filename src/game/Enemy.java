@@ -23,7 +23,7 @@ public class Enemy {
 	private int mvtimer = 0;
 	private Random r = new Random();
 	private static int XLOWERBOUND = 100;
-	private static int XUPPERBOUND = 300;
+	private static int XUPPERBOUND = BulletHellGame.WIDTH-XLOWERBOUND;
 	private static int YLOWERBOUND = 50;
 	private static int YUPPERBOUND = 200;
 
@@ -103,7 +103,7 @@ public class Enemy {
 	}
 
 	public void takeDamage(){
-		currentHP-=5;
+		currentHP-=15;
 		setHPBarColor();
 	}
 

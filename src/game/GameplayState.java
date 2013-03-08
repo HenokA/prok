@@ -20,11 +20,14 @@ import org.newdawn.slick.state.transition.FadeOutTransition;
 import pattern.Pattern;
 import pattern.PatternCircle;
 import pattern.PatternCurve;
+import pattern.PatternDoubleCurve;
+import pattern.PatternDoubleSinCurve;
 import pattern.PatternQuadSpiral;
 import pattern.PatternReverseCurve;
 import pattern.PatternReverseSinCurve;
 import pattern.PatternSinCircle;
 import pattern.PatternSinCurve;
+import pattern.PatternSpiral;
 
 import ability.Ability;
 import ability.AbilityLockOnMissiles;
@@ -117,6 +120,7 @@ public class GameplayState extends BasicGameState {
 		paused = false;
 		dead = false;
 		score=0;
+		multiplier=1;
 	}
 	/**
 	 * run at the beginning of the program to instantiate everything
@@ -144,8 +148,28 @@ public class GameplayState extends BasicGameState {
 	public void createEnemy(){
 		int posx=positionsx[createPositions()];
 		int posy=positionsy[createPositions()];
-		enemy = new Enemy(new Point(posx, posy), new Pattern[]{new PatternQuadSpiral(), new PatternReverseSinCurve(),
-			new PatternSinCurve(), new PatternSinCircle()}, new Point[]{new Point(posx,posy), new Point(posx-100, posy), new Point(posx+100,posy), new Point(posx,posy)}, images[4]);
+		Pattern[] temppatterns = new Pattern[3];
+		Point[] temppoints = new Point[3];
+		Random r = new Random();
+		for(int i=0; i<3; i++){
+			switch(r.nextInt(10)){
+			case 0 : temppatterns[i] = new PatternCircle(); break;
+			case 1 : temppatterns[i] = new PatternSpiral(); break;
+			case 2 : temppatterns[i] = new PatternQuadSpiral(); break;
+			case 3 : temppatterns[i] = new PatternCurve(); break;
+			case 4 : temppatterns[i] = new PatternReverseCurve(); break;
+			case 5 : temppatterns[i] = new PatternDoubleCurve(); break;
+			case 6 : temppatterns[i] = new PatternSinCurve(); break;
+			case 7 : temppatterns[i] = new PatternReverseSinCurve(); break;
+			case 8 : temppatterns[i] = new PatternDoubleSinCurve(); break;
+			case 9 : temppatterns[i] = new PatternSinCircle(); break;
+			}
+			temppoints[i] = new Point(posx, posy);
+		}
+		
+//		enemy = new Enemy(new Point(posx, posy), new Pattern[]{new PatternQuadSpiral(),new PatternDoubleSinCurve(), 
+//			new PatternCircle()}, new Point[]{new Point(posx,posy), new Point(posx,posy), new Point(posx,posy)}, images[4]);
+		enemy = new Enemy( new Point(posx, posy), temppatterns, temppoints, images[4]);
 		enemy.addPatterns(patterns); //adds patterns to the enemy
 		//abilities.add(new AbilityLockOnMissiles(new Point(posx, posy)));
 	}
@@ -173,7 +197,7 @@ public class GameplayState extends BasicGameState {
 			deathTimer -= delta;
 			if(deathTimer <= 0){
 				GameOverState.setCheckScore(true);
-				sbg.enterState(BulletHellGame.GAMEOVERSTATE, new FadeOutTransition(),new FadeInTransition());
+				sbg.enterState(BulletHellGame.GAMEOVERSTATE, new FadeOutTransition(Color.black, 100),new FadeInTransition(Color.black, 100));
 			}
 		}
 		if(paused){
@@ -220,12 +244,12 @@ public class GameplayState extends BasicGameState {
 		}
 		if(!paused && !dead){		
 			if (container.getInput().isKeyDown(Input.KEY_LSHIFT)){player.setSpeed(1f);}
-			if (container.getInput().isKeyDown(Input.KEY_LEFT) && player.position.x!=0) {player.increment(Player.LEFT);} // move player left
-			if (container.getInput().isKeyDown(Input.KEY_RIGHT) && player.position.x!=400) {player.increment(Player.RIGHT);} //move player right
-			if (container.getInput().isKeyDown(Input.KEY_UP) && player.position.y!=0) {player.increment(Player.UP);} //move player up
-			if (container.getInput().isKeyDown(Input.KEY_DOWN) && player.position.y!=640) {player.increment(Player.DOWN);} //move player down
+			if (container.getInput().isKeyDown(Input.KEY_LEFT) && player.position.x>0) {player.increment(Player.LEFT);} // move player left
+			if (container.getInput().isKeyDown(Input.KEY_RIGHT) && player.position.x<BulletHellGame.WIDTH) {player.increment(Player.RIGHT);} //move player right
+			if (container.getInput().isKeyDown(Input.KEY_UP) && player.position.y>0) {player.increment(Player.UP);} //move player up
+			if (container.getInput().isKeyDown(Input.KEY_DOWN) && player.position.y<BulletHellGame.HEIGHT) {player.increment(Player.DOWN);} //move player down
 			if (container.getInput().isKeyDown(Input.KEY_SPACE)) {player.shoot(pbullets);}
-			player.setSpeed(2);
+			player.setSpeed(3);
 			if(enemy == null){
 				if(respawnTimer <= 0)
 					createEnemy(); //creates enemy
@@ -257,7 +281,7 @@ public class GameplayState extends BasicGameState {
 					deadBullet=bullet;
 					deadx=player.position.x; //stores position of death
 					deady=player.position.y;
-					deathTimer = 2000; //time until the game over screen is made
+					deathTimer = 1000; //time until the game over screen is made
 					try {
 						out = new BufferedWriter(new FileWriter("assets/CurrentScore"));
 						out.write(Double.toString(Math.floor(score)));
@@ -293,7 +317,7 @@ public class GameplayState extends BasicGameState {
 				respawnTimer = 5000;
 			}
 
-			score += delta*.01*multiplier; //score increases
+			score += delta*.1*multiplier; //score increases
 		}
 	}
 	
@@ -315,7 +339,7 @@ public class GameplayState extends BasicGameState {
 		}
 		player.drawHitBox(g);		
 		g.setColor(new Color(255, 200, 0));
-		g.drawString(Math.floor(score)+"", 0, 0);
+		g.drawString((int)Math.floor(score)+"", 0, 0);
 		if(enemy!=null) enemy.drawHPBar(g);
 		if (paused) {
 			Color trans = new Color(0f,0f,0f,0.7f);

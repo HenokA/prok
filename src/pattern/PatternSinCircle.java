@@ -18,9 +18,9 @@ public class PatternSinCircle implements Pattern {
 	 * Expanding circle pattern
 	 */
 
-	private int PATTERNID = 0;
+	private int PATTERNID = 7;
 	private int time=0;
-	private int delay=(int) (1000/GameplayState.BULLETRATE);
+	private int delay=(int) (1500/GameplayState.BULLETRATE);
 	private Point position;
 	Image img;
 	Random r = new Random();
@@ -44,7 +44,7 @@ public class PatternSinCircle implements Pattern {
 	/**
 	 * Updates pattern, creates bullets based on delay, etc.
 	 */
-	@Override
+
 	public void update(ArrayList<Bullet> bullets, int delta) {
 		time += delta;
 		if(time > delay){

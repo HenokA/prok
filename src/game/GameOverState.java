@@ -22,6 +22,7 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
 import org.newdawn.slick.TrueTypeFont;
+import org.newdawn.slick.geom.Circle;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
@@ -57,12 +58,14 @@ public class GameOverState extends BasicGameState{
 	int hsposx=176;
 	boolean starting=true;
 	int[] hsposy= {300, 320, 340, 360, 380, 400, 420, 440,460,480,500};
-	Double currentScore;
+	double currentScore;
 	private static boolean checkScore=true;
 	BufferedWriter out;
 	ArrayList<Double> highscores;
 	boolean highscore=false;
 	String nameHS=null;
+	int inputTimer = 250;
+	int selection = 0;
 
 
 	GameOverState( int stateID ) 
@@ -74,12 +77,12 @@ public class GameOverState extends BasicGameState{
 	public int getID() {
 		return stateID;
 	}
-public static void setCheckScore(boolean x){
-	checkScore=x;
-}
-/**
- * run at the beginning of the program to instantiate everything
- */
+	public static void setCheckScore(boolean x){
+		checkScore=x;
+	}
+	/**
+	 * run at the beginning of the program to instantiate everything
+	 */
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
 		background = new Image("assets/gameplaybg.png");
 		// load the menu images
@@ -94,9 +97,9 @@ public static void setCheckScore(boolean x){
 		menuOption = menuOptions.getSubImage(0, 0, 288, 72);
 	}
 
-/**
- * gets the score of the just recently completed game
- */
+	/**
+	 * gets the score of the just recently completed game
+	 */
 	public void getScore(){
 		BufferedReader hs = null;
 		String x;
@@ -123,14 +126,16 @@ public static void setCheckScore(boolean x){
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 		// render the background
 		background.draw(0, 0);
-System.out.println(checkScore);
 		//Draw menu
+		
 		getHighscores();
 		if(checkScore){
+			selection = 0;
 			getScore();
 			compare();
 			checkScore=false;
 		}
+		g.draw(new Circle(50, 145+40*selection, 10));
 		playAgainOption.draw(playAgainX, playAgainY, playAgainScale);
 		highscoreOption.draw(highscoreX, highscoreY);
 		exitOption.draw(endX, endY, exitScale);
@@ -140,11 +145,11 @@ System.out.println(checkScore);
 
 		g.setColor(Color.red);
 		//g.setFont(new TrueTypeFont(new java.awt.Font("Verdana", Font.PLAIN, 32), true));
-		g.drawString("Score:" + currentScore, 140, 60);
+		g.drawString("Score:" + (int)currentScore, 140, 60);
 	}
-/**
- * adds the score
- */
+	/**
+	 * adds the score
+	 */
 
 	public void publishHS(){
 		try {
@@ -207,10 +212,10 @@ System.out.println(checkScore);
 		}
 	}
 
-/**
- * writes all of the highscores on the Screen
- * @param g
- */
+	/**
+	 * writes all of the highscores on the Screen
+	 * @param g
+	 */
 	public void displayHS(Graphics g){
 
 		BufferedReader br = null;
@@ -236,82 +241,44 @@ System.out.println(checkScore);
 			}
 		}
 	}
-/**
- * checks if the key is pressed, not implemented in Dodge
- * @param key
- */
+	/**
+	 * checks if the key is pressed, not implemented in Dodge
+	 * @param key
+	 */
 	public void keyPressed(KeyEvent key){
 		if(key.getKeyCode() == KeyEvent.VK_M){
-		char i = key.getKeyChar();
-		nameHS=Character.toString(i);
+			char i = key.getKeyChar();
+			nameHS=Character.toString(i);
 		}
 	}
-	
+
 	/**
 	 * A continously updated method that helps smoothly run the program
 	 */
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
 		Input input = gc.getInput();
-
-		int mouseX = input.getMouseX();
-		int mouseY = input.getMouseY();
-		if(highscore){
-
-		}
-		boolean insideplayAgain = false;
-		boolean insideExit = false;
-		boolean insideMenu = false;
-
-		if( ( mouseX >= playAgainX && mouseX <= playAgainX + playAgainOption.getWidth()) &&
-				( mouseY >= playAgainY && mouseY <= playAgainY + playAgainOption.getHeight()) ){
-			insideplayAgain = true;
-		}else if( ( mouseX >= endX && mouseX <= endX + exitOption.getWidth()) &&
-				( mouseY >= endY && mouseY <= endY + exitOption.getHeight()) ){
-			insideExit = true;
-		}else if( ( mouseX >= menuX && mouseX <= menuX + menuOption.getWidth()) &&
-				( mouseY >= menuY && mouseY <= menuY + menuOption.getHeight()) ){
-			insideMenu = true;
-		}
-
-		if(insideplayAgain){
-			if(playAgainScale < 1.05f)
-				playAgainScale += scaleStep * delta;
-
-			if ( input.isMouseButtonDown(Input.MOUSE_LEFT_BUTTON) ){
-				//fx1.stop();
-				//fx1.loop();	
-				
-				GameplayState gs = (GameplayState) sbg.getState(BulletHellGame.GAMEPLAYSTATE);
-				gs.newGame();
-				sbg.enterState(BulletHellGame.GAMEPLAYSTATE, new FadeOutTransition(Color.black,1000), new FadeInTransition(Color.black,500));
+		inputTimer -= delta;
+		if(inputTimer <=  0){
+			if(input.isKeyPressed(Input.KEY_DOWN)){
+				if(selection<2)
+					selection++;
 			}
-		}else {
-			if(playAgainScale > 1.0f)
-				playAgainScale -= scaleStep * delta;
-		}
-
-		if(insideExit)
-		{
-			if(exitScale < 1.05f)
-				exitScale +=  scaleStep * delta;
-			if ( input.isMouseButtonDown(Input.MOUSE_LEFT_BUTTON) )
-				gc.exit();
-		}else{
-			if(exitScale > 1.0f)
-				exitScale -= scaleStep * delta;
-		}
-
-		if(insideMenu){
-			if(menuScale < 1.05f)
-				menuScale += scaleStep * delta;
-
-			if ( input.isMouseButtonDown(Input.MOUSE_LEFT_BUTTON) ){
-				sbg.enterState(BulletHellGame.MAINMENUSTATE, new FadeOutTransition(Color.black,400), new FadeInTransition(Color.black,400));
+			if(input.isKeyPressed(Input.KEY_UP)){
+				if(selection>0)
+					selection--;
 			}
-		} else {
-			if(menuScale > 1.0f)
-				menuScale -= scaleStep * delta;
-		}
+			if(input.isKeyPressed(Input.KEY_ENTER)){
+				if(selection == 0){
+					GameplayState gs = (GameplayState) sbg.getState(BulletHellGame.GAMEPLAYSTATE);
+					gs.newGame();
+					sbg.enterState(BulletHellGame.GAMEPLAYSTATE, new FadeOutTransition(Color.black,1000), new FadeInTransition(Color.black,500));
+				}else if(selection ==1){
+					sbg.enterState(BulletHellGame.MAINMENUSTATE, new FadeOutTransition(Color.black,400), new FadeInTransition(Color.black,400));
+				}else if(selection ==2){
+					gc.exit();
+				}
+			}
+		}		
 	}
 
 

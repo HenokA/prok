@@ -9,15 +9,16 @@ import org.newdawn.slick.Image;
 
 import bullet.BulletCurve;
 import bullet.Bullet;
+import bullet.BulletSinCurve;
 
 
-public class PatternCurve implements Pattern{
+public class PatternDoubleSinCurve implements Pattern{
 	
 	/**
 	 * Curving bullet pattern
 	 */
 
-	private int PATTERNID = 1;
+	private int PATTERNID = 9;
 	private int time=0;
 	private int bulletDelay = (int) (100/GameplayState.BULLETRATE);
 	private int bulletTimer=0;
@@ -33,17 +34,17 @@ public class PatternCurve implements Pattern{
 	 * Constructor
 	 * @param position
 	 */
-	public PatternCurve(Point position){
+	public PatternDoubleSinCurve(Point position){
 		this.position = position;
-		img = GameplayState.images[5];
+		img = GameplayState.images[6];
 		startAngle = r.nextInt(90);
 	}
 
 	/**
 	 * Constructor
 	 */
-	public PatternCurve(){
-		img = GameplayState.images[5];
+	public PatternDoubleSinCurve(){
+		img = GameplayState.images[6];
 		startAngle = r.nextInt(90);
 	}
 
@@ -57,7 +58,10 @@ public class PatternCurve implements Pattern{
 		if(time>delay){
 			if(count<max){	//Max bullets per pattern
 				if(bulletTimer>bulletDelay){
-					bullets.add(new BulletCurve(position, new Point(0,1).rotate(startAngle-45), img, 5, 1));
+					Point posPosition = new Point(position.x-50, position.y);
+					Point negPosition = new Point(position.x+50, position.y);
+					bullets.add(new BulletSinCurve(posPosition, new Point(0,1).rotate(startAngle-135), img, 4, 5));
+					bullets.add(new BulletSinCurve(negPosition, new Point(0,1).rotate(-startAngle+135), img, 4, -5));
 					count++;
 					bulletTimer = 0;
 				}

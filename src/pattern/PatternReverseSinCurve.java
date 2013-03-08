@@ -32,12 +32,12 @@ public class PatternReverseSinCurve implements Pattern{
 
 	public PatternReverseSinCurve(Point position){
 		this.position = position;
-		img = GameplayState.images[5];
+		img = GameplayState.images[6];
 		startAngle = r.nextInt(90);
 	}
 
 	public PatternReverseSinCurve(){
-		img = GameplayState.images[5];
+		img = GameplayState.images[6];
 		startAngle = r.nextInt(90);
 	}
 
@@ -47,7 +47,7 @@ public class PatternReverseSinCurve implements Pattern{
 		if(time>delay){
 			if(count<max){
 				if(bulletTimer>bulletDelay){
-					bullets.add(new BulletSinCurve(position, new Point(0,1).rotate(-startAngle+90), img, 4, -5));
+					bullets.add(new BulletSinCurve(position, new Point(0,1).rotate(-startAngle+135), img, 4, -5));
 					count++;
 					bulletTimer = 0;
 				}

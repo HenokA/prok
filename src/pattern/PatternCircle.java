@@ -43,7 +43,7 @@ public class PatternCircle implements Pattern {
 	/**
 	 * Updates pattern, creates bullets based on delay, etc.
 	 */
-	@Override
+	
 	public void update(ArrayList<Bullet> bullets, int delta) {
 		time += delta;
 		if(time > delay){

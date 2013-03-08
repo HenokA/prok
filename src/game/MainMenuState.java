@@ -40,6 +40,7 @@ public class MainMenuState extends BasicGameState {
 	int highscoreY=250;
 	int hsposx=176;
 	boolean starting=true;
+	int selection = 0;
 	int[] hsposy= {300, 320, 340, 360, 380, 400, 420, 440,460,480,500};
 	MainMenuState( int stateID ) 
 	{
@@ -119,6 +120,15 @@ public class MainMenuState extends BasicGameState {
 		//fx1.play();
 		int mouseX = input.getMouseX();
 		int mouseY = input.getMouseY();
+		if(input.isKeyPressed(Input.KEY_ENTER)){
+			if(selection == 0){
+				GameplayState gs = (GameplayState) sbg.getState(BulletHellGame.GAMEPLAYSTATE);
+				gs.newGame();
+				sbg.enterState(BulletHellGame.GAMEPLAYSTATE, new FadeOutTransition(Color.black,1000), new FadeInTransition(Color.black,500));			
+			}else if(selection == 1){
+				gc.exit();
+			}
+		}
 
 		boolean insideStartGame = false;
 		boolean insideExit = false;

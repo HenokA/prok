@@ -46,7 +46,7 @@ public class PatternReverseCurve implements Pattern{
 		if(time>delay){
 			if(count<max){
 				if(bulletTimer>bulletDelay){
-					bullets.add(new BulletCurve(position, new Point(0,1).rotate(-startAngle+45), img, 4, -1));
+					bullets.add(new BulletCurve(position, new Point(0,1).rotate(-startAngle+45), img, 5, -1));
 					count++;
 					bulletTimer = 0;
 				}

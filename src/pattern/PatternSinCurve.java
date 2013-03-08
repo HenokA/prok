@@ -36,7 +36,7 @@ public class PatternSinCurve implements Pattern{
 	 */
 	public PatternSinCurve(Point position){
 		this.position = position;
-		img = GameplayState.images[5];
+		img = GameplayState.images[6];
 		startAngle = r.nextInt(90);
 	}
 
@@ -44,21 +44,21 @@ public class PatternSinCurve implements Pattern{
 	 * Constructor
 	 */
 	public PatternSinCurve(){
-		img = GameplayState.images[5];
+		img = GameplayState.images[6];
 		startAngle = r.nextInt(90);
 	}
 
 	/**
 	 * Updates bullets
 	 */
-	@Override
+
 	public void update(ArrayList<Bullet> bullets, int delta) {
 		time+=delta;	//Timer between patterns
 		bulletTimer+=delta;	//Timer between bullets
 		if(time>delay){
 			if(count<max){	//Max bullets per pattern
 				if(bulletTimer>bulletDelay){
-					bullets.add(new BulletSinCurve(position, new Point(0,1).rotate(startAngle-90), img, 4, 5));
+					bullets.add(new BulletSinCurve(position, new Point(0,1).rotate(startAngle-135), img, 4, 5));
 					count++;
 					bulletTimer = 0;
 				}

@@ -21,7 +21,7 @@ public class AbilityLockOnMissiles implements Ability {
 		this.position = position;
 	}
 
-	@Override
+
 	public boolean update(int delta) {
 		if(NUMMISSILES > 0){
 			timer+= delta;
@@ -47,19 +47,19 @@ public class AbilityLockOnMissiles implements Ability {
 
 	}
 
-	@Override
+
 	public void setPosition(Point position) {
 		// TODO Auto-generated method stub
 		this.position = position;
 	}
 
-	@Override
+
 	public int getAbilityID() {
 		// TODO Auto-generated method stub
 		return ABILITYID;
 	}
 
-	@Override
+
 	public void draw(Graphics g) {
 		// TODO Auto-generated method stub
 		for(Missile m : missiles){

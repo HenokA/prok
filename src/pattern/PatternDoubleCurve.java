@@ -11,13 +11,13 @@ import bullet.BulletCurve;
 import bullet.Bullet;
 
 
-public class PatternCurve implements Pattern{
+public class PatternDoubleCurve implements Pattern{
 	
 	/**
 	 * Curving bullet pattern
 	 */
 
-	private int PATTERNID = 1;
+	private int PATTERNID = 8;
 	private int time=0;
 	private int bulletDelay = (int) (100/GameplayState.BULLETRATE);
 	private int bulletTimer=0;
@@ -33,7 +33,7 @@ public class PatternCurve implements Pattern{
 	 * Constructor
 	 * @param position
 	 */
-	public PatternCurve(Point position){
+	public PatternDoubleCurve(Point position){
 		this.position = position;
 		img = GameplayState.images[5];
 		startAngle = r.nextInt(90);
@@ -42,7 +42,7 @@ public class PatternCurve implements Pattern{
 	/**
 	 * Constructor
 	 */
-	public PatternCurve(){
+	public PatternDoubleCurve(){
 		img = GameplayState.images[5];
 		startAngle = r.nextInt(90);
 	}
@@ -57,7 +57,10 @@ public class PatternCurve implements Pattern{
 		if(time>delay){
 			if(count<max){	//Max bullets per pattern
 				if(bulletTimer>bulletDelay){
-					bullets.add(new BulletCurve(position, new Point(0,1).rotate(startAngle-45), img, 5, 1));
+					Point posPosition = new Point(position.x-50, position.y);
+					Point negPosition = new Point(position.x+50, position.y);
+					bullets.add(new BulletCurve(posPosition, new Point(0,1).rotate(startAngle-45), img, 5, 1));
+					bullets.add(new BulletCurve(position, new Point(0,1).rotate(-startAngle+45), img, 5, -1));
 					count++;
 					bulletTimer = 0;
 				}
