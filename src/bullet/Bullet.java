@@ -80,6 +80,10 @@ public class Bullet {
 		return position.distanceTo(player) < radius;
 	}
 	
+	public boolean checkGraze(Point player){
+		return position.distanceTo(player) < (radius+7);
+	}
+	
 	/**
 	 * Checks collision on enemy (used by player bullets)
 	 * @param enemy - current enemy position

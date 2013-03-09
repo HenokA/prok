@@ -45,21 +45,19 @@ public class GameplayState extends BasicGameState {
 	ArrayList<Pattern> patterns;
 	ArrayList<Double> highscores;
 	ArrayList<Ability> abilities;
-//	int[] positionsx= {100,200,250,300,325};
-//	int[] positionsy = {75,100,150,200, 250};
-	int[] positionsx = {200};
-	int[] positionsy = {200};
 	public static Player player;
 	double score = 0;
 	double multiplier = 1;
 	public static Image[] images;
 	public static float BULLETSPEED = 1f;
 	public static float BULLETRATE = 2f;
-	int[] levelUps = {3, 6, 10, 15, 21};
+	int[] levelUps = {1, 2, 3, 4, 5};
 	int level = 0, lvlIndex = 0;
 	int nextTier = levelUps[lvlIndex];
 	Enemy enemy;
 	boolean paused;
+	int grazeDisplayTimer = 0;
+	Point grazeDisplayPoint;
 	int respawnTimer = 0;
 	int stateID = -1;
 	Image resumeOption = null;
@@ -107,9 +105,9 @@ public class GameplayState extends BasicGameState {
 			e.printStackTrace();
 		}
 	}
-/**
- * resets everything to make it a new game when we click start game or play again
- */
+	/**
+	 * resets everything to make it a new game when we click start game or play again
+	 */
 	public void newGame(){
 		player = new Player(new Point(200,500));
 		ebullets = new ArrayList<Bullet>();
@@ -121,6 +119,9 @@ public class GameplayState extends BasicGameState {
 		dead = false;
 		score=0;
 		multiplier=1;
+		BULLETSPEED = 1f;
+		BULLETRATE = 2f;
+		grazeDisplayTimer = 0;
 	}
 	/**
 	 * run at the beginning of the program to instantiate everything
@@ -133,26 +134,19 @@ public class GameplayState extends BasicGameState {
 	}
 
 	/**
-	 * creates positions for the enemies
-	 */
-	public int createPositions(){
-		//Random random = new Random();
-		int randomInt = 0;
-		//int randomInt=random.nextInt(5); //creates random position for boss
-		return randomInt;
-	}
-
-	/**
 	 * Creates an enemy object.  Once we have more content, this should become randomized.
 	 */
 	public void createEnemy(){
-		int posx=positionsx[createPositions()];
-		int posy=positionsy[createPositions()];
 		Pattern[] temppatterns = new Pattern[3];
 		Point[] temppoints = new Point[3];
 		Random r = new Random();
+		ArrayList<Integer> patternIds = new ArrayList<Integer>();
+		int pid =  0;
 		for(int i=0; i<3; i++){
-			switch(r.nextInt(10)){
+			patternIds.add(pid);
+			while(patternIds.contains(pid))
+				pid = r.nextInt(10);
+			switch(pid){
 			case 0 : temppatterns[i] = new PatternCircle(); break;
 			case 1 : temppatterns[i] = new PatternSpiral(); break;
 			case 2 : temppatterns[i] = new PatternQuadSpiral(); break;
@@ -164,18 +158,17 @@ public class GameplayState extends BasicGameState {
 			case 8 : temppatterns[i] = new PatternDoubleSinCurve(); break;
 			case 9 : temppatterns[i] = new PatternSinCircle(); break;
 			}
-			temppoints[i] = new Point(posx, posy);
+			temppoints[i] = new Point(200, 200);
 		}
-		
-//		enemy = new Enemy(new Point(posx, posy), new Pattern[]{new PatternQuadSpiral(),new PatternDoubleSinCurve(), 
-//			new PatternCircle()}, new Point[]{new Point(posx,posy), new Point(posx,posy), new Point(posx,posy)}, images[4]);
-		enemy = new Enemy( new Point(posx, posy), temppatterns, temppoints, images[4]);
+
+		enemy = new Enemy( new Point(200, 200), temppatterns, temppoints, images[4]);
 		enemy.addPatterns(patterns); //adds patterns to the enemy
 		//abilities.add(new AbilityLockOnMissiles(new Point(posx, posy)));
+		//ebullets.add(new Bullet(new Point(300, 400), new Point(0,0), images[2], 1));
 	}
-/**
- * Allows the program to increase in difficulty by increasing bullet speed
- */
+	/**
+	 * Allows the program to increase in difficulty by increasing bullet speed
+	 */
 	public void levelUp(){
 		level+=1;
 		if(level > nextTier){
@@ -250,22 +243,24 @@ public class GameplayState extends BasicGameState {
 			if (container.getInput().isKeyDown(Input.KEY_DOWN) && player.position.y<BulletHellGame.HEIGHT) {player.increment(Player.DOWN);} //move player down
 			if (container.getInput().isKeyDown(Input.KEY_SPACE)) {player.shoot(pbullets);}
 			player.setSpeed(3);
+			if(grazeDisplayTimer > 0)
+				grazeDisplayTimer -=delta;
 			if(enemy == null){
 				if(respawnTimer <= 0)
 					createEnemy(); //creates enemy
 				else
 					respawnTimer -= delta;
 			}
-			
+
 			if(enemy != null){
 				enemy.update(delta);
 				enemy.updatePatternPos(patterns);
 			}
-			
+
 			for(Pattern p : patterns){
 				p.update(ebullets, delta);
 			}
-			
+
 			Iterator<Ability> iAbility = abilities.iterator();
 			while(iAbility.hasNext()){
 				Ability a = iAbility.next();
@@ -290,6 +285,11 @@ public class GameplayState extends BasicGameState {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
+				}else if(bullet.checkGraze(player.position)){
+					System.out.println("graze");
+					score += 10*multiplier;
+					grazeDisplayTimer += 100;
+					grazeDisplayPoint = player.position.addVector(new Point(0, -10));
 				}
 				bullet.increment();
 				if(bullet.checkOffscreen()){
@@ -320,7 +320,7 @@ public class GameplayState extends BasicGameState {
 			score += delta*.1*multiplier; //score increases
 		}
 	}
-	
+
 	/**
 	 * renders the high scores and images onto the container
 	 */
@@ -338,6 +338,8 @@ public class GameplayState extends BasicGameState {
 			a.draw(g);
 		}
 		player.drawHitBox(g);		
+		if(grazeDisplayTimer > 0)
+			g.drawString("GRAZE!", (float)grazeDisplayPoint.x, (float)grazeDisplayPoint.y);
 		g.setColor(new Color(255, 200, 0));
 		g.drawString((int)Math.floor(score)+"", 0, 0);
 		if(enemy!=null) enemy.drawHPBar(g);
