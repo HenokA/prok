@@ -127,7 +127,7 @@ public class GameOverState extends BasicGameState{
 		// render the background
 		background.draw(0, 0);
 		//Draw menu
-		
+		g.setColor(Color.cyan);
 		getHighscores();
 		if(checkScore){
 			selection = 0;
@@ -142,8 +142,6 @@ public class GameOverState extends BasicGameState{
 		menuOption.draw(menuX, menuY, menuScale);
 		publishHS();
 		displayHS(g);
-
-		g.setColor(Color.red);
 		//g.setFont(new TrueTypeFont(new java.awt.Font("Verdana", Font.PLAIN, 32), true));
 		g.drawString("Score:" + (int)currentScore, 140, 60);
 	}

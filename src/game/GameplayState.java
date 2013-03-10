@@ -51,13 +51,14 @@ public class GameplayState extends BasicGameState {
 	public static Image[] images;
 	public static float BULLETSPEED = 1f;
 	public static float BULLETRATE = 2f;
-	int[] levelUps = {1, 2, 3, 4, 5};
+	int[] levelUps = {3, 6, 10, 15, 20};
 	int level = 0, lvlIndex = 0;
 	int nextTier = levelUps[lvlIndex];
 	Enemy enemy;
 	boolean paused;
 	int grazeDisplayTimer = 0;
 	Point grazeDisplayPoint;
+	int grazeBonus = 0;
 	int respawnTimer = 0;
 	int stateID = -1;
 	Image resumeOption = null;
@@ -172,10 +173,11 @@ public class GameplayState extends BasicGameState {
 	public void levelUp(){
 		level+=1;
 		if(level > nextTier){
-			BULLETSPEED += .5; //increases bullet speed across screen
-			BULLETRATE += .5; //increases bullet rate
+			BULLETSPEED += .2; //increases bullet speed across screen
+			BULLETRATE += .2; //increases bullet rate
 			lvlIndex++;
 			nextTier = levelUps[lvlIndex];
+			System.out.println(BULLETSPEED+" "+BULLETRATE);
 		}
 	}
 
@@ -245,6 +247,8 @@ public class GameplayState extends BasicGameState {
 			player.setSpeed(3);
 			if(grazeDisplayTimer > 0)
 				grazeDisplayTimer -=delta;
+			if(grazeDisplayTimer <= 0)
+				grazeBonus = 0;
 			if(enemy == null){
 				if(respawnTimer <= 0)
 					createEnemy(); //creates enemy
@@ -289,6 +293,7 @@ public class GameplayState extends BasicGameState {
 					System.out.println("graze");
 					score += 10*multiplier;
 					grazeDisplayTimer += 100;
+					grazeBonus += 10*multiplier;
 					grazeDisplayPoint = player.position.addVector(new Point(0, -10));
 				}
 				bullet.increment();
@@ -315,6 +320,7 @@ public class GameplayState extends BasicGameState {
 				enemy = null;
 				patterns = new ArrayList<Pattern>();
 				respawnTimer = 5000;
+				levelUp();
 			}
 
 			score += delta*.1*multiplier; //score increases
@@ -337,9 +343,10 @@ public class GameplayState extends BasicGameState {
 		for(Ability a: abilities){
 			a.draw(g);
 		}
-		player.drawHitBox(g);		
+		player.drawHitBox(g);	
+		g.setColor(Color.cyan);
 		if(grazeDisplayTimer > 0)
-			g.drawString("GRAZE!", (float)grazeDisplayPoint.x, (float)grazeDisplayPoint.y);
+			g.drawString("GRAZE! +"+grazeBonus, (float)grazeDisplayPoint.x, (float)grazeDisplayPoint.y);
 		g.setColor(new Color(255, 200, 0));
 		g.drawString((int)Math.floor(score)+"", 0, 0);
 		if(enemy!=null) enemy.drawHPBar(g);
