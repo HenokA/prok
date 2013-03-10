@@ -45,13 +45,17 @@ public class GameplayState extends BasicGameState {
 	ArrayList<Pattern> patterns;
 	ArrayList<Double> highscores;
 	ArrayList<Ability> abilities;
+//	int[] positionsx= {100,200,250,300,325};
+//	int[] positionsy = {75,100,150,200, 250};
+	int[] positionsx = {200};
+	int[] positionsy = {200};
 	public static Player player;
 	double score = 0;
 	double multiplier = 1;
 	public static Image[] images;
 	public static float BULLETSPEED = 1f;
 	public static float BULLETRATE = 2f;
-	int[] levelUps = {3, 6, 10, 15, 20};
+	int[] levelUps = {1, 2, 10, 15, 21};
 	int level = 0, lvlIndex = 0;
 	int nextTier = levelUps[lvlIndex];
 	Enemy enemy;
@@ -106,9 +110,9 @@ public class GameplayState extends BasicGameState {
 			e.printStackTrace();
 		}
 	}
-	/**
-	 * resets everything to make it a new game when we click start game or play again
-	 */
+/**
+ * resets everything to make it a new game when we click start game or play again
+ */
 	public void newGame(){
 		player = new Player(new Point(200,500));
 		ebullets = new ArrayList<Bullet>();
@@ -165,19 +169,17 @@ public class GameplayState extends BasicGameState {
 		enemy = new Enemy( new Point(200, 200), temppatterns, temppoints, images[4]);
 		enemy.addPatterns(patterns); //adds patterns to the enemy
 		//abilities.add(new AbilityLockOnMissiles(new Point(posx, posy)));
-		//ebullets.add(new Bullet(new Point(300, 400), new Point(0,0), images[2], 1));
 	}
-	/**
-	 * Allows the program to increase in difficulty by increasing bullet speed
-	 */
+/**
+ * Allows the program to increase in difficulty by increasing bullet speed
+ */
 	public void levelUp(){
 		level+=1;
 		if(level > nextTier){
-			BULLETSPEED += .2; //increases bullet speed across screen
-			BULLETRATE += .2; //increases bullet rate
+			BULLETSPEED += .1; //increases bullet speed across screen
+			BULLETRATE += .1; //increases bullet rate
 			lvlIndex++;
 			nextTier = levelUps[lvlIndex];
-			System.out.println(BULLETSPEED+" "+BULLETRATE);
 		}
 	}
 
@@ -250,21 +252,23 @@ public class GameplayState extends BasicGameState {
 			if(grazeDisplayTimer <= 0)
 				grazeBonus = 0;
 			if(enemy == null){
-				if(respawnTimer <= 0)
+				if(respawnTimer <= 0){
 					createEnemy(); //creates enemy
+					
+				}
 				else
 					respawnTimer -= delta;
 			}
-
+			
 			if(enemy != null){
 				enemy.update(delta);
 				enemy.updatePatternPos(patterns);
 			}
-
+			
 			for(Pattern p : patterns){
 				p.update(ebullets, delta);
 			}
-
+			
 			Iterator<Ability> iAbility = abilities.iterator();
 			while(iAbility.hasNext()){
 				Ability a = iAbility.next();
@@ -326,7 +330,7 @@ public class GameplayState extends BasicGameState {
 			score += delta*.1*multiplier; //score increases
 		}
 	}
-
+	
 	/**
 	 * renders the high scores and images onto the container
 	 */

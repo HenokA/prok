@@ -66,6 +66,7 @@ public class GameOverState extends BasicGameState{
 	String nameHS=null;
 	int inputTimer = 250;
 	int selection = 0;
+	int xselection=playAgainX;
 
 
 	GameOverState( int stateID ) 
@@ -127,7 +128,7 @@ public class GameOverState extends BasicGameState{
 		// render the background
 		background.draw(0, 0);
 		//Draw menu
-		g.setColor(Color.cyan);
+
 		getHighscores();
 		if(checkScore){
 			selection = 0;
@@ -135,13 +136,23 @@ public class GameOverState extends BasicGameState{
 			compare();
 			checkScore=false;
 		}
-		g.draw(new Circle(50, 145+40*selection, 10));
+		switch(selection){
+		case 0: xselection=playAgainX;
+				break;
+		case 1: xselection=menuX;
+				break;
+		case 2: xselection=endX;
+				break;
+		}
+		g.draw(new Circle(xselection-5, 145+40*selection, 10));
 		playAgainOption.draw(playAgainX, playAgainY, playAgainScale);
 		highscoreOption.draw(highscoreX, highscoreY);
 		exitOption.draw(endX, endY, exitScale);
 		menuOption.draw(menuX, menuY, menuScale);
 		publishHS();
 		displayHS(g);
+
+		g.setColor(Color.red);
 		//g.setFont(new TrueTypeFont(new java.awt.Font("Verdana", Font.PLAIN, 32), true));
 		g.drawString("Score:" + (int)currentScore, 140, 60);
 	}
@@ -258,12 +269,16 @@ public class GameOverState extends BasicGameState{
 		inputTimer -= delta;
 		if(inputTimer <=  0){
 			if(input.isKeyPressed(Input.KEY_DOWN)){
-				if(selection<2)
+				if(selection<=2)
 					selection++;
+				if(selection==3)
+					selection=0;
 			}
 			if(input.isKeyPressed(Input.KEY_UP)){
-				if(selection>0)
+				if(selection>=0)
 					selection--;
+				if(selection==-1)
+					selection=2;
 			}
 			if(input.isKeyPressed(Input.KEY_ENTER)){
 				if(selection == 0){
