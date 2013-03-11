@@ -1,5 +1,7 @@
 package bullet;
 
+import java.util.Random;
+
 import game.GameplayState;
 import game.Point;
 
@@ -22,8 +24,9 @@ public class BulletBigExploding extends Bullet {
 		timer -=delta;
 		super.increment(delta);
 		if(timer <= 0){
-			int startAngle = 0; //Random starting angle
-			for(int i=startAngle; i<360+startAngle; i+=30){ //Create bullets in a circle
+			Random r = new Random();
+			int startAngle = r.nextInt(45); //Random starting angle
+			for(int i=startAngle; i<360+startAngle; i+=45){ //Create bullets in a circle
 				GameplayState.bulletsToBeAdded.add(new Bullet(position, new Point(0,1).rotate(i), miniImg, GameplayState.BULLETSPEED));
 			}
 			GameplayState.bulletsToBeRemoved.add(this);

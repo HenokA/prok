@@ -96,12 +96,12 @@ public class GameplayState extends BasicGameState {
 	 */
 	public void loadImages(){
 		String[] files = {"ship2.png", "BulletGreen.png", "BulletBlue.png", "BulletRed.png", 
-				"samusship.png", "BulletOrange.png","BulletPurple.png", "gameplaybg.png", "PDot.png",
+				"samusship.png", "BulletOrange.png","BulletPurple.png", "gameplaybgFIRE.png", "PDot.png",
 				"PlayerBullet.png", "BulletBigBlue.png"};
 		images = new Image[files.length];
 		try {
 			for(int i=0; i<files.length; i++){
-				images[i] = new Image("assets/"+files[i], new Color(92,189,186));
+				images[i] = new Image("assets/"+files[i]);
 			}
 			Image resumeOptions = new Image("assets/resume.png");
 			Image exitOptions = new Image("assets/exit1.png");
@@ -157,10 +157,10 @@ public class GameplayState extends BasicGameState {
 		Random r = new Random();
 		ArrayList<Integer> patternIds = new ArrayList<Integer>();
 		int pid =  -1;
-		for(int i=0; i<2; i++){
+		for(int i=0; i<3; i++){
 			patternIds.add(pid);
 			while(patternIds.contains(pid))
-				pid = r.nextInt(10);
+				pid = r.nextInt(11);
 			switch(pid){
 			case 0 : temppatterns[i] = new PatternCircle(); break;
 			case 1 : temppatterns[i] = new PatternSpiral(); break;
@@ -172,13 +172,11 @@ public class GameplayState extends BasicGameState {
 			case 7 : temppatterns[i] = new PatternReverseSinCurve(); break;
 			case 8 : temppatterns[i] = new PatternDoubleSinCurve(); break;
 			case 9 : temppatterns[i] = new PatternSinCircle(); break;
-			//case 10: temppatterns[i] = new PatternBigExplodingCircle(); break;
+			case 10: temppatterns[i] = new PatternBigExplodingCircle(); break;
 			}
 			temppoints[i] = new Point(200, 200);
 		}
 
-		temppatterns[2] = new PatternBigExplodingCircle();
-		temppoints[2] = new Point(200, 200);
 		enemy = new Enemy( new Point(200, 200), temppatterns, temppoints, images[4]);
 		enemy.addPatterns(patterns); //adds patterns to the enemy
 		//abilities.add(new AbilityLockOnMissiles(new Point(posx, posy)));
