@@ -64,7 +64,7 @@ public class GameOverState extends BasicGameState{
 	ArrayList<Double> highscores;
 	boolean highscore=false;
 	String nameHS=null;
-	int inputTimer = 250;
+	static int inputTimer = 1000;
 	int selection = 0;
 	int xselection=playAgainX;
 
@@ -80,6 +80,7 @@ public class GameOverState extends BasicGameState{
 	}
 	public static void setCheckScore(boolean x){
 		checkScore=x;
+		inputTimer=1000;
 	}
 	/**
 	 * run at the beginning of the program to instantiate everything

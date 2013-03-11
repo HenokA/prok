@@ -59,8 +59,8 @@ public class PatternDoubleCurve implements Pattern{
 				if(bulletTimer>bulletDelay){
 					Point posPosition = new Point(position.x-50, position.y);
 					Point negPosition = new Point(position.x+50, position.y);
-					bullets.add(new BulletCurve(posPosition, new Point(0,1).rotate(startAngle-45), img, 5, 1));
-					bullets.add(new BulletCurve(negPosition, new Point(0,1).rotate(-startAngle+45), img, 5, -1));
+					bullets.add(new BulletCurve(posPosition, new Point(0,1).rotate(startAngle-45), img, 4, 1));
+					bullets.add(new BulletCurve(position, new Point(0,1).rotate(-startAngle+45), img, 4, -1));
 					count++;
 					bulletTimer = 0;
 				}

@@ -58,7 +58,7 @@ public class GameplayState extends BasicGameState {
 	public static Image[] images;
 	public static float BULLETSPEED = 1f;
 	public static float BULLETRATE = 2f;
-	int[] levelUps = {1, 2, 10, 15, 21};
+	int[] levelUps = {3, 6, 10, 15, 21};
 	int level = 0, lvlIndex = 0;
 	int nextTier = levelUps[lvlIndex];
 	Enemy enemy;
@@ -130,6 +130,8 @@ public class GameplayState extends BasicGameState {
 		dead = false;
 		score=0;
 		multiplier=1;
+		level=0;
+		lvlIndex=0;
 		BULLETSPEED = 1f;
 		BULLETRATE = 2f;
 		grazeDisplayTimer = 0;
@@ -187,8 +189,8 @@ public class GameplayState extends BasicGameState {
 	public void levelUp(){
 		level+=1;
 		if(level > nextTier){
-			BULLETSPEED += .1; //increases bullet speed across screen
-			BULLETRATE += .1; //increases bullet rate
+			BULLETSPEED += .3; //increases bullet speed across screen
+			BULLETRATE += .3; //increases bullet rate
 			lvlIndex++;
 			nextTier = levelUps[lvlIndex];
 		}
