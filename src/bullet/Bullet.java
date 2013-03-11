@@ -36,7 +36,7 @@ public class Bullet {
 	/**
 	 * Updates position
 	 */
-	public void increment(){
+	public void increment(int delta){
 		position = position.addVector(vector.mult(speed));
 	}
 	

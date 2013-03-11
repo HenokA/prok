@@ -16,7 +16,8 @@ public class BulletSinCurve extends Bullet{
 		// TODO Auto-generated constructor stub
 	}
 
-	public void increment(){
+	@Override
+	public void increment(int delta){
 		if(increasing){
 			if(totalAngle<180){
 				setVector(vector.rotate(angle));

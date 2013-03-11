@@ -29,7 +29,7 @@ public class Player {
 		position = p;
 		img = GameplayState.images[0];
 		hitbox = GameplayState.images[8];
-		bulletImg = GameplayState.images[2];
+		bulletImg = GameplayState.images[9];
 		time = System.currentTimeMillis();
 	}
 

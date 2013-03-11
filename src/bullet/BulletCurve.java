@@ -15,7 +15,7 @@ public class BulletCurve extends Bullet{
 	}
 
 	@Override
-	public void increment(){
+	public void increment(int delta){
 		setVector(vector.rotate(angle));
 		position = position.addVector(vector.mult(speed));
 	}

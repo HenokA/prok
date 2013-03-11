@@ -18,6 +18,7 @@ import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
 import pattern.Pattern;
+import pattern.PatternBigExplodingCircle;
 import pattern.PatternCircle;
 import pattern.PatternCurve;
 import pattern.PatternDoubleCurve;
@@ -40,6 +41,8 @@ import bullet.Bullet;
 
 public class GameplayState extends BasicGameState {
 
+	public static  ArrayList<Bullet> bulletsToBeAdded;
+	public static  ArrayList<Bullet> bulletsToBeRemoved;
 	ArrayList<Bullet> ebullets;
 	ArrayList<Bullet> pbullets;
 	ArrayList<Pattern> patterns;
@@ -93,7 +96,8 @@ public class GameplayState extends BasicGameState {
 	 */
 	public void loadImages(){
 		String[] files = {"ship2.png", "BulletGreen.png", "BulletBlue.png", "BulletRed.png", 
-				"samusship.png", "BulletOrange.png","BulletPurple.png", "gameplaybg.png", "PDot.png" };
+				"samusship.png", "BulletOrange.png","BulletPurple.png", "gameplaybg.png", "PDot.png",
+				"PlayerBullet.png", "BulletBigBlue.png"};
 		images = new Image[files.length];
 		try {
 			for(int i=0; i<files.length; i++){
@@ -116,6 +120,8 @@ public class GameplayState extends BasicGameState {
 	public void newGame(){
 		player = new Player(new Point(200,500));
 		ebullets = new ArrayList<Bullet>();
+		bulletsToBeAdded = new ArrayList<Bullet>();
+		bulletsToBeRemoved = new ArrayList<Bullet>();
 		pbullets = new ArrayList<Bullet>();
 		patterns = new ArrayList<Pattern>();
 		abilities = new ArrayList<Ability>();
@@ -127,6 +133,8 @@ public class GameplayState extends BasicGameState {
 		BULLETSPEED = 1f;
 		BULLETRATE = 2f;
 		grazeDisplayTimer = 0;
+		level=0;
+		lvlIndex=0;
 	}
 	/**
 	 * run at the beginning of the program to instantiate everything
@@ -146,8 +154,8 @@ public class GameplayState extends BasicGameState {
 		Point[] temppoints = new Point[3];
 		Random r = new Random();
 		ArrayList<Integer> patternIds = new ArrayList<Integer>();
-		int pid =  0;
-		for(int i=0; i<3; i++){
+		int pid =  -1;
+		for(int i=0; i<2; i++){
 			patternIds.add(pid);
 			while(patternIds.contains(pid))
 				pid = r.nextInt(10);
@@ -162,10 +170,13 @@ public class GameplayState extends BasicGameState {
 			case 7 : temppatterns[i] = new PatternReverseSinCurve(); break;
 			case 8 : temppatterns[i] = new PatternDoubleSinCurve(); break;
 			case 9 : temppatterns[i] = new PatternSinCircle(); break;
+			//case 10: temppatterns[i] = new PatternBigExplodingCircle(); break;
 			}
 			temppoints[i] = new Point(200, 200);
 		}
 
+		temppatterns[2] = new PatternBigExplodingCircle();
+		temppoints[2] = new Point(200, 200);
 		enemy = new Enemy( new Point(200, 200), temppatterns, temppoints, images[4]);
 		enemy.addPatterns(patterns); //adds patterns to the enemy
 		//abilities.add(new AbilityLockOnMissiles(new Point(posx, posy)));
@@ -276,6 +287,10 @@ public class GameplayState extends BasicGameState {
 					iAbility.remove();
 			}
 
+			ebullets.removeAll(bulletsToBeRemoved);
+			bulletsToBeRemoved.clear();
+			ebullets.addAll(bulletsToBeAdded);
+			bulletsToBeAdded.clear();
 			Iterator<Bullet> i = ebullets.iterator(); 
 			while(i.hasNext()) {
 				Bullet bullet = i.next();
@@ -300,7 +315,7 @@ public class GameplayState extends BasicGameState {
 					grazeBonus += 10*multiplier;
 					grazeDisplayPoint = player.position.addVector(new Point(0, -10));
 				}
-				bullet.increment();
+				bullet.increment(delta);
 				if(bullet.checkOffscreen()){
 					i.remove();
 				}
@@ -313,7 +328,7 @@ public class GameplayState extends BasicGameState {
 					i.remove();
 					enemy.takeDamage(); //enemy has taken damage
 				}
-				bullet.increment();
+				bullet.increment(delta);
 				if(bullet.checkOffscreen()){
 					i.remove();
 				}
