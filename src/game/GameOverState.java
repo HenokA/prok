@@ -145,6 +145,7 @@ public class GameOverState extends BasicGameState{
 		case 2: xselection=endX;
 				break;
 		}
+		g.setColor(Color.cyan);
 		g.draw(new Circle(xselection-5, 145+40*selection, 10));
 		playAgainOption.draw(playAgainX, playAgainY, playAgainScale);
 		highscoreOption.draw(highscoreX, highscoreY);
@@ -153,7 +154,6 @@ public class GameOverState extends BasicGameState{
 		publishHS();
 		displayHS(g);
 
-		g.setColor(Color.red);
 		//g.setFont(new TrueTypeFont(new java.awt.Font("Verdana", Font.PLAIN, 32), true));
 		g.drawString("Score:" + (int)currentScore, 140, 60);
 	}

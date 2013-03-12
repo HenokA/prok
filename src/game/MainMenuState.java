@@ -86,6 +86,7 @@ public class MainMenuState extends BasicGameState {
 		highscoreOption.draw(highscoreX, highscoreY);
 		exitOption.draw(endX, endY, exitScale);
 
+		g.setColor(Color.white);
 		BufferedReader br = null;
 		BufferedReader hs = null;
 		String x,y = null;

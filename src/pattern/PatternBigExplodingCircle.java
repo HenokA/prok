@@ -20,7 +20,7 @@ public class PatternBigExplodingCircle implements Pattern {
 
 	private int PATTERNID = 0;
 	private int time=0;
-	private int delay=(int) (1000/GameplayState.BULLETRATE);
+	private int delay=(int) (1500/GameplayState.BULLETRATE);
 	private Point position;
 	Image img;
 	Image miniImg;

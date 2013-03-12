@@ -309,7 +309,6 @@ public class GameplayState extends BasicGameState {
 						e.printStackTrace();
 					}
 				}else if(bullet.checkGraze(player.position)){
-					System.out.println("graze");
 					score += 10*multiplier;
 					grazeDisplayTimer += 100;
 					grazeBonus += 10*multiplier;
