@@ -18,7 +18,6 @@ public class PatternSinCurve implements Pattern{
 	 * Curving bullet pattern
 	 */
 
-	private int PATTERNID = 6;
 	private int time=0;
 	private int bulletDelay = (int) (100/GameplayState.BULLETRATE);
 	private int bulletTimer=0;
@@ -36,14 +35,6 @@ public class PatternSinCurve implements Pattern{
 	 */
 	public PatternSinCurve(Point position){
 		this.position = position;
-		img = GameplayState.images[6];
-		startAngle = r.nextInt(90);
-	}
-
-	/**
-	 * Constructor
-	 */
-	public PatternSinCurve(){
 		img = GameplayState.images[6];
 		startAngle = r.nextInt(90);
 	}
@@ -77,7 +68,4 @@ public class PatternSinCurve implements Pattern{
 		this.position = position;
 	}
 
-	public int getPatternID() {
-		return PATTERNID;
-	}
 }

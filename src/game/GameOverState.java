@@ -64,7 +64,8 @@ public class GameOverState extends BasicGameState{
 	ArrayList<Double> highscores;
 	boolean highscore=false;
 	String nameHS=null;
-	static int inputTimer = 1000;
+	public static int inputTimer = 250;
+	public static boolean active = false;
 	int selection = 0;
 	int xselection=playAgainX;
 
@@ -139,11 +140,11 @@ public class GameOverState extends BasicGameState{
 		}
 		switch(selection){
 		case 0: xselection=playAgainX;
-				break;
+		break;
 		case 1: xselection=menuX;
-				break;
+		break;
 		case 2: xselection=endX;
-				break;
+		break;
 		}
 		g.setColor(Color.cyan);
 		g.draw(new Circle(xselection-5, 145+40*selection, 10));
@@ -266,33 +267,37 @@ public class GameOverState extends BasicGameState{
 	 * A continously updated method that helps smoothly run the program
 	 */
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
-		Input input = gc.getInput();
-		inputTimer -= delta;
-		if(inputTimer <=  0){
-			if(input.isKeyPressed(Input.KEY_DOWN)){
-				if(selection<=2)
-					selection++;
-				if(selection==3)
-					selection=0;
-			}
-			if(input.isKeyPressed(Input.KEY_UP)){
-				if(selection>=0)
-					selection--;
-				if(selection==-1)
-					selection=2;
-			}
-			if(input.isKeyPressed(Input.KEY_ENTER)){
-				if(selection == 0){
-					GameplayState gs = (GameplayState) sbg.getState(BulletHellGame.GAMEPLAYSTATE);
-					gs.newGame();
-					sbg.enterState(BulletHellGame.GAMEPLAYSTATE, new FadeOutTransition(Color.black,1000), new FadeInTransition(Color.black,500));
-				}else if(selection ==1){
-					sbg.enterState(BulletHellGame.MAINMENUSTATE, new FadeOutTransition(Color.black,400), new FadeInTransition(Color.black,400));
-				}else if(selection ==2){
-					gc.exit();
+		if(active){
+			Input input = gc.getInput();
+			inputTimer -= delta;
+			if(inputTimer <=  0){
+				if(input.isKeyPressed(Input.KEY_DOWN)){
+					if(selection<=2)
+						selection++;
+					if(selection==3)
+						selection=0;
 				}
-			}
-		}		
+				if(input.isKeyPressed(Input.KEY_UP)){
+					if(selection>=0)
+						selection--;
+					if(selection==-1)
+						selection=2;
+				}
+				if(input.isKeyPressed(Input.KEY_ENTER)){
+					if(selection == 0){
+						GameplayState gs = (GameplayState) sbg.getState(BulletHellGame.GAMEPLAYSTATE);
+						gs.newGame();
+						active = false;
+						sbg.enterState(BulletHellGame.GAMEPLAYSTATE, new FadeOutTransition(Color.black,1000), new FadeInTransition(Color.black,500));
+					}else if(selection ==1){
+						active = false;
+						sbg.enterState(BulletHellGame.MAINMENUSTATE, new FadeOutTransition(Color.black,400), new FadeInTransition(Color.black,400));
+					}else if(selection ==2){
+						gc.exit();
+					}
+				}
+			}		
+		}
 	}
 
 

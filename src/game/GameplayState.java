@@ -23,6 +23,8 @@ import pattern.PatternCircle;
 import pattern.PatternCurve;
 import pattern.PatternDoubleCurve;
 import pattern.PatternDoubleSinCurve;
+import pattern.PatternInitialHomingLine;
+import pattern.PatternInitialHomingWide;
 import pattern.PatternQuadSpiral;
 import pattern.PatternReverseCurve;
 import pattern.PatternReverseSinCurve;
@@ -96,8 +98,8 @@ public class GameplayState extends BasicGameState {
 	 */
 	public void loadImages(){
 		String[] files = {"ship2.png", "BulletGreen.png", "BulletBlue.png", "BulletRed.png", 
-				"samusship.png", "BulletOrange.png","BulletPurple.png", "gameplaybgFIRE.png", "PDot.png",
-				"PlayerBullet.png", "BulletBigBlue.png"};
+				"samusship.png", "BulletOrange.png","BulletPurple.png", "gameplaybg.png", "PDot.png",
+				"PlayerBullet.png", "BulletBigBlue.png", "BulletPink.png"};
 		images = new Image[files.length];
 		try {
 			for(int i=0; i<files.length; i++){
@@ -153,33 +155,32 @@ public class GameplayState extends BasicGameState {
 	 */
 	public void createEnemy(){
 		Pattern[] temppatterns = new Pattern[3];
-		Point[] temppoints = new Point[3];
 		Random r = new Random();
 		ArrayList<Integer> patternIds = new ArrayList<Integer>();
 		int pid =  -1;
+		Point enemyxy = new Point(200, 200);
 		for(int i=0; i<3; i++){
 			patternIds.add(pid);
 			while(patternIds.contains(pid))
-				pid = r.nextInt(11);
+				pid = r.nextInt(13);
 			switch(pid){
-			case 0 : temppatterns[i] = new PatternCircle(); break;
-			case 1 : temppatterns[i] = new PatternSpiral(); break;
-			case 2 : temppatterns[i] = new PatternQuadSpiral(); break;
-			case 3 : temppatterns[i] = new PatternCurve(); break;
-			case 4 : temppatterns[i] = new PatternReverseCurve(); break;
-			case 5 : temppatterns[i] = new PatternDoubleCurve(); break;
-			case 6 : temppatterns[i] = new PatternSinCurve(); break;
-			case 7 : temppatterns[i] = new PatternReverseSinCurve(); break;
-			case 8 : temppatterns[i] = new PatternDoubleSinCurve(); break;
-			case 9 : temppatterns[i] = new PatternSinCircle(); break;
-			case 10: temppatterns[i] = new PatternBigExplodingCircle(); break;
+			case 0 : temppatterns[i] = new PatternCircle(enemyxy); break;
+			case 1 : temppatterns[i] = new PatternSpiral(enemyxy); break;
+			case 2 : temppatterns[i] = new PatternQuadSpiral(enemyxy); break;
+			case 3 : temppatterns[i] = new PatternCurve(enemyxy); break;
+			case 4 : temppatterns[i] = new PatternReverseCurve(enemyxy); break;
+			case 5 : temppatterns[i] = new PatternDoubleCurve(enemyxy); break;
+			case 6 : temppatterns[i] = new PatternSinCurve(enemyxy); break;
+			case 7 : temppatterns[i] = new PatternReverseSinCurve(enemyxy); break;
+			case 8 : temppatterns[i] = new PatternDoubleSinCurve(enemyxy); break;
+			case 9 : temppatterns[i] = new PatternSinCircle(enemyxy); break;
+			case 10: temppatterns[i] = new PatternBigExplodingCircle(enemyxy); break;
+			case 11: temppatterns[i] = new PatternInitialHomingWide(enemyxy); break;
+			case 12: temppatterns[i] = new PatternInitialHomingLine(enemyxy); break;
 			}
-			temppoints[i] = new Point(200, 200);
 		}
-
-		enemy = new Enemy( new Point(200, 200), temppatterns, temppoints, images[4]);
+		enemy = new Enemy( enemyxy, temppatterns, images[4]);
 		enemy.addPatterns(patterns); //adds patterns to the enemy
-		//abilities.add(new AbilityLockOnMissiles(new Point(posx, posy)));
 	}
 /**
  * Allows the program to increase in difficulty by increasing bullet speed
@@ -206,6 +207,8 @@ public class GameplayState extends BasicGameState {
 			if(deathTimer <= 0){
 				GameOverState.setCheckScore(true);
 				sbg.enterState(BulletHellGame.GAMEOVERSTATE, new FadeOutTransition(Color.black, 100),new FadeInTransition(Color.black, 100));
+				GameOverState.active=true;
+				GameOverState.inputTimer= 250;
 			}
 		}
 		if(paused){
@@ -339,6 +342,7 @@ public class GameplayState extends BasicGameState {
 				patterns = new ArrayList<Pattern>();
 				respawnTimer = 5000;
 				levelUp();
+				ebullets.clear();
 			}
 
 			score += delta*.1*multiplier; //score increases

@@ -19,6 +19,4 @@ public interface Pattern {
 	public void update(ArrayList<Bullet> bullets, int delta);
 	
 	public void setPosition(Point position);
-	
-	public int getPatternID();
 }

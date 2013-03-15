@@ -17,7 +17,6 @@ public class PatternCircle implements Pattern {
 	 * Expanding circle pattern
 	 */
 
-	private int PATTERNID = 0;
 	private int time=0;
 	private int delay=(int) (1000/GameplayState.BULLETRATE);
 	private Point position;
@@ -33,12 +32,6 @@ public class PatternCircle implements Pattern {
 		img = GameplayState.images[1];
 	}
 
-	/**
-	 * Constructor
-	 */
-	public PatternCircle(){
-		img = GameplayState.images[1];
-	}
 	
 	/**
 	 * Updates pattern, creates bullets based on delay, etc.
@@ -62,8 +55,4 @@ public class PatternCircle implements Pattern {
 		this.position = position;
 	}
 
-	
-	public int getPatternID() {
-		return PATTERNID;
-	}
 }

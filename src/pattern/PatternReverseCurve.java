@@ -16,8 +16,7 @@ public class PatternReverseCurve implements Pattern{
 	/**
 	 * The same as BulletCurve, but directions are reversed
 	 */
-	
-	private int PATTERNID = 3;
+
 	private int time=0;
 	private int bulletDelay = (int) (100/GameplayState.BULLETRATE);
 	private int bulletTimer=0;
@@ -31,11 +30,6 @@ public class PatternReverseCurve implements Pattern{
 
 	public PatternReverseCurve(Point position){
 		this.position = position;
-		img = GameplayState.images[5];
-		startAngle = r.nextInt(90);
-	}
-
-	public PatternReverseCurve(){
 		img = GameplayState.images[5];
 		startAngle = r.nextInt(90);
 	}
@@ -62,7 +56,4 @@ public class PatternReverseCurve implements Pattern{
 		this.position = position;
 	}
 
-	public int getPatternID() {
-		return PATTERNID;
-	}
 }

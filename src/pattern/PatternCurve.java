@@ -17,7 +17,6 @@ public class PatternCurve implements Pattern{
 	 * Curving bullet pattern
 	 */
 
-	private int PATTERNID = 1;
 	private int time=0;
 	private int bulletDelay = (int) (100/GameplayState.BULLETRATE);
 	private int bulletTimer=0;
@@ -39,13 +38,6 @@ public class PatternCurve implements Pattern{
 		startAngle = r.nextInt(90);
 	}
 
-	/**
-	 * Constructor
-	 */
-	public PatternCurve(){
-		img = GameplayState.images[5];
-		startAngle = r.nextInt(90);
-	}
 
 	/**
 	 * Updates bullets
@@ -76,7 +68,4 @@ public class PatternCurve implements Pattern{
 		this.position = position;
 	}
 
-	public int getPatternID() {
-		return PATTERNID;
-	}
 }

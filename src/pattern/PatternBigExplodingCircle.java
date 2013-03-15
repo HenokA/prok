@@ -17,8 +17,6 @@ public class PatternBigExplodingCircle implements Pattern {
 	/**
 	 * Expanding circle pattern
 	 */
-
-	private int PATTERNID = 0;
 	private int time=0;
 	private int delay=(int) (1500/GameplayState.BULLETRATE);
 	private Point position;
@@ -36,14 +34,7 @@ public class PatternBigExplodingCircle implements Pattern {
 		miniImg = GameplayState.images[2];
 	}
 
-	/**
-	 * Constructor
-	 */
-	public PatternBigExplodingCircle(){
-		img = GameplayState.images[10];
-		miniImg = GameplayState.images[2];
-	}
-	
+
 	/**
 	 * Updates pattern, creates bullets based on delay, etc.
 	 */
@@ -64,10 +55,5 @@ public class PatternBigExplodingCircle implements Pattern {
 	 */
 	public void setPosition(Point position) {
 		this.position = position;
-	}
-
-	
-	public int getPatternID() {
-		return PATTERNID;
 	}
 }

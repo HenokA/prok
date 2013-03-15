@@ -32,6 +32,10 @@ public class Bullet {
 		this.speed = speed;
 		radius = img.getHeight()/2;
 	}
+	
+	public Bullet(){
+		
+	}
 
 	/**
 	 * Updates position
@@ -44,7 +48,7 @@ public class Bullet {
 	 * draws bullet to the screen
 	 */
 	public void draw(Graphics g){
-		g.drawImage(img, (float)position.x-radius, (float)position.y-radius);
+		g.drawImage(img, (float)Math.round(position.x-radius), (float)Math.round(position.y-radius));
 	}
 	
 	/**

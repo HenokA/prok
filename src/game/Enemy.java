@@ -16,7 +16,7 @@ public class Enemy {
 	private Point vector;
 	private double dAngle;
 	private Image img;
-	private float maxHP = 1000;
+	private float maxHP = 2000;
 	public float currentHP = maxHP;
 	private Color hpbar  = new Color(Color.black);
 	private float speed = .5f;
@@ -27,12 +27,9 @@ public class Enemy {
 	private static int YLOWERBOUND = 50;
 	private static int YUPPERBOUND = 200;
 
-	public Enemy(Point position, Pattern[] p, Point[] patternPos, Image img){
+	public Enemy(Point position, Pattern[] p, Image img){
 		this.position = position;
 		this.patterns = p;
-		for(int i=0; i<patterns.length; i++){
-			patterns[i].setPosition(patternPos[i]);
-		}
 		this.img = img;
 		setHPBarColor();
 		rollNewDirection(0, 360);

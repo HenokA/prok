@@ -18,7 +18,6 @@ public class PatternSinCircle implements Pattern {
 	 * Expanding circle pattern
 	 */
 
-	private int PATTERNID = 7;
 	private int time=0;
 	private int delay=(int) (1500/GameplayState.BULLETRATE);
 	private Point position;
@@ -34,13 +33,6 @@ public class PatternSinCircle implements Pattern {
 		img = GameplayState.images[1];
 	}
 
-	/**
-	 * Constructor
-	 */
-	public PatternSinCircle(){
-		img = GameplayState.images[1];
-	}
-	
 	/**
 	 * Updates pattern, creates bullets based on delay, etc.
 	 */
@@ -63,8 +55,4 @@ public class PatternSinCircle implements Pattern {
 		this.position = position;
 	}
 
-	
-	public int getPatternID() {
-		return PATTERNID;
-	}
 }

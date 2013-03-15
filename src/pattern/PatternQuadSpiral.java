@@ -16,7 +16,6 @@ public class PatternQuadSpiral implements Pattern{
 	 * Literally the same as BulletSpiral but creates 4 bullets in update() per call instead of 1
 	 */
 
-	private int PATTERNID = 2;
 	public Point position;
 	public Point nextPosition;
 	private int angle;
@@ -30,10 +29,6 @@ public class PatternQuadSpiral implements Pattern{
 	public PatternQuadSpiral(Point position){
 		this.position = position;
 		nextPosition = position;
-		img = GameplayState.images[3];
-	}
-	
-	public PatternQuadSpiral(){
 		img = GameplayState.images[3];
 	}
 	
@@ -60,7 +55,4 @@ public class PatternQuadSpiral implements Pattern{
 		this.nextPosition = position;
 	}
 
-	public int getPatternID() {
-		return PATTERNID;
-	}
 }

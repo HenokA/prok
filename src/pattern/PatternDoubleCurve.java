@@ -17,7 +17,6 @@ public class PatternDoubleCurve implements Pattern{
 	 * Curving bullet pattern
 	 */
 
-	private int PATTERNID = 8;
 	private int time=0;
 	private int bulletDelay = (int) (100/GameplayState.BULLETRATE);
 	private int bulletTimer=0;
@@ -35,14 +34,6 @@ public class PatternDoubleCurve implements Pattern{
 	 */
 	public PatternDoubleCurve(Point position){
 		this.position = position;
-		img = GameplayState.images[5];
-		startAngle = r.nextInt(90);
-	}
-
-	/**
-	 * Constructor
-	 */
-	public PatternDoubleCurve(){
 		img = GameplayState.images[5];
 		startAngle = r.nextInt(90);
 	}
@@ -79,7 +70,4 @@ public class PatternDoubleCurve implements Pattern{
 		this.position = position;
 	}
 
-	public int getPatternID() {
-		return PATTERNID;
-	}
 }
