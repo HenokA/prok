@@ -46,7 +46,8 @@ public class PatternInitialHomingLine implements Pattern{
 		if(time>delay){
 			if(count<max){	//Max bullets per pattern
 				if(bulletTimer>bulletDelay){
-					bullets.add(new BulletInitialHoming(position, img, GameplayState.BULLETSPEED*4));count++;
+					bullets.add(new BulletInitialHoming(position, img, GameplayState.BULLETSPEED*4));
+					count++;
 					bulletTimer = 0;
 				}
 			}else{

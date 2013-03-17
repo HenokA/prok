@@ -15,7 +15,7 @@ public class Bullet {
 	protected Point position;	//position
 	protected Point vector;	//directional vector
 	protected float speed = 1;
-	private int radius;
+	protected int radius;
 	Image img;
 	
 	/**

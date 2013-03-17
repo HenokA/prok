@@ -13,6 +13,7 @@ public class BulletInitialHoming extends Bullet{
 		this.speed = speed;
 		Point player = GameplayState.player.position;
 		this.vector = new Point(player.x-p.x, player.y-p.y).getUnitVector();
+		this.radius = img.getHeight()/2;
 	}
 
 }

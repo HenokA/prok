@@ -35,6 +35,7 @@ import pattern.PatternSpiral;
 import ability.Ability;
 import ability.AbilityLockOnMissiles;
 import bullet.Bullet;
+import bullet.BulletInitialHoming;
 /**
  * This class is the game play class where the actual game is played.
  * @author 912606
@@ -50,10 +51,6 @@ public class GameplayState extends BasicGameState {
 	ArrayList<Pattern> patterns;
 	ArrayList<Double> highscores;
 	ArrayList<Ability> abilities;
-//	int[] positionsx= {100,200,250,300,325};
-//	int[] positionsy = {75,100,150,200, 250};
-	int[] positionsx = {200};
-	int[] positionsy = {200};
 	public static Player player;
 	double score = 0;
 	double multiplier = 1;
