@@ -151,7 +151,6 @@ public class GameplayState extends BasicGameState {
 	 * Creates an enemy object.  Once we have more content, this should become randomized.
 	 */
 	public void createEnemy(){
-		Pattern[] temppatterns = new Pattern[3];
 		Random r = new Random();
 		ArrayList<Integer> patternIds = new ArrayList<Integer>();
 		int pid =  -1;
@@ -161,23 +160,23 @@ public class GameplayState extends BasicGameState {
 			while(patternIds.contains(pid))
 				pid = r.nextInt(13);
 			switch(pid){
-			case 0 : temppatterns[i] = new PatternCircle(enemyxy); break;
-			case 1 : temppatterns[i] = new PatternSpiral(enemyxy); break;
-			case 2 : temppatterns[i] = new PatternQuadSpiral(enemyxy); break;
-			case 3 : temppatterns[i] = new PatternCurve(enemyxy); break;
-			case 4 : temppatterns[i] = new PatternReverseCurve(enemyxy); break;
-			case 5 : temppatterns[i] = new PatternDoubleCurve(enemyxy); break;
-			case 6 : temppatterns[i] = new PatternSinCurve(enemyxy); break;
-			case 7 : temppatterns[i] = new PatternReverseSinCurve(enemyxy); break;
-			case 8 : temppatterns[i] = new PatternDoubleSinCurve(enemyxy); break;
-			case 9 : temppatterns[i] = new PatternSinCircle(enemyxy); break;
-			case 10: temppatterns[i] = new PatternBigExplodingCircle(enemyxy); break;
-			case 11: temppatterns[i] = new PatternInitialHomingWide(enemyxy); break;
-			case 12: temppatterns[i] = new PatternInitialHomingLine(enemyxy); break;
+			case 0 : patterns.add(new PatternCircle(enemyxy)); break;
+			case 1 : patterns.add(new PatternSpiral(enemyxy)); break;
+			case 2 : patterns.add(new PatternQuadSpiral(enemyxy)); break;
+			case 3 : patterns.add(new PatternCurve(enemyxy)); break;
+			case 4 : patterns.add(new PatternReverseCurve(enemyxy)); break;
+			case 5 : patterns.add(new PatternDoubleCurve(enemyxy)); break;
+			case 6 : patterns.add(new PatternSinCurve(enemyxy)); break;
+			case 7 : patterns.add(new PatternReverseSinCurve(enemyxy)); break;
+			case 8 : patterns.add(new PatternDoubleSinCurve(enemyxy)); break;
+			case 9 : patterns.add(new PatternSinCircle(enemyxy)); break;
+			case 10: patterns.add(new PatternBigExplodingCircle(enemyxy)); break;
+			case 11: patterns.add(new PatternInitialHomingWide(enemyxy)); break;
+			case 12: patterns.add(new PatternInitialHomingLine(enemyxy)); break;
 			}
 		}
-		enemy = new Enemy( enemyxy, temppatterns, images[4]);
-		enemy.addPatterns(patterns); //adds patterns to the enemy
+		enemy = new Enemy( enemyxy, images[4]);
+		abilities.add(new AbilityLockOnMissiles(enemyxy));
 	}
 /**
  * Allows the program to increase in difficulty by increasing bullet speed
@@ -273,18 +272,15 @@ public class GameplayState extends BasicGameState {
 			
 			if(enemy != null){
 				enemy.update(delta);
-				enemy.updatePatternPos(patterns);
+				enemy.updatePos(patterns, abilities);
 			}
 			
 			for(Pattern p : patterns){
 				p.update(ebullets, delta);
 			}
 			
-			Iterator<Ability> iAbility = abilities.iterator();
-			while(iAbility.hasNext()){
-				Ability a = iAbility.next();
-				if(!a.update(delta))
-					iAbility.remove();
+			for(Ability a: abilities){
+				a.update(delta);
 			}
 
 			ebullets.removeAll(bulletsToBeRemoved);

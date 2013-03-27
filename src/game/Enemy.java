@@ -6,13 +6,14 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 
+import ability.Ability;
+
 import pattern.Pattern;
 
 
 public class Enemy {
 
 	public Point position;
-	private Pattern[] patterns;
 	private Point vector;
 	private double dAngle;
 	private Image img;
@@ -27,23 +28,19 @@ public class Enemy {
 	private static int YLOWERBOUND = 50;
 	private static int YUPPERBOUND = 200;
 
-	public Enemy(Point position, Pattern[] p, Image img){
+	public Enemy(Point position, Image img){
 		this.position = position;
-		this.patterns = p;
 		this.img = img;
 		setHPBarColor();
 		rollNewDirection(0, 360);
 	}
 
-	public void updatePatternPos(ArrayList<Pattern> bp){
+	public void updatePos(ArrayList<Pattern> bp, ArrayList<Ability> a){
 		for(Pattern p : bp){
 			p.setPosition(position);
 		}
-	}
-
-	public void addPatterns(ArrayList<Pattern> bp){
-		for(int i=0; i<patterns.length; i++){
-			bp.add(patterns[i]);
+		for(Ability ia: a){
+			ia.setPosition(position);
 		}
 	}
 	

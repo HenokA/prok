@@ -6,7 +6,7 @@ import game.Point;
 
 public interface Ability {
 
-	public boolean update(int delta);
+	public void update(int delta);
 	
 	public void setPosition(Point position);
 	
