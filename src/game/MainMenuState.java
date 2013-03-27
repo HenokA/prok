@@ -1,6 +1,7 @@
 package game;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
@@ -70,6 +71,14 @@ public class MainMenuState extends BasicGameState {
 		exitOption = exitOptions.getSubImage(0, 0, 89, 29);
 	
 		
+	}
+	public void getHSX(){
+		try {
+			 new BufferedReader(new FileReader("assets/Highscores"));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	/**
 	 * renders the high scores and images onto the container

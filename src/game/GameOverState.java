@@ -1,6 +1,7 @@
 package game;
 import java.awt.Font;
 import java.awt.TextField;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -19,6 +20,8 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
+import org.newdawn.slick.InputListener;
+import org.newdawn.slick.KeyListener;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
 import org.newdawn.slick.TrueTypeFont;
@@ -27,6 +30,7 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
+import org.newdawn.slick.util.InputAdapter;
 
 /**
  * This class is the game over menu which displays the users score, highscores and the option to go to main menu, exit, or play again
@@ -68,6 +72,10 @@ public class GameOverState extends BasicGameState{
 	public static boolean active = false;
 	int selection = 0;
 	int xselection=playAgainX;
+	String highScoreName= "";
+	float alphablock=(float).95;
+	boolean up=false;
+	int blinker=278;
 
 
 	GameOverState( int stateID ) 
@@ -93,7 +101,11 @@ public class GameOverState extends BasicGameState{
 		Image exitOptions = new Image("assets/exit1.png");
 		Image highscoreOptions = new Image("assets/highscore1.png");
 		Image menuOptions = new Image("assets/menu.png");
-
+		gc.getInput().addPrimaryListener(new InputAdapter(){
+			public void keyPressed(int key, char c){
+				highScoreName=highScoreName+c;
+			}
+		});
 		playAgainOption = playAgainOptions.getSubImage(0, 0, 360, 72);
 		highscoreOption = highscoreOptions.getSubImage(0, 0, 231, 39);
 		exitOption = exitOptions.getSubImage(0, 0, 89, 29);
@@ -126,6 +138,7 @@ public class GameOverState extends BasicGameState{
 	/**
 	 * renders the high scores and images onto the container
 	 */
+	@SuppressWarnings("deprecation")
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 		// render the background
 		background.draw(0, 0);
@@ -155,8 +168,14 @@ public class GameOverState extends BasicGameState{
 		publishHS();
 		displayHS(g);
 
-		//g.setFont(new TrueTypeFont(new java.awt.Font("Verdana", Font.PLAIN, 32), true));
-		g.drawString("Score:" + (int)currentScore, 140, 60);
+	//	getWidth(highScoreName);
+	//	g.setFont(new TrueTypeFont(new java.awt.Font("Verdana", Font.PLAIN, 32), true));
+		g.drawString("Score:" + (int)currentScore, 50, 60);
+		g.drawString("Enter Name:", 180, 60);
+		g.drawString(highScoreName,278, 60);
+		g.setColor(new Color(0f,0f,0f,alphablock));
+	
+		g.fillRect(278, 62, 7, 15);
 	}
 	/**
 	 * adds the score
@@ -252,22 +271,28 @@ public class GameOverState extends BasicGameState{
 			}
 		}
 	}
-	/**
-	 * checks if the key is pressed, not implemented in Dodge
-	 * @param key
-	 */
-	public void keyPressed(KeyEvent key){
-		if(key.getKeyCode() == KeyEvent.VK_M){
-			char i = key.getKeyChar();
-			nameHS=Character.toString(i);
-		}
-	}
 
 	/**
 	 * A continously updated method that helps smoothly run the program
 	 */
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
 		if(active){
+			if(alphablock<=.95 && up!=true)
+				alphablock-=.03;
+			 if(alphablock<=.05&&up!=true){
+				up=true;
+				alphablock=(float).05;
+			}				
+			 if(alphablock>=.05&& up==true)
+				alphablock+=.03;
+			 if(alphablock>=.95 &&up==true){
+				up=false;
+				alphablock=(float).95;
+			}				
+			 
+			 if(highscore==true){
+				
+			 }
 			Input input = gc.getInput();
 			inputTimer -= delta;
 			if(inputTimer <=  0){
