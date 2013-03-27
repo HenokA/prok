@@ -298,7 +298,7 @@ public class GameplayState extends BasicGameState {
 					deathTimer = 1000; //time until the game over screen is made
 					try {
 						out = new BufferedWriter(new FileWriter("assets/CurrentScore"));
-						out.write(Double.toString(Math.floor(score)));
+						out.write(Integer.toString((int)(score)));
 						out.close(); //writes score to the current score file
 					} catch (IOException e) {
 						// TODO Auto-generated catch block

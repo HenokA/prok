@@ -58,10 +58,10 @@ public class GameOverState extends BasicGameState{
 	int hsposx=176;
 	boolean starting=true;
 	int[] hsposy= {300, 320, 340, 360, 380, 400, 420, 440,460,480,500};
-	double currentScore;
+	int currentScore;
 	private static boolean checkScore=true;
 	BufferedWriter out;
-	ArrayList<Double> highscores;
+	ArrayList<Integer> highscores;
 	boolean highscore=false;
 	String nameHS=null;
 	public static int inputTimer = 250;
@@ -109,7 +109,7 @@ public class GameOverState extends BasicGameState{
 		try {
 			hs = new BufferedReader(new FileReader("assets/CurrentScore"));
 			if((x = hs.readLine()) != null){
-				currentScore=Double.parseDouble(x);
+				currentScore=Integer.parseInt(x);
 			}	
 
 		} catch (IOException e) {
@@ -166,7 +166,7 @@ public class GameOverState extends BasicGameState{
 		try {
 			out = new BufferedWriter(new FileWriter("assets/HighScores"));
 			for(int i=0;i<10;i++){
-				out.write(Double.toString(Math.floor(highscores.get(i))));
+				out.write(Integer.toString((highscores.get(i))));
 				out.newLine();
 			}
 			out.close();
@@ -181,14 +181,14 @@ public class GameOverState extends BasicGameState{
 	 */
 	public void getHighscores(){
 		BufferedReader hs = null;
-		highscores=new ArrayList<Double>();
+		highscores=new ArrayList<Integer>();
 		String x = null;
 		String y=null;
 		try {
 			hs = new BufferedReader(new FileReader("assets/Highscores"));
 			for(int i=0;i<10;i++){
 				if((x = hs.readLine()) != null){
-					highscores.add(Double.parseDouble(x));
+					highscores.add(Integer.parseInt(x));
 				}
 
 			}	
@@ -209,7 +209,7 @@ public class GameOverState extends BasicGameState{
 	 */
 	public void compare(){
 		for(int i=0;i<10;i++){
-			if(Math.floor(currentScore)==highscores.get(i)){
+			if(currentScore==highscores.get(i)){
 				if(i!=10){
 					highscores.add(i,(currentScore));
 					highscore=true;
