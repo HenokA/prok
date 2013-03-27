@@ -366,9 +366,7 @@ public class GameplayState extends BasicGameState {
 		g.setColor(Color.cyan);
 		if(grazeDisplayTimer > 0)
 			g.drawString("GRAZE! +"+grazeBonus, (float)grazeDisplayPoint.x, (float)grazeDisplayPoint.y);
-		g.setColor(new Color(255, 200, 0));
-		g.drawString((int)Math.floor(score)+"", 0, 0);
-		if(enemy!=null) enemy.drawHPBar(g);
+		
 		if (paused) {
 			Color trans = new Color(0f,0f,0f,0.7f);
 			g.setColor(trans);
@@ -391,6 +389,11 @@ public class GameplayState extends BasicGameState {
 				dMissile.draw(g);
 			}
 		}
+		g.setColor(Color.black);
+		g.fillRect(BulletHellGame.WIDTH, 0, BulletHellGame.APPWIDTH-BulletHellGame.WIDTH, BulletHellGame.HEIGHT);
+		g.setColor(new Color(255, 200, 0));
+		g.drawString((int)Math.floor(score)+"", BulletHellGame.WIDTH+15, 0);
+		if(enemy!=null) enemy.drawHPBar(g);
 	}
 	@Override
 	public int getID() {
