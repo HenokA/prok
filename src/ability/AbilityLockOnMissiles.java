@@ -15,7 +15,6 @@ public class AbilityLockOnMissiles implements Ability {
 	private int fireRate = 250;
 	private int timer=0;
 	private int cooldown=0;
-	private boolean onCD = false;
 	private ArrayList<Missile> missiles = new ArrayList<Missile>();
 	private Point position;
 

@@ -34,6 +34,7 @@ import pattern.PatternSpiral;
 
 import ability.Ability;
 import ability.AbilityLockOnMissiles;
+import ability.Missile;
 import bullet.Bullet;
 import bullet.BulletInitialHoming;
 /**
@@ -78,11 +79,11 @@ public class GameplayState extends BasicGameState {
 	int resumeY=170;
 	int menuX=100;
 	int menuY=220;
-	boolean dead;
+	public static boolean dead;
 	int deathTimer = 0;
 	double deadx;
 	double deady;
-	Bullet deadBullet;
+	public static Object deadBullet;
 	BufferedWriter out;
 
 	public GameplayState( int stateID ) 
@@ -113,9 +114,9 @@ public class GameplayState extends BasicGameState {
 			e.printStackTrace();
 		}
 	}
-/**
- * resets everything to make it a new game when we click start game or play again
- */
+	/**
+	 * resets everything to make it a new game when we click start game or play again
+	 */
 	public void newGame(){
 		player = new Player(new Point(200,500));
 		ebullets = new ArrayList<Bullet>();
@@ -178,9 +179,9 @@ public class GameplayState extends BasicGameState {
 		enemy = new Enemy( enemyxy, images[4]);
 		abilities.add(new AbilityLockOnMissiles(enemyxy));
 	}
-/**
- * Allows the program to increase in difficulty by increasing bullet speed
- */
+	/**
+	 * Allows the program to increase in difficulty by increasing bullet speed
+	 */
 	public void levelUp(){
 		level+=1;
 		if(level > nextTier){
@@ -264,21 +265,21 @@ public class GameplayState extends BasicGameState {
 			if(enemy == null){
 				if(respawnTimer <= 0){
 					createEnemy(); //creates enemy
-					
+
 				}
 				else
 					respawnTimer -= delta;
 			}
-			
+
 			if(enemy != null){
 				enemy.update(delta);
 				enemy.updatePos(patterns, abilities);
 			}
-			
+
 			for(Pattern p : patterns){
 				p.update(ebullets, delta);
 			}
-			
+
 			for(Ability a: abilities){
 				a.update(delta);
 			}
@@ -293,9 +294,6 @@ public class GameplayState extends BasicGameState {
 				if(bullet.checkCollision(player.position)){
 					dead = true;
 					deadBullet=bullet;
-					deadx=player.position.x; //stores position of death
-					deady=player.position.y;
-					deathTimer = 1000; //time until the game over screen is made
 					try {
 						out = new BufferedWriter(new FileWriter("assets/CurrentScore"));
 						out.write(Integer.toString((int)(score)));
@@ -329,6 +327,12 @@ public class GameplayState extends BasicGameState {
 				}
 			}			
 
+			if(dead){
+				deadx=player.position.x; //stores position of death
+				deady=player.position.y;
+				deathTimer = 1000; //time until the game over screen is made
+			}
+			
 			if(enemy != null && enemy.currentHP<=0){
 				multiplier+=.5;
 				enemy = null;
@@ -341,7 +345,7 @@ public class GameplayState extends BasicGameState {
 			score += delta*.1*multiplier; //score increases
 		}
 	}
-	
+
 	/**
 	 * renders the high scores and images onto the container
 	 */
@@ -379,7 +383,13 @@ public class GameplayState extends BasicGameState {
 			Player died=new Player(new Point(deadx,deady));
 			died.drawShip(g);
 			died.drawHitBox(g);
-			deadBullet.draw(g);
+			if(deadBullet instanceof Bullet){
+				Bullet dBullet = (Bullet) deadBullet;
+				dBullet.draw(g);
+			}else if(deadBullet instanceof Missile){
+				Missile dMissile = (Missile) deadBullet;
+				dMissile.draw(g);
+			}
 		}
 	}
 	@Override

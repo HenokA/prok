@@ -35,8 +35,11 @@ public class Missile {
 		Point p = GameplayState.player.position;
 		vector = new Point(p.x-position.x, p.y-position.y).getUnitVector();
 		position = position.addVector(vector.mult(vf));
-		if(checkCollision(p))
+		if(checkCollision(p)){
+			GameplayState.dead = true;
+			GameplayState.deadBullet = this;
 			return false;
+		}
 		if(vf > 0){
 			return true;
 		}

@@ -10,6 +10,7 @@ public class BulletHellGame extends StateBasedGame {
     public static final int MAINMENUSTATE = 0;
     public static final int GAMEPLAYSTATE = 1;
     public static final int GAMEOVERSTATE = 2;
+    public static final int APPWIDTH = 600;
     public static final int HEIGHT = 610;
     public static final int WIDTH = 400;
     
@@ -21,7 +22,7 @@ public class BulletHellGame extends StateBasedGame {
     public static void main(String[] args) throws SlickException
     {
          AppGameContainer app = new AppGameContainer(new BulletHellGame());
-         app.setDisplayMode(WIDTH, HEIGHT, false);
+         app.setDisplayMode(APPWIDTH, HEIGHT, false);
          //make non resizable
          app.start();
     }
