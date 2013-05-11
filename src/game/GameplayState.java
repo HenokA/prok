@@ -37,6 +37,7 @@ import ability.AbilityLockOnMissiles;
 import ability.Missile;
 import bullet.Bullet;
 import bullet.BulletInitialHoming;
+import bullet.PowerUp;
 /**
  * This class is the game play class where the actual game is played.
  * @author 912606
@@ -258,6 +259,9 @@ public class GameplayState extends BasicGameState {
 			if (container.getInput().isKeyDown(Input.KEY_DOWN) && player.position.y<BulletHellGame.HEIGHT) {player.increment(Player.DOWN);} //move player down
 			if (container.getInput().isKeyDown(Input.KEY_SPACE)) {player.shoot(pbullets);}
 			player.setSpeed(3);
+
+			player.checkPowerUps();
+
 			if(grazeDisplayTimer > 0)
 				grazeDisplayTimer -=delta;
 			if(grazeDisplayTimer <= 0)
@@ -291,22 +295,28 @@ public class GameplayState extends BasicGameState {
 			Iterator<Bullet> i = ebullets.iterator(); 
 			while(i.hasNext()) {
 				Bullet bullet = i.next();
-				if(bullet.checkCollision(player.position)){
-					dead = true;
-					deadBullet=bullet;
-					try {
-						out = new BufferedWriter(new FileWriter("assets/CurrentScore"));
-						out.write(Integer.toString((int)(score)));
-						out.close(); //writes score to the current score file
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+				if(bullet instanceof PowerUp && bullet.checkCollision(player.position)){
+					System.out.println("asdfasdfa");
+					((PowerUp) bullet).applyPowerUp(player);
+				}
+				else{
+					if(bullet.checkCollision(player.position) && player.invul==false){
+						dead = true;
+						deadBullet=bullet;
+						try {
+							out = new BufferedWriter(new FileWriter("assets/CurrentScore"));
+							out.write(Integer.toString((int)(score)));
+							out.close(); //writes score to the current score file
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}else if(bullet.checkGraze(player.position)){
+						score += 10*multiplier;
+						grazeDisplayTimer += 100;
+						grazeBonus += 10*multiplier;
+						grazeDisplayPoint = player.position.addVector(new Point(0, -10));
 					}
-				}else if(bullet.checkGraze(player.position)){
-					score += 10*multiplier;
-					grazeDisplayTimer += 100;
-					grazeBonus += 10*multiplier;
-					grazeDisplayPoint = player.position.addVector(new Point(0, -10));
 				}
 				bullet.increment(delta);
 				if(bullet.checkOffscreen()){
@@ -319,7 +329,8 @@ public class GameplayState extends BasicGameState {
 				Bullet bullet = i.next();
 				if(enemy != null && bullet.checkCollisionEnemy(enemy.position)){
 					i.remove();
-					enemy.takeDamage(); //enemy has taken damage
+					enemy.takeDamage(player.dd); //enemy has taken damage
+					System.out.println(player.dd);
 				}
 				bullet.increment(delta);
 				if(bullet.checkOffscreen()){
@@ -332,14 +343,17 @@ public class GameplayState extends BasicGameState {
 				deady=player.position.y;
 				deathTimer = 1000; //time until the game over screen is made
 			}
-			
+
 			if(enemy != null && enemy.currentHP<=0){
 				multiplier+=.5;
+				Point epos = enemy.position;
+				Bullet powup = new PowerUp(epos, new Point(0,1), 2);
 				enemy = null;
 				patterns = new ArrayList<Pattern>();
 				respawnTimer = 5000;
 				levelUp();
 				ebullets.clear();
+				ebullets.add(powup);
 			}
 
 			score += delta*.1*multiplier; //score increases
@@ -366,7 +380,7 @@ public class GameplayState extends BasicGameState {
 		g.setColor(Color.cyan);
 		if(grazeDisplayTimer > 0)
 			g.drawString("GRAZE! +"+grazeBonus, (float)grazeDisplayPoint.x, (float)grazeDisplayPoint.y);
-		
+
 		if (paused) {
 			Color trans = new Color(0f,0f,0f,0.7f);
 			g.setColor(trans);

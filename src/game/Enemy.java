@@ -96,8 +96,11 @@ public class Enemy {
 			hpbar = Color.red;
 	}
 
-	public void takeDamage(){
-		currentHP-=15;
+	public void takeDamage(boolean dd){
+		if(dd)
+			currentHP-=30;
+		else
+			currentHP-=15;
 		setHPBarColor();
 	}
 

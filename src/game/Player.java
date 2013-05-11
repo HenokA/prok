@@ -24,6 +24,10 @@ public class Player {
 	private float speed = 2;
 	private long time;
 	private long delay=100;
+	public int powerUpTimer = 0;
+	public int currPowerUp = -1;
+	public boolean dd = false;
+	public boolean invul = false;
 
 	public Player(Point p){
 		position = p;
@@ -31,6 +35,23 @@ public class Player {
 		hitbox = GameplayState.images[8];
 		bulletImg = GameplayState.images[9];
 		time = System.currentTimeMillis();
+	}
+	
+	public void checkPowerUps(){
+		if(currPowerUp > 0){
+			if(powerUpTimer>0){
+				switch(currPowerUp){
+				case 0: dd = true;
+				case 1: invul = true;
+				}
+			}else{
+				switch(currPowerUp){
+				case 0: dd = false;
+				case 1: invul = false;
+				}
+				currPowerUp = -1;
+			}
+		}
 	}
 
 	public void increment(int direction){
