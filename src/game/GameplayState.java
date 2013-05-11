@@ -96,7 +96,7 @@ public class GameplayState extends BasicGameState {
 	 */
 	public void loadImages(){
 		String[] files = {"ship2.png", "BulletGreen.png", "BulletBlue.png", "BulletRed.png", 
-				"samusship.png", "BulletOrange.png","BulletPurple.png", "gameplaybg.png", "PDot.png",
+				"finalship2.png", "BulletOrange.png","BulletPurple.png", "gameplaybg.png", "PDot.png",
 				"PlayerBullet.png", "BulletBigBlue.png", "BulletPink.png"};
 		images = new Image[files.length];
 		try {

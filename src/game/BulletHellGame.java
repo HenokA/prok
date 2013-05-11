@@ -13,6 +13,7 @@ public class BulletHellGame extends StateBasedGame {
     public static final int APPWIDTH = 600;
     public static final int HEIGHT = 610;
     public static final int WIDTH = 400;
+    public static final int OFFSET= (APPWIDTH-WIDTH)/2;
     
     public BulletHellGame()
     {

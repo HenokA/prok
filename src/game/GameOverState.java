@@ -141,7 +141,7 @@ public class GameOverState extends BasicGameState{
 	@SuppressWarnings("deprecation")
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 		// render the background
-		background.draw(0, 0);
+		background.draw(BulletHellGame.OFFSET, 0);
 		//Draw menu
 
 		getHighscores();
@@ -160,22 +160,22 @@ public class GameOverState extends BasicGameState{
 		break;
 		}
 		g.setColor(Color.cyan);
-		g.draw(new Circle(xselection-5, 145+40*selection, 10));
-		playAgainOption.draw(playAgainX, playAgainY, playAgainScale);
-		highscoreOption.draw(highscoreX, highscoreY);
-		exitOption.draw(endX, endY, exitScale);
-		menuOption.draw(menuX, menuY, menuScale);
+		g.draw(new Circle(BulletHellGame.OFFSET+xselection-5, 145+40*selection, 10));
+		playAgainOption.draw(BulletHellGame.OFFSET+playAgainX, playAgainY, playAgainScale);
+		highscoreOption.draw(BulletHellGame.OFFSET+highscoreX, highscoreY);
+		exitOption.draw(BulletHellGame.OFFSET+endX, endY, exitScale);
+		menuOption.draw(BulletHellGame.OFFSET+menuX, menuY, menuScale);
 		publishHS();
 		displayHS(g);
 
 	//	getWidth(highScoreName);
 	//	g.setFont(new TrueTypeFont(new java.awt.Font("Verdana", Font.PLAIN, 32), true));
-		g.drawString("Score:" + (int)currentScore, 50, 60);
-		g.drawString("Enter Name:", 180, 60);
-		g.drawString(highScoreName,278, 60);
+		g.drawString("Score:" + (int)currentScore, BulletHellGame.OFFSET+50, 60);
+		g.drawString("Enter Name:", BulletHellGame.OFFSET+180, 60);
+		g.drawString(highScoreName,BulletHellGame.OFFSET+278, 60);
 		g.setColor(new Color(0f,0f,0f,alphablock));
 	
-		g.fillRect(278, 62, 7, 15);
+		g.fillRect(BulletHellGame.OFFSET+278, 62, 7, 15);
 	}
 	/**
 	 * adds the score

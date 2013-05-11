@@ -72,13 +72,13 @@ public class Enemy {
 	}
 
 	public void draw(Graphics g){
-		g.drawImage(img, (float)position.x-img.getWidth()/2, (float)position.y-img.getHeight()/2);
+		g.drawImage(img, (int)position.x-img.getWidth()/2, (int)position.y-img.getHeight()/2);
 		g.setColor(Color.cyan);
 
 		//Hitboxes
-		//		g.drawRect((float) position.x-50, (float) position.y-50, 100, 75);
-		//		g.drawRect((float) position.x-100, (float) position.y-25, 50, 75);
-		//		g.drawRect((float) position.x+50, (float) position.y-25, 50, 75);
+//				g.drawRect((float) position.x-50, (float) position.y-50, 100, 75);
+//				g.drawRect((float) position.x-100, (float) position.y-25, 50, 75);
+//				g.drawRect((float) position.x+50, (float) position.y-25, 50, 75);
 	}
 
 	public void drawHPBar(Graphics g){

@@ -86,14 +86,14 @@ public class MainMenuState extends BasicGameState {
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 		// render the background
 		//background.setAlpha(.1f);
-		background.draw(-17, 0);
+		background.draw(BulletHellGame.OFFSET-17, 0);
 		
 		
 		//fx1.play();
 		 //Draw menu
-		startGameOption.draw(startgameX, startgameY, startGameScale);
-		highscoreOption.draw(highscoreX, highscoreY);
-		exitOption.draw(endX, endY, exitScale);
+		startGameOption.draw(BulletHellGame.OFFSET+startgameX, startgameY, startGameScale);
+		highscoreOption.draw(BulletHellGame.OFFSET+highscoreX, highscoreY);
+		exitOption.draw(BulletHellGame.OFFSET+endX, endY, exitScale);
 
 		g.setColor(Color.white);
 		BufferedReader br = null;
@@ -104,7 +104,7 @@ public class MainMenuState extends BasicGameState {
 			hs = new BufferedReader(new FileReader("assets/Names"));
 			for(int i=0;i<10;i++){
 				if((x = br.readLine()) != null && (y=hs.readLine())!=null){
-					g.drawString(x, hsposx, hsposy[i]);
+					g.drawString(x, BulletHellGame.OFFSET+hsposx, hsposy[i]);
 				}
 			}	
 
