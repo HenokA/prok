@@ -1,5 +1,6 @@
 package game;
 import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.TextField;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
@@ -66,6 +67,7 @@ public class GameOverState extends BasicGameState{
 	private static boolean checkScore=true;
 	BufferedWriter out;
 	ArrayList<Integer> highscores;
+	ArrayList<String> names;
 	boolean highscore=false;
 	String nameHS=null;
 	public static int inputTimer = 250;
@@ -75,8 +77,11 @@ public class GameOverState extends BasicGameState{
 	String highScoreName= "";
 	float alphablock=(float).95;
 	boolean up=false;
-	int blinker=278;
-
+	int blinker=260;
+	int changeNames;
+	boolean addName=false;
+	boolean firstChar=true;
+	boolean game=true;
 
 	GameOverState( int stateID ) 
 	{
@@ -101,15 +106,46 @@ public class GameOverState extends BasicGameState{
 		Image exitOptions = new Image("assets/exit1.png");
 		Image highscoreOptions = new Image("assets/highscore1.png");
 		Image menuOptions = new Image("assets/menu.png");
+
 		gc.getInput().addPrimaryListener(new InputAdapter(){
 			public void keyPressed(int key, char c){
-				highScoreName=highScoreName+c;
+				if(addName){
+					game=false;
+					if(key==Input.KEY_BACK){
+						if(highScoreName.length()>0){
+							if(highScoreName!=null){
+								highScoreName= highScoreName.substring(0, highScoreName.length()-1);
+								blinker=blinker-9;
+							}
+						}
+					}
+					else{
+						if(key==Input.KEY_ENTER){
+							if(addName){
+								highScoreName=highScoreName.trim();
+								names.set(changeNames,highScoreName);
+								publishNames();
+								highScoreName=" ";
+								addName=false;
+								firstChar=true;
+								game=true;
+							}
+						}
+						if(key!=Input.KEY_LSHIFT && key!=Input.KEY_ENTER){
+							highScoreName=highScoreName+c;
+							blinker=blinker+9;
+							firstChar=false;
+						}
+					}
+				}
 			}
 		});
+
 		playAgainOption = playAgainOptions.getSubImage(0, 0, 360, 72);
 		highscoreOption = highscoreOptions.getSubImage(0, 0, 231, 39);
 		exitOption = exitOptions.getSubImage(0, 0, 89, 29);
 		menuOption = menuOptions.getSubImage(0, 0, 288, 72);
+
 	}
 
 	/**
@@ -122,6 +158,7 @@ public class GameOverState extends BasicGameState{
 			hs = new BufferedReader(new FileReader("assets/CurrentScore"));
 			if((x = hs.readLine()) != null){
 				currentScore=Integer.parseInt(x);
+				System.out.println(currentScore);
 			}	
 
 		} catch (IOException e) {
@@ -145,6 +182,7 @@ public class GameOverState extends BasicGameState{
 		//Draw menu
 
 		getHighscores();
+		getNames();
 		if(checkScore){
 			selection = 0;
 			getScore();
@@ -168,14 +206,15 @@ public class GameOverState extends BasicGameState{
 		publishHS();
 		displayHS(g);
 
-	//	getWidth(highScoreName);
-	//	g.setFont(new TrueTypeFont(new java.awt.Font("Verdana", Font.PLAIN, 32), true));
+		//	getWidth(highScoreName);
+		//	g.setFont(new TrueTypeFont(new java.awt.Font("Verdana", Font.PLAIN, 32), true));
 		g.drawString("Score:" + (int)currentScore, BulletHellGame.OFFSET+50, 60);
 		g.drawString("Enter Name:", BulletHellGame.OFFSET+180, 60);
 		g.drawString(highScoreName,BulletHellGame.OFFSET+278, 60);
 		g.setColor(new Color(0f,0f,0f,alphablock));
-	
-		g.fillRect(BulletHellGame.OFFSET+278, 62, 7, 15);
+
+		g.fillRect(BulletHellGame.OFFSET+blinker, 62, 7, 15);
+
 	}
 	/**
 	 * adds the score
@@ -192,6 +231,23 @@ public class GameOverState extends BasicGameState{
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+	}
+
+	public void publishNames(){
+		if(addName){
+			try {
+				out = new BufferedWriter(new FileWriter("assets/Names"));
+				for(int i=0;i<10;i++){
+					out.write((names.get(i)));
+					System.out.println(names.get(i));
+					out.newLine();
+				}
+				out.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -222,25 +278,65 @@ public class GameOverState extends BasicGameState{
 			}
 		}
 	}
+	public void getNames(){
+		BufferedReader hs = null;
+		names=new ArrayList<String>();
+		String x = null;
+		String y=null;
+		try {
+			hs = new BufferedReader(new FileReader("assets/Names"));
+			for(int i=0;i<10;i++){
+				if((x = hs.readLine()) != null){
+					names.add(x);
+				}
+
+			}	
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (hs != null)hs.close();
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
+		}
+	}
+
 
 	/**
 	 * compares current score to the high scores to add it to the list
 	 */
 	public void compare(){
 		for(int i=0;i<10;i++){
-			if(currentScore==highscores.get(i)){
-				if(i!=10){
-					highscores.add(i,(currentScore));
-					highscore=true;
-					break;
-				}
-			} else if(Math.floor(currentScore)>highscores.get(i)){
+			if(currentScore>highscores.get(i)){
+				addName=true;
+				names.add(i, "<Your Name Here>");	
 				highscores.add(i,(currentScore));
+				publishNames();
+				System.out.println(names.get(i));
 				highscore=true;
+
+				changeNames=i;
 				break;
 			}
 		}
+		//			if(currentScore==highscores.get(i)){
+		//				if(i!=10){
+		//					highscores.add(i,(currentScore));
+		//					names.add(i, "-------");
+		//					publishNames();
+		//					System.out.println(names.get(i));
+		//					highscore=true;
+		//					addName=true;
+		//					changeNames=i;
+		//					break;
+		//				}
+		//			} 
+
 	}
+
+
 
 	/**
 	 * writes all of the highscores on the Screen
@@ -256,7 +352,8 @@ public class GameOverState extends BasicGameState{
 			hs = new BufferedReader(new FileReader("assets/Names"));
 			for(int i=0;i<10;i++){
 				if((x = br.readLine()) != null && (y=hs.readLine())!=null){
-					g.drawString(x, hsposx, hsposy[i]);
+					g.drawString(x, hsposx+50, hsposy[i]);
+					g.drawString(y, hsposx+150, hsposy[i]);
 				}
 			}	
 
@@ -271,59 +368,61 @@ public class GameOverState extends BasicGameState{
 			}
 		}
 	}
-
 	/**
 	 * A continously updated method that helps smoothly run the program
 	 */
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
-		if(active){
-			if(alphablock<=.95 && up!=true)
-				alphablock-=.03;
-			 if(alphablock<=.05&&up!=true){
-				up=true;
-				alphablock=(float).05;
-			}				
-			 if(alphablock>=.05&& up==true)
-				alphablock+=.03;
-			 if(alphablock>=.95 &&up==true){
-				up=false;
-				alphablock=(float).95;
-			}				
-			 
-			 if(highscore==true){
-				
-			 }
-			Input input = gc.getInput();
-			inputTimer -= delta;
-			if(inputTimer <=  0){
-				if(input.isKeyPressed(Input.KEY_DOWN)){
-					if(selection<=2)
-						selection++;
-					if(selection==3)
-						selection=0;
+		if(game){
+			if(active){
+				if(alphablock<=.95 && up!=true)
+					alphablock-=.03;
+				if(alphablock<=.05&&up!=true){
+					up=true;
+					alphablock=(float).05;
+				}				
+				if(alphablock>=.05&& up==true)
+					alphablock+=.03;
+				if(alphablock>=.95 &&up==true){
+					up=false;
+					alphablock=(float).95;
+				}				
+
+				if(highscore==true){
+
 				}
-				if(input.isKeyPressed(Input.KEY_UP)){
-					if(selection>=0)
-						selection--;
-					if(selection==-1)
-						selection=2;
-				}
-				if(input.isKeyPressed(Input.KEY_ENTER)){
-					if(selection == 0){
-						GameplayState gs = (GameplayState) sbg.getState(BulletHellGame.GAMEPLAYSTATE);
-						gs.newGame();
-						active = false;
-						sbg.enterState(BulletHellGame.GAMEPLAYSTATE, new FadeOutTransition(Color.black,1000), new FadeInTransition(Color.black,500));
-					}else if(selection ==1){
-						active = false;
-						sbg.enterState(BulletHellGame.MAINMENUSTATE, new FadeOutTransition(Color.black,400), new FadeInTransition(Color.black,400));
-					}else if(selection ==2){
-						gc.exit();
+				Input input = gc.getInput();
+				inputTimer -= delta;
+				if(inputTimer <=  0){
+					if(input.isKeyPressed(Input.KEY_DOWN)){
+						if(selection<=2)
+							selection++;
+						if(selection==3)
+							selection=0;
 					}
-				}
-			}		
+					if(input.isKeyPressed(Input.KEY_UP)){
+						if(selection>=0)
+							selection--;
+						if(selection==-1)
+							selection=2;
+					}
+					if(input.isKeyPressed(Input.KEY_ENTER)){
+						if(selection == 0){
+							GameplayState gs = (GameplayState) sbg.getState(BulletHellGame.GAMEPLAYSTATE);
+							addName=true;
+							gs.newGame();
+							active = false;
+							sbg.enterState(BulletHellGame.GAMEPLAYSTATE, new FadeOutTransition(Color.black,1000), new FadeInTransition(Color.black,500));
+						}else if(selection ==1){
+							addName=true;
+							active = false;
+							sbg.enterState(BulletHellGame.MAINMENUSTATE, new FadeOutTransition(Color.black,400), new FadeInTransition(Color.black,400));
+						}else if(selection ==2){
+							gc.exit();
+						}
+					}
+				}		
+			}
 		}
 	}
-
 
 }
