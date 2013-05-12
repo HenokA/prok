@@ -52,14 +52,14 @@ public class GameOverState extends BasicGameState{
 	int stateID = -1;
 	Sound fx = null;
 	Sound fx1 = null;
-	int playAgainX=30;
-	int playAgainY=106;
-	int menuX=100;
+	int playAgainX=35;
+	int playAgainY=136;
+//	int menuX=100;
 	int menuY=146;
-	int endX= 156;
+	int endX= 126;
 	int endY=206;
-	int highscoreX= 95;
-	int highscoreY=250;
+	int highscoreX= 100;
+	int highscoreY=270;
 	int hsposx=176;
 	boolean starting=true;
 	int[] hsposy= {300, 320, 340, 360, 380, 400, 420, 440,460,480,500};
@@ -103,9 +103,9 @@ public class GameOverState extends BasicGameState{
 		background = new Image("assets/gameplaybg.png");
 		// load the menu images
 		Image playAgainOptions = new Image("assets/playagain.png");
-		Image exitOptions = new Image("assets/exit1.png");
+		Image exitOptions = new Image("assets/exit.png");
 		Image highscoreOptions = new Image("assets/highscore1.png");
-		Image menuOptions = new Image("assets/menu.png");
+		//Image menuOptions = new Image("assets/menu.png");
 
 		gc.getInput().addPrimaryListener(new InputAdapter(){
 			public void keyPressed(int key, char c){
@@ -125,7 +125,6 @@ public class GameOverState extends BasicGameState{
 								highScoreName=highScoreName.trim();
 								names.set(changeNames,highScoreName);
 								publishNames();
-								highScoreName=" ";
 								addName=false;
 								firstChar=true;
 								game=true;
@@ -141,10 +140,10 @@ public class GameOverState extends BasicGameState{
 			}
 		});
 
-		playAgainOption = playAgainOptions.getSubImage(0, 0, 360, 72);
-		highscoreOption = highscoreOptions.getSubImage(0, 0, 231, 39);
-		exitOption = exitOptions.getSubImage(0, 0, 89, 29);
-		menuOption = menuOptions.getSubImage(0, 0, 288, 72);
+		playAgainOption = playAgainOptions.getSubImage(0, 0, 329, 29);
+		highscoreOption = highscoreOptions.getSubImage(0, 0, 200, 16);
+		exitOption = exitOptions.getSubImage(0, 0, 148, 27);
+		//menuOption = menuOptions.getSubImage(0, 0, 288, 72);
 
 	}
 
@@ -192,8 +191,8 @@ public class GameOverState extends BasicGameState{
 		switch(selection){
 		case 0: xselection=playAgainX;
 		break;
-		case 1: xselection=menuX;
-		break;
+	//	case 1: xselection=menuX;
+	//	break;
 		case 2: xselection=endX;
 		break;
 		}
@@ -202,12 +201,10 @@ public class GameOverState extends BasicGameState{
 		playAgainOption.draw(BulletHellGame.OFFSET+playAgainX, playAgainY, playAgainScale);
 		highscoreOption.draw(BulletHellGame.OFFSET+highscoreX, highscoreY);
 		exitOption.draw(BulletHellGame.OFFSET+endX, endY, exitScale);
-		menuOption.draw(BulletHellGame.OFFSET+menuX, menuY, menuScale);
+	//	menuOption.draw(BulletHellGame.OFFSET+menuX, menuY, menuScale);
 		publishHS();
 		displayHS(g);
 
-		//	getWidth(highScoreName);
-		//	g.setFont(new TrueTypeFont(new java.awt.Font("Verdana", Font.PLAIN, 32), true));
 		g.drawString("Score:" + (int)currentScore, BulletHellGame.OFFSET+50, 60);
 		g.drawString("Enter Name:", BulletHellGame.OFFSET+180, 60);
 		g.drawString(highScoreName,BulletHellGame.OFFSET+278, 60);
@@ -320,20 +317,21 @@ public class GameOverState extends BasicGameState{
 				changeNames=i;
 				break;
 			}
-		}
-		//			if(currentScore==highscores.get(i)){
-		//				if(i!=10){
-		//					highscores.add(i,(currentScore));
-		//					names.add(i, "-------");
-		//					publishNames();
-		//					System.out.println(names.get(i));
-		//					highscore=true;
-		//					addName=true;
-		//					changeNames=i;
-		//					break;
-		//				}
-		//			} 
 
+			if(currentScore==highscores.get(i)){
+				if(i!=10){
+					addName=true;
+					highscores.add(i,(currentScore));
+					names.add(i, "-------");
+					publishNames();
+					System.out.println(names.get(i));
+					highscore=true;
+
+					changeNames=i;
+					break;
+				}
+			} 
+		}
 	}
 
 

@@ -37,8 +37,8 @@ public class MainMenuState extends BasicGameState {
 	int startgameY=156;
 	int endX= 156;
 	int endY=206;
-	int highscoreX= 95;
-	int highscoreY=250;
+	int highscoreX= 110;
+	int highscoreY=260;
 	int hsposx=176;
 	boolean starting=true;
 	int selection = 0;
@@ -67,7 +67,7 @@ public class MainMenuState extends BasicGameState {
 		Image highscoreOptions = new Image("assets/highscore1.png");
 
 		startGameOption = startgameOptions.getSubImage(0, 0, 231, 39);
-		highscoreOption = highscoreOptions.getSubImage(0, 0, 231, 39);
+		highscoreOption = highscoreOptions.getSubImage(0, 0, 200, 16);
 		exitOption = exitOptions.getSubImage(0, 0, 89, 29);
 	
 		
@@ -104,7 +104,8 @@ public class MainMenuState extends BasicGameState {
 			hs = new BufferedReader(new FileReader("assets/Names"));
 			for(int i=0;i<10;i++){
 				if((x = br.readLine()) != null && (y=hs.readLine())!=null){
-					g.drawString(x, BulletHellGame.OFFSET+hsposx, hsposy[i]);
+					g.drawString(x, hsposx+30, hsposy[i]);
+					g.drawString(y, hsposx+105, hsposy[i]);
 				}
 			}	
 
