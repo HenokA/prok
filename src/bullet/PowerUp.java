@@ -15,7 +15,7 @@ public class PowerUp extends Bullet{
 	public static int INVULNERABILITY = 1;
 	public static int NUMPOWERUPS = 2;
 
-	private Image[] sprites = {GameplayState.images[10],GameplayState.images[10] };
+	private Image[] sprites = {GameplayState.images[12],GameplayState.images[13] };
 	private Random r = new Random();
 	private int powerUpNum = 0;
 
@@ -29,10 +29,11 @@ public class PowerUp extends Bullet{
 	}
 
 	public void applyPowerUp(Player p){
+		p.turnOffPowerUps();		//Reset powerups
 		p.currPowerUp = powerUpNum;
 		switch(powerUpNum){
-		case 0 : p.powerUpTimer = 30000;
-		case 1 : p.powerUpTimer = 5000;
+		case 0 : p.powerUpTimer = 30000;break;
+		case 1 : p.powerUpTimer = 10000;break;
 		}
 	}
 }

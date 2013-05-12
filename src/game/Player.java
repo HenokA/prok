@@ -24,6 +24,7 @@ public class Player {
 	private float speed = 2;
 	private long time;
 	private long delay=100;
+
 	public int powerUpTimer = 0;
 	public int currPowerUp = -1;
 	public boolean dd = false;
@@ -36,22 +37,27 @@ public class Player {
 		bulletImg = GameplayState.images[9];
 		time = System.currentTimeMillis();
 	}
-	
-	public void checkPowerUps(){
-		if(currPowerUp > 0){
+
+	public void checkPowerUps(int delta){
+		System.out.println(currPowerUp+", "+powerUpTimer);
+		if(currPowerUp >= 0){
 			if(powerUpTimer>0){
 				switch(currPowerUp){
-				case 0: dd = true;
-				case 1: invul = true;
+				case 0: dd = true;break;
+				case 1: invul = true;break;
 				}
-			}else{
-				switch(currPowerUp){
-				case 0: dd = false;
-				case 1: invul = false;
-				}
-				currPowerUp = -1;
+				powerUpTimer-=delta;
+			}
+			else{
+				turnOffPowerUps();
 			}
 		}
+	}
+
+	public void turnOffPowerUps(){
+		dd = false;
+		invul = false;
+		currPowerUp = -1;
 	}
 
 	public void increment(int direction){
@@ -68,7 +74,7 @@ public class Player {
 	public void setSpeed(float s){
 		speed = s;
 	}
-	
+
 	public void drawShip(Graphics g){
 		g.drawImage(img, (float)position.x-img.getWidth()/2, (float)position.y-img.getHeight()/2);
 	}
@@ -79,7 +85,12 @@ public class Player {
 
 	public void shoot(ArrayList<Bullet> bullets){
 		if(System.currentTimeMillis() -time > delay){
-			bullets.add(new Bullet(position, new Point(0,-1), bulletImg, 7));
+			if(dd){
+				bullets.add(new Bullet(new Point(position.x-10, position.y), new Point(0,-1), bulletImg, 7));
+				bullets.add(new Bullet(new Point(position.x+10, position.y), new Point(0,-1), bulletImg, 7));
+			}
+			else
+				bullets.add(new Bullet(position, new Point(0,-1), bulletImg, 7));
 			time = System.currentTimeMillis();
 		}
 	}

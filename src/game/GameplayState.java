@@ -64,9 +64,13 @@ public class GameplayState extends BasicGameState {
 	int nextTier = levelUps[lvlIndex];
 	Enemy enemy;
 	boolean paused;
+
+	int invulDisplayTimer =0;
+	Point invulDisplayPoint;
 	int grazeDisplayTimer = 0;
 	Point grazeDisplayPoint;
 	int grazeBonus = 0;
+
 	int respawnTimer = 0;
 	int stateID = -1;
 	Image resumeOption = null;
@@ -98,7 +102,7 @@ public class GameplayState extends BasicGameState {
 	public void loadImages(){
 		String[] files = {"ship2.png", "BulletGreen.png", "BulletBlue.png", "BulletRed.png", 
 				"finalship2.png", "BulletOrange.png","BulletPurple.png", "gameplaybg.png", "PDot.png",
-				"PlayerBullet.png", "BulletBigBlue.png", "BulletPink.png"};
+				"PlayerBullet.png", "BulletBigBlue.png", "BulletPink.png", "PowerUpDD.png", "PowerUpInvul.png"};
 		images = new Image[files.length];
 		try {
 			for(int i=0; i<files.length; i++){
@@ -260,8 +264,10 @@ public class GameplayState extends BasicGameState {
 			if (container.getInput().isKeyDown(Input.KEY_SPACE)) {player.shoot(pbullets);}
 			player.setSpeed(3);
 
-			player.checkPowerUps();
+			player.checkPowerUps(delta);
 
+			if(invulDisplayTimer > 0)
+				invulDisplayTimer -=delta;
 			if(grazeDisplayTimer > 0)
 				grazeDisplayTimer -=delta;
 			if(grazeDisplayTimer <= 0)
@@ -300,22 +306,27 @@ public class GameplayState extends BasicGameState {
 					((PowerUp) bullet).applyPowerUp(player);
 				}
 				else{
-					if(bullet.checkCollision(player.position) && player.invul==false){
-						dead = true;
-						deadBullet=bullet;
-						try {
-							out = new BufferedWriter(new FileWriter("assets/CurrentScore"));
-							out.write(Integer.toString((int)(score)));
-							out.close(); //writes score to the current score file
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
+					if(bullet.checkCollision(player.position)){
+						if(!player.invul){
+							dead = true;
+							deadBullet=bullet;
+							try {
+								out = new BufferedWriter(new FileWriter("assets/CurrentScore"));
+								out.write(Integer.toString((int)(score)));
+								out.close(); //writes score to the current score file
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}else{
+							invulDisplayTimer = 500;
+							invulDisplayPoint = player.position.addVector(new Point(-5, -10));
 						}
 					}else if(bullet.checkGraze(player.position)){
 						score += 10*multiplier;
-						grazeDisplayTimer += 100;
+						grazeDisplayTimer = 500;
 						grazeBonus += 10*multiplier;
-						grazeDisplayPoint = player.position.addVector(new Point(0, -10));
+						grazeDisplayPoint = player.position.addVector(new Point(5, -10));
 					}
 				}
 				bullet.increment(delta);
@@ -329,8 +340,7 @@ public class GameplayState extends BasicGameState {
 				Bullet bullet = i.next();
 				if(enemy != null && bullet.checkCollisionEnemy(enemy.position)){
 					i.remove();
-					enemy.takeDamage(player.dd); //enemy has taken damage
-					System.out.println(player.dd);
+					enemy.takeDamage(); //enemy has taken damage
 				}
 				bullet.increment(delta);
 				if(bullet.checkOffscreen()){
@@ -380,7 +390,9 @@ public class GameplayState extends BasicGameState {
 		g.setColor(Color.cyan);
 		if(grazeDisplayTimer > 0)
 			g.drawString("GRAZE! +"+grazeBonus, (float)grazeDisplayPoint.x, (float)grazeDisplayPoint.y);
-
+		g.setColor(Color.green);
+		if(invulDisplayTimer > 0)
+			g.drawString("INVUL!", (float)invulDisplayPoint.x, (float)invulDisplayPoint.y);
 		if (paused) {
 			Color trans = new Color(0f,0f,0f,0.7f);
 			g.setColor(trans);
