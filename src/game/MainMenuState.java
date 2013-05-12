@@ -5,9 +5,6 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
-
-import javax.swing.JOptionPane;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -16,15 +13,10 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
-import org.newdawn.slick.TrueTypeFont;
-import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
-import org.newdawn.slick.state.transition.CombinedTransition;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
-import org.newdawn.slick.state.transition.RotateTransition;
-import org.newdawn.slick.util.ResourceLoader;
 
 
 public class MainMenuState extends BasicGameState {
@@ -135,8 +127,7 @@ public class MainMenuState extends BasicGameState {
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
 		Input input = gc.getInput();
 		//fx1.play();
-		int mouseX = input.getMouseX();
-		int mouseY = input.getMouseY();
+
 		if(input.isKeyPressed(Input.KEY_ENTER)){
 			if(selection == 0){
 				GameplayState gs = (GameplayState) sbg.getState(BulletHellGame.GAMEPLAYSTATE);
@@ -145,44 +136,6 @@ public class MainMenuState extends BasicGameState {
 			}else if(selection == 1){
 				gc.exit();
 			}
-		}
-
-		boolean insideStartGame = false;
-		boolean insideExit = false;
-
-		if( ( mouseX >= startgameX && mouseX <= startgameX + startGameOption.getWidth()) &&
-				( mouseY >= startgameY && mouseY <= startgameY + startGameOption.getHeight()) ){
-			insideStartGame = true;
-		}else if( ( mouseX >= endX && mouseX <= endX + exitOption.getWidth()) &&
-				( mouseY >= endY && mouseY <= endY + exitOption.getHeight()) ){
-			insideExit = true;
-		}
-
-		if(insideStartGame){
-			if(startGameScale < 1.05f)
-				startGameScale += scaleStep * delta;
-
-			if ( input.isMouseButtonDown(Input.MOUSE_LEFT_BUTTON) ){
-				//fx1.stop();
-				//fx1.loop();	
-				GameplayState gs = (GameplayState) sbg.getState(BulletHellGame.GAMEPLAYSTATE);
-				gs.newGame();
-				sbg.enterState(BulletHellGame.GAMEPLAYSTATE, new FadeOutTransition(Color.black,1000), new FadeInTransition(Color.black,500));
-			}
-		}else {
-			if(startGameScale > 1.0f)
-				startGameScale -= scaleStep * delta;
-		}
-
-		if(insideExit)
-		{
-			if(exitScale < 1.05f)
-				exitScale +=  scaleStep * delta;
-			if ( input.isMouseButtonDown(Input.MOUSE_LEFT_BUTTON) )
-				gc.exit();
-		}else{
-			if(exitScale > 1.0f)
-				exitScale -= scaleStep * delta;
 		}
 	}
 

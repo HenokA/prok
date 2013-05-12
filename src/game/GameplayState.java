@@ -20,6 +20,8 @@ import org.newdawn.slick.state.transition.FadeOutTransition;
 import pattern.Pattern;
 import pattern.PatternBigExplodingCircle;
 import pattern.PatternCircle;
+import pattern.PatternConstantHomingLine;
+import pattern.PatternConstantHomingWide;
 import pattern.PatternCurve;
 import pattern.PatternDoubleCurve;
 import pattern.PatternDoubleSinCurve;
@@ -102,7 +104,7 @@ public class GameplayState extends BasicGameState {
 		String[] files = {"ship2.png", "BulletGreen.png", "BulletBlue.png", "BulletRed.png", 
 				"finalship2.png", "BulletOrange.png","BulletPurple.png", "gameplaybg.png", "PDot.png",
 				"PlayerBullet.png", "BulletBigBlue.png", "BulletPink.png", "PowerUpDD.png", "PowerUpInvul.png",
-				"HPBarOutline.png", "PowerUpTWarp.png"};
+				"HPBarOutline.png", "PowerUpTWarp.png", "BulletCyan.png"};
 		images = new Image[files.length];
 		try {
 			for(int i=0; i<files.length; i++){
@@ -165,7 +167,7 @@ public class GameplayState extends BasicGameState {
 		for(int i=0; i<3; i++){
 			patternIds.add(pid);
 			while(patternIds.contains(pid))
-				pid = r.nextInt(13);
+				pid = r.nextInt(15);
 			switch(pid){
 			case 0 : patterns.add(new PatternCircle(enemyxy)); break;
 			case 1 : patterns.add(new PatternSpiral(enemyxy)); break;
@@ -180,6 +182,8 @@ public class GameplayState extends BasicGameState {
 			case 10: patterns.add(new PatternBigExplodingCircle(enemyxy)); break;
 			case 11: patterns.add(new PatternInitialHomingWide(enemyxy)); break;
 			case 12: patterns.add(new PatternInitialHomingLine(enemyxy)); break;
+			case 13: patterns.add(new PatternConstantHomingLine(enemyxy)); break;
+			case 14: patterns.add(new PatternConstantHomingWide(enemyxy)); break;
 			}
 		}
 		enemy = new Enemy( enemyxy, images[4]);
@@ -303,7 +307,6 @@ public class GameplayState extends BasicGameState {
 			while(i.hasNext()) {
 				Bullet bullet = i.next();
 				if(bullet instanceof PowerUp && bullet.checkCollision(player.position)){
-					System.out.println("asdfasdfa");
 					((PowerUp) bullet).applyPowerUp(player);
 					i.remove();
 				}

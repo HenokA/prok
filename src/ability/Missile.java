@@ -31,7 +31,6 @@ public class Missile {
 		time += (float) delta;
 		float timeSeconds = time/1000;
 		vf = vo+accel*(timeSeconds*timeSeconds); //		vf = vo + at^2
-		//vf = 1.1f;
 		Point p = GameplayState.player.position;
 		vector = new Point(p.x-position.x, p.y-position.y).getUnitVector();
 		position = position.addVector(vector.mult(vf));

@@ -33,7 +33,7 @@ public class PowerUp extends Bullet{
 		p.turnOffPowerUps();		//Reset powerups
 		p.currPowerUp = powerUpNum;
 		switch(powerUpNum){
-		case 0 : p.powerUpTimer = 30000;break;
+		case 0 : p.powerUpTimer = 20000;break;
 		case 1 : p.powerUpTimer = 10000;break;
 		case 2 : p.powerUpTimer = 20000;break; 
 		}
