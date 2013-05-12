@@ -27,6 +27,7 @@ public class Enemy {
 	private static int XUPPERBOUND = BulletHellGame.WIDTH-XLOWERBOUND;
 	private static int YLOWERBOUND = 50;
 	private static int YUPPERBOUND = 200;
+	private Image outline = GameplayState.images[14];
 
 	public Enemy(Point position, Image img){
 		this.position = position;
@@ -83,8 +84,9 @@ public class Enemy {
 
 	public void drawHPBar(Graphics g){
 		g.setColor(hpbar);
-		g.fillRect(BulletHellGame.WIDTH+15, 25, 150*(currentHP/maxHP), 10);
-		g.drawString((int)currentHP+"", BulletHellGame.WIDTH+15, 35);
+		g.fillRect(BulletHellGame.WIDTH+15, 27, 150*(currentHP/maxHP), 13);
+		g.drawString("BOSS HP: "+(int)currentHP+"", BulletHellGame.WIDTH+15, 42);
+		g.drawImage(outline, BulletHellGame.WIDTH+11, 23);
 	}
 
 	public void setHPBarColor(){

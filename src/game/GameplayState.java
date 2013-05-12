@@ -36,7 +36,6 @@ import ability.Ability;
 import ability.AbilityLockOnMissiles;
 import ability.Missile;
 import bullet.Bullet;
-import bullet.BulletInitialHoming;
 import bullet.PowerUp;
 /**
  * This class is the game play class where the actual game is played.
@@ -102,7 +101,8 @@ public class GameplayState extends BasicGameState {
 	public void loadImages(){
 		String[] files = {"ship2.png", "BulletGreen.png", "BulletBlue.png", "BulletRed.png", 
 				"finalship2.png", "BulletOrange.png","BulletPurple.png", "gameplaybg.png", "PDot.png",
-				"PlayerBullet.png", "BulletBigBlue.png", "BulletPink.png", "PowerUpDD.png", "PowerUpInvul.png"};
+				"PlayerBullet.png", "BulletBigBlue.png", "BulletPink.png", "PowerUpDD.png", "PowerUpInvul.png",
+				"HPBarOutline.png", "PowerUpTWarp.png"};
 		images = new Image[files.length];
 		try {
 			for(int i=0; i<files.length; i++){
@@ -140,6 +140,7 @@ public class GameplayState extends BasicGameState {
 		BULLETSPEED = 1f;
 		BULLETRATE = 2f;
 		grazeDisplayTimer = 0;
+		invulDisplayTimer = 0;
 		level=0;
 		lvlIndex=0;
 	}
@@ -182,7 +183,7 @@ public class GameplayState extends BasicGameState {
 			}
 		}
 		enemy = new Enemy( enemyxy, images[4]);
-		abilities.add(new AbilityLockOnMissiles(enemyxy));
+		//abilities.add(new AbilityLockOnMissiles(enemyxy));
 	}
 	/**
 	 * Allows the program to increase in difficulty by increasing bullet speed
@@ -304,6 +305,7 @@ public class GameplayState extends BasicGameState {
 				if(bullet instanceof PowerUp && bullet.checkCollision(player.position)){
 					System.out.println("asdfasdfa");
 					((PowerUp) bullet).applyPowerUp(player);
+					i.remove();
 				}
 				else{
 					if(bullet.checkCollision(player.position)){
@@ -320,13 +322,16 @@ public class GameplayState extends BasicGameState {
 							}
 						}else{
 							invulDisplayTimer = 500;
-							invulDisplayPoint = player.position.addVector(new Point(-5, -10));
+							invulDisplayPoint = player.position.addVector(new Point(5, 10));
 						}
-					}else if(bullet.checkGraze(player.position)){
+					}else if(bullet.checkGraze(player.position, 7)){
 						score += 10*multiplier;
 						grazeDisplayTimer = 500;
 						grazeBonus += 10*multiplier;
 						grazeDisplayPoint = player.position.addVector(new Point(5, -10));
+					}else if(player.twarp && !bullet.warp && bullet.checkGraze(player.position, 45)){
+						bullet.setSpeed(bullet.getSpeed()*.5f);
+						bullet.warp = true;
 					}
 				}
 				bullet.increment(delta);
@@ -418,7 +423,7 @@ public class GameplayState extends BasicGameState {
 		g.setColor(Color.black);
 		g.fillRect(BulletHellGame.WIDTH, 0, BulletHellGame.APPWIDTH-BulletHellGame.WIDTH, BulletHellGame.HEIGHT);
 		g.setColor(new Color(255, 200, 0));
-		g.drawString((int)Math.floor(score)+"", BulletHellGame.WIDTH+15, 0);
+		g.drawString("SCORE: "+(int)Math.floor(score)+"", BulletHellGame.WIDTH+15, 5);
 		if(enemy!=null) enemy.drawHPBar(g);
 	}
 	@Override

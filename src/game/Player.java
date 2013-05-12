@@ -29,6 +29,7 @@ public class Player {
 	public int currPowerUp = -1;
 	public boolean dd = false;
 	public boolean invul = false;
+	public boolean twarp = false;
 
 	public Player(Point p){
 		position = p;
@@ -39,12 +40,12 @@ public class Player {
 	}
 
 	public void checkPowerUps(int delta){
-		System.out.println(currPowerUp+", "+powerUpTimer);
 		if(currPowerUp >= 0){
 			if(powerUpTimer>0){
 				switch(currPowerUp){
 				case 0: dd = true;break;
 				case 1: invul = true;break;
+				case 2: twarp = true;break;
 				}
 				powerUpTimer-=delta;
 			}
@@ -57,6 +58,7 @@ public class Player {
 	public void turnOffPowerUps(){
 		dd = false;
 		invul = false;
+		twarp = false;
 		currPowerUp = -1;
 	}
 
@@ -81,6 +83,11 @@ public class Player {
 
 	public void drawHitBox(Graphics g){
 		g.drawImage(hitbox, (float)position.x-hitbox.getWidth()/2, (float)position.y-hitbox.getHeight()/2);
+		if(invul || twarp){
+			g.setColor(invul ? Color.green : Color.magenta);
+			g.setLineWidth(3.0f);
+			g.draw(new Circle((float)position.x, (float)position.y, invul ? 15.0f : 45.0f));
+		}
 	}
 
 	public void shoot(ArrayList<Bullet> bullets){

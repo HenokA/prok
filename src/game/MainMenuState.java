@@ -1,9 +1,11 @@
 package game;
 
+import java.awt.Font;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 
 import javax.swing.JOptionPane;
 
@@ -14,12 +16,15 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
+import org.newdawn.slick.TrueTypeFont;
+import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.CombinedTransition;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 import org.newdawn.slick.state.transition.RotateTransition;
+import org.newdawn.slick.util.ResourceLoader;
 
 
 public class MainMenuState extends BasicGameState {
@@ -43,6 +48,7 @@ public class MainMenuState extends BasicGameState {
 	boolean starting=true;
 	int selection = 0;
 	int[] hsposy= {300, 320, 340, 360, 380, 400, 420, 440,460,480,500};
+	
 	MainMenuState( int stateID ) 
 	{
 		this.stateID = stateID;
@@ -55,7 +61,7 @@ public class MainMenuState extends BasicGameState {
 	/**
 	 * run at the beginning of the program to instantiate everything
 	 */
-	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
+	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {		
 		background = new Image("assets/b1.png");
 		
 		//fx= new Sound("assets/Kalimba.wav");

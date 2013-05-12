@@ -16,6 +16,7 @@ public class Bullet {
 	protected Point vector;	//directional vector
 	protected float speed = 1;
 	protected int radius;
+	public boolean warp = false;
 	Image img;
 	
 	/**
@@ -59,6 +60,10 @@ public class Bullet {
 		this.speed = speed;
 	}
 	
+	public float getSpeed(){
+		return speed;
+	}
+	
 	/**
 	 * Sets direction vector
 	 * @param v - Unit vector
@@ -84,8 +89,8 @@ public class Bullet {
 		return position.distanceTo(player) < radius;
 	}
 	
-	public boolean checkGraze(Point player){
-		return position.distanceTo(player) < (radius+7);
+	public boolean checkGraze(Point player, int dist){
+		return position.distanceTo(player) < (radius+dist);
 	}
 	
 	/**
