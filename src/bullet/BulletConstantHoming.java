@@ -29,7 +29,7 @@ public class BulletConstantHoming extends Bullet{
 		Point p = GameplayState.player.position;
 		vector = new Point(p.x-position.x, p.y-position.y).getUnitVector();
 		position = position.addVector(vector.mult(vf));
-		if(vf < 0){
+		if(vf < 2){
 			GameplayState.bulletsToBeRemoved.add(this);
 		}
 	}

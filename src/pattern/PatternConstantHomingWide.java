@@ -44,7 +44,7 @@ public class PatternConstantHomingWide implements Pattern {
 		time += delta;
 		if(time > delay){
 			for(int i=0; i<pointsx.length; i++){ //Create bullets in a circle
-				bullets.add(new BulletConstantHoming(position.addVector(new Point(pointsx[i],pointsy[i])), img, 3f, -.35f));
+				bullets.add(new BulletConstantHoming(position.addVector(new Point(pointsx[i],pointsy[i])), img, 3.5f, -.25f));
 			}
 			time = 0;
 		}

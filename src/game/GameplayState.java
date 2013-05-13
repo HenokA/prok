@@ -30,14 +30,17 @@ import pattern.PatternInitialHomingWide;
 import pattern.PatternQuadSpiral;
 import pattern.PatternReverseCurve;
 import pattern.PatternReverseSinCurve;
+import pattern.PatternRotatingBeam;
 import pattern.PatternSinCircle;
 import pattern.PatternSinCurve;
 import pattern.PatternSpiral;
+import pattern.PatternTrackingBeam;
 
 import ability.Ability;
 import ability.AbilityLockOnMissiles;
 import ability.Missile;
 import bullet.Bullet;
+import bullet.BulletBeamHitbox;
 import bullet.PowerUp;
 /**
  * This class is the game play class where the actual game is played.
@@ -164,28 +167,31 @@ public class GameplayState extends BasicGameState {
 		ArrayList<Integer> patternIds = new ArrayList<Integer>();
 		int pid =  -1;
 		Point enemyxy = new Point(200, 200);
-		for(int i=0; i<3; i++){
-			patternIds.add(pid);
-			while(patternIds.contains(pid))
-				pid = r.nextInt(15);
-			switch(pid){
-			case 0 : patterns.add(new PatternCircle(enemyxy)); break;
-			case 1 : patterns.add(new PatternSpiral(enemyxy)); break;
-			case 2 : patterns.add(new PatternQuadSpiral(enemyxy)); break;
-			case 3 : patterns.add(new PatternCurve(enemyxy)); break;
-			case 4 : patterns.add(new PatternReverseCurve(enemyxy)); break;
-			case 5 : patterns.add(new PatternDoubleCurve(enemyxy)); break;
-			case 6 : patterns.add(new PatternSinCurve(enemyxy)); break;
-			case 7 : patterns.add(new PatternReverseSinCurve(enemyxy)); break;
-			case 8 : patterns.add(new PatternDoubleSinCurve(enemyxy)); break;
-			case 9 : patterns.add(new PatternSinCircle(enemyxy)); break;
-			case 10: patterns.add(new PatternBigExplodingCircle(enemyxy)); break;
-			case 11: patterns.add(new PatternInitialHomingWide(enemyxy)); break;
-			case 12: patterns.add(new PatternInitialHomingLine(enemyxy)); break;
-			case 13: patterns.add(new PatternConstantHomingLine(enemyxy)); break;
-			case 14: patterns.add(new PatternConstantHomingWide(enemyxy)); break;
-			}
-		}
+				for(int i=0; i<3; i++){
+					patternIds.add(pid);
+					while(patternIds.contains(pid))
+						pid = r.nextInt(17);
+					switch(pid){
+					case 0 : patterns.add(new PatternCircle(enemyxy)); break;
+					case 1 : patterns.add(new PatternSpiral(enemyxy)); break;
+					case 2 : patterns.add(new PatternQuadSpiral(enemyxy)); break;
+					case 3 : patterns.add(new PatternCurve(enemyxy)); break;
+					case 4 : patterns.add(new PatternReverseCurve(enemyxy)); break;
+					case 5 : patterns.add(new PatternDoubleCurve(enemyxy)); break;
+					case 6 : patterns.add(new PatternSinCurve(enemyxy)); break;
+					case 7 : patterns.add(new PatternReverseSinCurve(enemyxy)); break;
+					case 8 : patterns.add(new PatternDoubleSinCurve(enemyxy)); break;
+					case 9 : patterns.add(new PatternSinCircle(enemyxy)); break;
+					case 10: patterns.add(new PatternBigExplodingCircle(enemyxy)); break;
+					case 11: patterns.add(new PatternInitialHomingWide(enemyxy)); break;
+					case 12: patterns.add(new PatternInitialHomingLine(enemyxy)); break;
+					case 13: patterns.add(new PatternConstantHomingLine(enemyxy)); break;
+					case 14: patterns.add(new PatternConstantHomingWide(enemyxy)); break;
+					case 15: patterns.add(new PatternRotatingBeam(enemyxy)); break;
+					case 16: patterns.add(new PatternTrackingBeam(enemyxy)); break;
+					}
+				}
+		//patterns.add(new PatternTrackingBeam(enemyxy));
 		enemy = new Enemy( enemyxy, images[4]);
 		//abilities.add(new AbilityLockOnMissiles(enemyxy));
 	}
@@ -306,9 +312,11 @@ public class GameplayState extends BasicGameState {
 			Iterator<Bullet> i = ebullets.iterator(); 
 			while(i.hasNext()) {
 				Bullet bullet = i.next();
-				if(bullet instanceof PowerUp && bullet.checkCollision(player.position)){
-					((PowerUp) bullet).applyPowerUp(player);
-					i.remove();
+				if(bullet instanceof PowerUp){
+					if(bullet.checkCollision(player.position)){
+						((PowerUp) bullet).applyPowerUp(player);
+						i.remove();
+					}
 				}
 				else{
 					if(bullet.checkCollision(player.position)){
@@ -338,7 +346,7 @@ public class GameplayState extends BasicGameState {
 					}
 				}
 				bullet.increment(delta);
-				if(bullet.checkOffscreen()){
+				if(bullet.checkOffscreen() && !(bullet instanceof BulletBeamHitbox)){
 					i.remove();
 				}
 			}
