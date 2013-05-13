@@ -127,7 +127,7 @@ public class MainMenuState extends BasicGameState {
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
 		Input input = gc.getInput();
 		//fx1.play();
-
+		
 		if(input.isKeyPressed(Input.KEY_ENTER)){
 			if(selection == 0){
 				GameplayState gs = (GameplayState) sbg.getState(BulletHellGame.GAMEPLAYSTATE);

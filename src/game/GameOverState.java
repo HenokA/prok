@@ -54,7 +54,7 @@ public class GameOverState extends BasicGameState{
 	Sound fx1 = null;
 	int playAgainX=35;
 	int playAgainY=136;
-//	int menuX=100;
+	//	int menuX=100;
 	int menuY=146;
 	int endX= 126;
 	int endY=206;
@@ -77,8 +77,8 @@ public class GameOverState extends BasicGameState{
 	String highScoreName= "";
 	float alphablock=(float).95;
 	boolean up=false;
-	int blinker=260;
-	int changeNames;
+	int blinker=280;
+	int changeNames=-1;
 	boolean addName=false;
 	boolean firstChar=true;
 	boolean game=true;
@@ -111,29 +111,32 @@ public class GameOverState extends BasicGameState{
 			public void keyPressed(int key, char c){
 				if(addName){
 					game=false;
-					if(key==Input.KEY_BACK){
-						if(highScoreName.length()>0){
-							if(highScoreName!=null){
-								highScoreName= highScoreName.substring(0, highScoreName.length()-1);
-								blinker=blinker-9;
+					if(changeNames!=-1){
+						if(key==Input.KEY_BACK){
+							if(highScoreName.length()>0){
+								if(highScoreName!=null){
+									highScoreName= highScoreName.substring(0, highScoreName.length()-1);
+									blinker=blinker-9;
+								}
 							}
 						}
-					}
-					else{
-						if(key==Input.KEY_ENTER){
-							if(addName){
-								highScoreName=highScoreName.trim();
-								names.set(changeNames,highScoreName);
-								publishNames();
-								addName=false;
-								firstChar=true;
-								game=true;
+						else{
+							if(key==Input.KEY_ENTER){
+								if(addName){
+									highScoreName=highScoreName.trim();
+									names.set(changeNames,highScoreName);
+									publishNames();
+									addName=false;
+									firstChar=true;
+									blinker=270;
+									game=true;
+								}
 							}
-						}
-						if(key!=Input.KEY_LSHIFT && key!=Input.KEY_ENTER){
-							highScoreName=highScoreName+c;
-							blinker=blinker+9;
-							firstChar=false;
+							if(highScoreName.length()<13  && key!=Input.KEY_LSHIFT && key!=Input.KEY_ENTER && key!=Input.KEY_UP && key!=Input.KEY_DOWN && key!=Input.KEY_LEFT && key!=Input.KEY_RIGHT){
+								highScoreName=highScoreName+c;
+								blinker=blinker+9;
+								firstChar=false;
+							}
 						}
 					}
 				}
@@ -191,17 +194,17 @@ public class GameOverState extends BasicGameState{
 		switch(selection){
 		case 0: xselection=playAgainX;
 		break;
-	//	case 1: xselection=menuX;
-	//	break;
-		case 2: xselection=endX;
+		//	case 1: xselection=menuX;
+		//	break;
+		case 1: xselection=endX;
 		break;
 		}
 		g.setColor(Color.cyan);
-		g.draw(new Circle(BulletHellGame.OFFSET+xselection-5, 145+40*selection, 10));
+		g.draw(new Circle(BulletHellGame.OFFSET+xselection-5, 145+80*selection, 10));
 		playAgainOption.draw(BulletHellGame.OFFSET+playAgainX, playAgainY, playAgainScale);
 		highscoreOption.draw(BulletHellGame.OFFSET+highscoreX, highscoreY);
 		exitOption.draw(BulletHellGame.OFFSET+endX, endY, exitScale);
-	//	menuOption.draw(BulletHellGame.OFFSET+menuX, menuY, menuScale);
+		//	menuOption.draw(BulletHellGame.OFFSET+menuX, menuY, menuScale);
 		publishHS();
 		displayHS(g);
 
@@ -209,8 +212,8 @@ public class GameOverState extends BasicGameState{
 		g.drawString("Enter Name:", BulletHellGame.OFFSET+180, 60);
 		g.drawString(highScoreName,BulletHellGame.OFFSET+278, 60);
 		g.setColor(new Color(0f,0f,0f,alphablock));
-
-		g.fillRect(BulletHellGame.OFFSET+blinker, 62, 7, 15);
+		if(addName)
+			g.fillRect(BulletHellGame.OFFSET+blinker, 62, 7, 15);
 
 	}
 	/**
@@ -370,7 +373,7 @@ public class GameOverState extends BasicGameState{
 	 * A continously updated method that helps smoothly run the program
 	 */
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
-		if(game){
+		
 			if(active){
 				if(alphablock<=.95 && up!=true)
 					alphablock-=.03;
@@ -385,37 +388,33 @@ public class GameOverState extends BasicGameState{
 					alphablock=(float).95;
 				}				
 
-				if(highscore==true){
-
-				}
+				if(game){
 				Input input = gc.getInput();
 				inputTimer -= delta;
 				if(inputTimer <=  0){
 					if(input.isKeyPressed(Input.KEY_DOWN)){
-						if(selection<=2)
+						if(selection<=1)
 							selection++;
-						if(selection==3)
+						if(selection==2)
 							selection=0;
 					}
 					if(input.isKeyPressed(Input.KEY_UP)){
 						if(selection>=0)
 							selection--;
 						if(selection==-1)
-							selection=2;
+							selection=1;
 					}
 					if(input.isKeyPressed(Input.KEY_ENTER)){
 						if(selection == 0){
 							GameplayState gs = (GameplayState) sbg.getState(BulletHellGame.GAMEPLAYSTATE);
-							addName=true;
+							//addName=true;
 							gs.newGame();
 							active = false;
 							sbg.enterState(BulletHellGame.GAMEPLAYSTATE, new FadeOutTransition(Color.black,1000), new FadeInTransition(Color.black,500));
 						}else if(selection ==1){
-							addName=true;
+							//addName=true;
 							active = false;
 							sbg.enterState(BulletHellGame.MAINMENUSTATE, new FadeOutTransition(Color.black,400), new FadeInTransition(Color.black,400));
-						}else if(selection ==2){
-							gc.exit();
 						}
 					}
 				}		
