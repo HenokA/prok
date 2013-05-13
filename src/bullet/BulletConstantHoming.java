@@ -7,7 +7,6 @@ import org.newdawn.slick.Image;
 
 public class BulletConstantHoming extends Bullet{
 	
-	private float vo; //velocity inital
 	private float vf; //velocity final
 	private float accel;
 	private float time;

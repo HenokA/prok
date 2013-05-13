@@ -2,9 +2,11 @@ package pattern;
 
 import game.GameplayState;
 import game.Point;
+import game.RenderObjectBeam;
 
 import java.util.ArrayList;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Image;
 
 import bullet.Bullet;
@@ -18,10 +20,11 @@ public class PatternRotatingBeam implements Pattern{
 	private Point initial;
 	private int timer=3000;
 	private double angle=0;
-	private Image beamImg = GameplayState.images[10];
+	private Image beamImg = GameplayState.images[17];
 	private Image hitboxImg = GameplayState.images[1];
 	private ArrayList<BulletBeamHitbox> hitboxes = new ArrayList<BulletBeamHitbox>();
 	private Bullet startBullet;
+	private RenderObjectBeam ro;
 	
 	public PatternRotatingBeam(Point position){
 		this.position = position;
@@ -56,6 +59,9 @@ public class PatternRotatingBeam implements Pattern{
 					hitboxes.add(currhb4);
 				}
 			}
+			ro = new RenderObjectBeam(initial, new Color(144, 0 , 255), beamImg);
+			GameplayState.renderObjs.add(ro);
+			ro.setRender(true);
 			created = true;
 		}
 		else{
@@ -65,6 +71,7 @@ public class PatternRotatingBeam implements Pattern{
 						hb.rotate(initial, position, .1);					
 					}
 					angle+=.1;
+					ro.increaseAngle(.1);
 				}
 				else{
 					for(BulletBeamHitbox hb : hitboxes){
@@ -76,6 +83,7 @@ public class PatternRotatingBeam implements Pattern{
 					angle = 0;
 					created = false;
 					started = false;
+					ro.setRender(false);
 				}
 		}
 	}

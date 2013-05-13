@@ -2,9 +2,11 @@ package pattern;
 
 import game.GameplayState;
 import game.Point;
+import game.RenderObjectBeam;
 
 import java.util.ArrayList;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Image;
 
 import bullet.Bullet;
@@ -18,10 +20,11 @@ public class PatternTrackingBeam implements Pattern{
 	private Point initial;
 	private int timer=3000;
 	private double beamTimer=15000;
-	private Image beamImg = GameplayState.images[10];
+	private Image beamImg = GameplayState.images[18];
 	private Image hitboxImg = GameplayState.images[11];
 	private ArrayList<BulletBeamHitbox> hitboxes = new ArrayList<BulletBeamHitbox>();
 	private Bullet startBullet;
+	private RenderObjectBeam ro;
 
 	public PatternTrackingBeam(Point position){
 		this.position = position;
@@ -56,15 +59,20 @@ public class PatternTrackingBeam implements Pattern{
 					hitboxes.add(currhb4);
 				}
 			}
+			ro = new RenderObjectBeam(initial, new Color(255, 20 , 147), beamImg);
+			GameplayState.renderObjs.add(ro);
+			ro.setRender(true);
 			created = true;
 		}
 		else{
 			if(created)
 				if(beamTimer>0){
-					for(BulletBeamHitbox hb : hitboxes){
-						hb.rotate(initial, position, GameplayState.player.position.x < initial.x ? .1 : -.1);	
+					double a = GameplayState.player.position.x < initial.x ? .1 : -.1;
+					for(BulletBeamHitbox hb : hitboxes){						
+						hb.rotate(initial, position, a);	
 					}
 					beamTimer-=delta;
+					ro.increaseAngle(a);
 				}
 				else{
 					for(BulletBeamHitbox hb : hitboxes){
@@ -76,6 +84,7 @@ public class PatternTrackingBeam implements Pattern{
 					beamTimer = 15000;
 					created = false;
 					started = false;
+					ro.setRender(false);
 				}
 		}
 	}
