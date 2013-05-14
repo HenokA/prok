@@ -25,12 +25,12 @@ public class Player {
 	private long time;
 	private long delay=100;
 	private Image outline = GameplayState.images[14];
-	public int powerUpTimer = 0;
+	public float powerUpTimer = 0;
 	public int currPowerUp = -1;
 	public boolean dd = false;
 	public boolean invul = false;
 	public boolean twarp = false;
-	public int powerTime=1;
+	public float powerTime=1;
 	public Color colorBar;
 
 	public Player(Point p){
