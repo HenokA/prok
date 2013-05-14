@@ -128,7 +128,7 @@ public class GameOverState extends BasicGameState{
 									publishNames();
 									addName=false;
 									firstChar=true;
-									blinker=270;
+									
 									game=true;
 								}
 							}

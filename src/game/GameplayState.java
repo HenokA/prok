@@ -69,13 +69,12 @@ public class GameplayState extends BasicGameState {
 	int nextTier = levelUps[lvlIndex];
 	Enemy enemy;
 	boolean paused;
-
 	int invulDisplayTimer =0;
 	Point invulDisplayPoint;
 	int grazeDisplayTimer = 0;
 	Point grazeDisplayPoint;
 	int grazeBonus = 0;
-
+	float totalGraze=0;
 	int respawnTimer = 0;
 	int stateID = -1;
 	Image resumeOption = null;
@@ -94,6 +93,7 @@ public class GameplayState extends BasicGameState {
 	double deadx;
 	double deady;
 	public static Object deadBullet;
+	boolean grazeMove=false;
 	BufferedWriter out;
 
 	public GameplayState( int stateID ) 
@@ -197,7 +197,7 @@ public class GameplayState extends BasicGameState {
 			}
 		}
 		//patterns.add(new PatternTrackingBeam(enemyxy));
-		enemy = new Enemy( enemyxy, images[4], 2000f);
+		enemy = new Enemy( enemyxy, images[4], 15f);
 		//abilities.add(new AbilityLockOnMissiles(enemyxy));
 	}
 	/**
@@ -224,6 +224,7 @@ public class GameplayState extends BasicGameState {
 			deathTimer -= delta;
 			if(deathTimer <= 0){
 				GameOverState.setCheckScore(true);
+				totalGraze=0;
 				sbg.enterState(BulletHellGame.GAMEOVERSTATE, new FadeOutTransition(Color.black, 100),new FadeInTransition(Color.black, 100));
 				GameOverState.active=true;
 				GameOverState.inputTimer= 250;
@@ -277,7 +278,8 @@ public class GameplayState extends BasicGameState {
 			if (container.getInput().isKeyDown(Input.KEY_RIGHT) && player.position.x<BulletHellGame.WIDTH) {player.increment(Player.RIGHT);} //move player right
 			if (container.getInput().isKeyDown(Input.KEY_UP) && player.position.y>0) {player.increment(Player.UP);} //move player up
 			if (container.getInput().isKeyDown(Input.KEY_DOWN) && player.position.y<BulletHellGame.HEIGHT) {player.increment(Player.DOWN);} //move player down
-			if (container.getInput().isKeyDown(Input.KEY_SPACE)) {player.shoot(pbullets);}
+			if (container.getInput().isKeyDown(Input.KEY_SPACE)) {player.shoot(pbullets);
+			if (container.getInput().isKeyDown(Input.KEY_ENTER )) {player.turnOffPowerUps(); player.currPowerUp=1; player.powerUpTimer = 10000; player.powerTime=10000; player.colorBar=new Color(Color.green);}}
 			player.setSpeed(3);
 
 			player.checkPowerUps(delta);
@@ -342,19 +344,27 @@ public class GameplayState extends BasicGameState {
 						}
 					}else if(bullet.checkGraze(player.position, 7)){
 						score += 10*multiplier;
+						totalGraze+=10*multiplier;
+						if(totalGraze==300)
+							grazeMove=true;
+						System.out.println(grazeMove);
 						grazeDisplayTimer = 500;
 						grazeBonus += 10*multiplier;
+						System.out.println(grazeBonus);
 						grazeDisplayPoint = player.position.addVector(new Point(5, -10));
 					}else if(player.twarp && !bullet.warp && bullet.checkGraze(player.position, 45)){
 						bullet.setSpeed(bullet.getSpeed()*.5f);
 						bullet.warp = true;
 					}
+
 				}
 				bullet.increment(delta);
 				if(bullet.checkOffscreen() && !(bullet instanceof BulletBeamHitbox)){
 					i.remove();
 				}
 			}
+
+			System.out.println("total graze: " +totalGraze);
 
 			i = pbullets.iterator(); 
 			while(i.hasNext()) {
@@ -381,7 +391,7 @@ public class GameplayState extends BasicGameState {
 				Bullet powup = new PowerUp(epos, new Point(0,1), 2);
 				enemy = null;
 				patterns = new ArrayList<Pattern>();
-				respawnTimer = 5000;
+				respawnTimer = 10;
 				levelUp();
 				ebullets.clear();
 				ebullets.add(powup);
@@ -399,6 +409,7 @@ public class GameplayState extends BasicGameState {
 		g.drawImage(images[7], 0, 0);
 		player.drawShip(g);
 		
+		
 		if(enemy!=null) enemy.draw(g);
 		for(Bullet b : ebullets){
 			if(!(b instanceof BulletBeamHitbox))
@@ -412,7 +423,6 @@ public class GameplayState extends BasicGameState {
 		}
 
 		player.drawHitBox(g);
-		
 
 		for(RenderObject r: renderObjs){
 			r.draw(g);
@@ -452,7 +462,20 @@ public class GameplayState extends BasicGameState {
 		g.setColor(new Color(255, 200, 0));
 		g.drawString("SCORE: "+(int)Math.floor(score)+"", BulletHellGame.WIDTH+15, 5);
 		player.drawPowerUpBar(g);
+		drawGraze(g);
 		if(enemy!=null) enemy.drawHPBar(g);
+	}
+	public void drawGraze(Graphics g){
+		g.setColor(new Color(Color.pink));
+		if(totalGraze/300<=1)
+			g.fillRect(BulletHellGame.WIDTH+15, 227, (150*(totalGraze/300)), 13);
+		else
+			g.fillRect(BulletHellGame.WIDTH+15, 227, (150), 13);
+		if(300-totalGraze<0)
+			g.drawString("Graze Left: "+0+"", BulletHellGame.WIDTH+15, 242);
+		else
+			g.drawString("Graze Left: "+(300-(int)totalGraze)+"", BulletHellGame.WIDTH+15, 242);	
+		g.drawImage(images[14], BulletHellGame.WIDTH+11, 223);
 	}
 	@Override
 	public int getID() {

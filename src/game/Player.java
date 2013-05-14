@@ -32,7 +32,6 @@ public class Player {
 	public boolean twarp = false;
 	public float powerTime=1;
 	public Color colorBar;
-
 	public Player(Point p){
 		position = p;
 		img = GameplayState.images[0];
@@ -41,12 +40,24 @@ public class Player {
 		time = System.currentTimeMillis();
 		
 	}
-	
+	public void grazeMove(boolean grazeMove){
+		if(grazeMove){
+			powerUpTimer=2000;
+			powerTime=2000;
+			currPowerUp=1;
+			invul = true;
+		}
+	}
 	public void drawPowerUpBar(Graphics g){
 		g.setColor(colorBar);
-		g.fillRect(BulletHellGame.WIDTH+15, 128, 150*(powerUpTimer/powerTime), 13);
-		g.drawString("Power Up Timer: "+(int)powerUpTimer+"", BulletHellGame.WIDTH+15, 142);
+		
+		g.fillRect(BulletHellGame.WIDTH+15, 127, (150*(powerUpTimer/powerTime)), 13);
+		if(powerUpTimer<0)
+		g.drawString("Power Up Timer: "+0+"", BulletHellGame.WIDTH+15, 142);
+		else
+			g.drawString("Power Up Timer: "+(int)powerUpTimer+"", BulletHellGame.WIDTH+15, 142);	
 		g.drawImage(outline, BulletHellGame.WIDTH+11, 123);
+			
 	}
 	
 	public void checkPowerUps(int delta){
