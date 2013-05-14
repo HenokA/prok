@@ -43,7 +43,7 @@ public class PatternInitialHomingWide implements Pattern {
 		time += delta;
 		if(time > delay){
 			for(int i=0; i<pointsx.length; i++){ //Create bullets in a circle
-				bullets.add(new BulletInitialHoming(position.addVector(new Point(pointsx[i],pointsy[i])), img, GameplayState.BULLETSPEED*3));
+				bullets.add(new BulletInitialHoming(position.addVector(new Point(pointsx[i],pointsy[i])), img, GameplayState.BULLETSPEED*5));
 			}
 			time = 0;
 		}

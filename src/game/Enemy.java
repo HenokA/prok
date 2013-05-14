@@ -17,8 +17,8 @@ public class Enemy {
 	private Point vector;
 	private double dAngle;
 	private Image img;
-	private float maxHP = 20;
-	public float currentHP = maxHP;
+	private float maxHP;
+	public float currentHP;
 	private Color hpbar  = new Color(Color.black);
 	private float speed = .5f;
 	private int mvtimer = 0;
@@ -29,9 +29,11 @@ public class Enemy {
 	private static int YUPPERBOUND = 200;
 	private Image outline = GameplayState.images[14];
 
-	public Enemy(Point position, Image img){
+	public Enemy(Point position, Image img, float hp){
 		this.position = position;
 		this.img = img;
+		maxHP = hp;
+		currentHP = maxHP;
 		setHPBarColor();
 		rollNewDirection(0, 360);
 	}

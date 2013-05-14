@@ -197,7 +197,7 @@ public class GameplayState extends BasicGameState {
 			}
 		}
 		//patterns.add(new PatternTrackingBeam(enemyxy));
-		enemy = new Enemy( enemyxy, images[4]);
+		enemy = new Enemy( enemyxy, images[4], 2000f);
 		//abilities.add(new AbilityLockOnMissiles(enemyxy));
 	}
 	/**

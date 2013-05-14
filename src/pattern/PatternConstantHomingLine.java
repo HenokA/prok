@@ -47,7 +47,7 @@ public class PatternConstantHomingLine implements Pattern{
 		if(time>delay){
 			if(count<max){	//Max bullets per pattern
 				if(bulletTimer>bulletDelay){
-					bullets.add(new BulletConstantHoming(position, img, 3.5f, -.25f));
+					bullets.add(new BulletConstantHoming(position, img, 5f, -.9f));
 					count++;
 					bulletTimer = 0;
 				}
