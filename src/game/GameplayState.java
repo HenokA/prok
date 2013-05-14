@@ -394,6 +394,7 @@ public class GameplayState extends BasicGameState {
 	public void render(GameContainer container,StateBasedGame sbg, Graphics g)  {
 		g.drawImage(images[7], 0, 0);
 		player.drawShip(g);
+		
 		if(enemy!=null) enemy.draw(g);
 		for(Bullet b : ebullets){
 			if(!(b instanceof BulletBeamHitbox))
@@ -405,10 +406,15 @@ public class GameplayState extends BasicGameState {
 		for(Ability a: abilities){
 			a.draw(g);
 		}
+
+		player.drawHitBox(g);
+		
+
 		for(RenderObject r: renderObjs){
 			r.draw(g);
 		}
 		player.drawHitBox(g);	
+
 		g.setColor(Color.cyan);
 		if(grazeDisplayTimer > 0)
 			g.drawString("GRAZE! +"+grazeBonus, (float)grazeDisplayPoint.x, (float)grazeDisplayPoint.y);
@@ -441,6 +447,7 @@ public class GameplayState extends BasicGameState {
 		g.fillRect(BulletHellGame.WIDTH, 0, BulletHellGame.APPWIDTH-BulletHellGame.WIDTH, BulletHellGame.HEIGHT);
 		g.setColor(new Color(255, 200, 0));
 		g.drawString("SCORE: "+(int)Math.floor(score)+"", BulletHellGame.WIDTH+15, 5);
+		player.drawPowerUpBar(g);
 		if(enemy!=null) enemy.drawHPBar(g);
 	}
 	@Override

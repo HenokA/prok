@@ -24,12 +24,14 @@ public class Player {
 	private float speed = 2;
 	private long time;
 	private long delay=100;
-
+	private Image outline = GameplayState.images[14];
 	public int powerUpTimer = 0;
 	public int currPowerUp = -1;
 	public boolean dd = false;
 	public boolean invul = false;
 	public boolean twarp = false;
+	public int powerTime=1;
+	public Color colorBar;
 
 	public Player(Point p){
 		position = p;
@@ -37,8 +39,16 @@ public class Player {
 		hitbox = GameplayState.images[8];
 		bulletImg = GameplayState.images[9];
 		time = System.currentTimeMillis();
+		
 	}
-
+	
+	public void drawPowerUpBar(Graphics g){
+		g.setColor(colorBar);
+		g.fillRect(BulletHellGame.WIDTH+15, 128, 150*(powerUpTimer/powerTime), 13);
+		g.drawString("Power Up Timer: "+(int)powerUpTimer+"", BulletHellGame.WIDTH+15, 142);
+		g.drawImage(outline, BulletHellGame.WIDTH+11, 123);
+	}
+	
 	public void checkPowerUps(int delta){
 		if(currPowerUp >= 0){
 			if(powerUpTimer>0){

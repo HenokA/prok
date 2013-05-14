@@ -15,6 +15,7 @@ public class BulletHellGame extends StateBasedGame {
     public static final int WIDTH = 400;
     public static final int OFFSET= (APPWIDTH-WIDTH)/2;
     
+    
     public BulletHellGame()
     {
         super("Bullet Hell Game");
@@ -24,6 +25,7 @@ public class BulletHellGame extends StateBasedGame {
     {
          AppGameContainer app = new AppGameContainer(new BulletHellGame());
          app.setDisplayMode(APPWIDTH, HEIGHT, false);
+         app.setShowFPS(false);
          //make non resizable
          app.start();
     }

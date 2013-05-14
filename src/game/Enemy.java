@@ -17,7 +17,7 @@ public class Enemy {
 	private Point vector;
 	private double dAngle;
 	private Image img;
-	private float maxHP = 2000;
+	private float maxHP = 20;
 	public float currentHP = maxHP;
 	private Color hpbar  = new Color(Color.black);
 	private float speed = .5f;
