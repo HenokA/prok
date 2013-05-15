@@ -6,6 +6,7 @@ import game.RenderObjectBeam;
 
 import java.util.ArrayList;
 
+import org.newdawn.slick.Animation;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Image;
 
@@ -20,15 +21,16 @@ public class PatternTrackingBeam implements Pattern{
 	private Point initial;
 	private int timer=3000;
 	private double beamTimer=15000;
-	private Image beamImg = GameplayState.images[18];
+	private Animation beamImg;
+	private Image[] frames = {GameplayState.images[22],GameplayState.images[21],GameplayState.images[20]};
 	private Image hitboxImg = GameplayState.images[11];
 	private ArrayList<BulletBeamHitbox> hitboxes = new ArrayList<BulletBeamHitbox>();
-	private Bullet startBullet;
 	private RenderObjectBeam ro;
 
 	public PatternTrackingBeam(Point position){
 		this.position = position;
 		initial = position;
+		beamImg = new Animation(frames, 100);
 	}
 
 	@Override
@@ -38,8 +40,9 @@ public class PatternTrackingBeam implements Pattern{
 			timer-=delta;
 		if(!started){
 			initial = position;
-			startBullet = new Bullet(initial, new Point(0,0), beamImg, 0);
-			bullets.add(startBullet);
+			ro = new RenderObjectBeam(initial, new Color(255, 20 , 147), beamImg);
+			GameplayState.renderObjs.add(ro);
+			ro.setRender(true);
 			started=true;
 		}
 		if(!created && timer <=0){
@@ -59,9 +62,7 @@ public class PatternTrackingBeam implements Pattern{
 					hitboxes.add(currhb4);
 				}
 			}
-			ro = new RenderObjectBeam(initial, new Color(255, 20 , 147), beamImg);
-			GameplayState.renderObjs.add(ro);
-			ro.setRender(true);
+			ro.setBeam(true);
 			created = true;
 		}
 		else{
@@ -78,7 +79,6 @@ public class PatternTrackingBeam implements Pattern{
 					for(BulletBeamHitbox hb : hitboxes){
 						GameplayState.bulletsToBeRemoved.add(hb);
 					}
-					GameplayState.bulletsToBeRemoved.add(startBullet);
 					hitboxes.clear();
 					timer = 3000;
 					beamTimer = 15000;

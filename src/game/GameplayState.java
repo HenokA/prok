@@ -35,10 +35,8 @@ import pattern.PatternSinCircle;
 import pattern.PatternSinCurve;
 import pattern.PatternSpiral;
 import pattern.PatternTrackingBeam;
+import pattern.PatternDiamondBeam;
 
-import ability.Ability;
-import ability.AbilityLockOnMissiles;
-import ability.Missile;
 import bullet.Bullet;
 import bullet.BulletBeamHitbox;
 import bullet.PowerUp;
@@ -57,7 +55,6 @@ public class GameplayState extends BasicGameState {
 	ArrayList<Bullet> pbullets;
 	ArrayList<Pattern> patterns;
 	ArrayList<Double> highscores;
-	ArrayList<Ability> abilities;
 	public static Player player;
 	double score = 0;
 	double multiplier = 1;
@@ -108,7 +105,11 @@ public class GameplayState extends BasicGameState {
 		String[] files = {"ship2.png", "BulletGreen.png", "BulletBlue.png", "BulletRed.png", 
 				"finalship2.png", "BulletOrange.png","BulletPurple.png", "gameplaybg.png", "PDot.png",
 				"PlayerBullet.png", "BulletBigBlue.png", "BulletPink.png", "PowerUpDD.png", "PowerUpInvul.png",
-				"HPBarOutline.png", "PowerUpTWarp.png", "BulletCyan.png", "LaserCenterPurple.png", "LaserCenterPink.png"};
+				"HPBarOutline.png", "PowerUpTWarp.png", "BulletCyan.png", 
+				"LaserCenterLightBlue.png","LaserCenterLightBlue1.png", "LaserCenterLightBlue2.png",
+				"LaserCenterPink.png", "LaserCenterPink1.png", "LaserCenterPink2.png",
+				"LaserCenterPurple.png", "LaserCenterPurple1.png", "LaserCenterPurple2.png"
+				};
 		images = new Image[files.length];
 		try {
 			for(int i=0; i<files.length; i++){
@@ -136,7 +137,6 @@ public class GameplayState extends BasicGameState {
 		renderObjs = new ArrayList<RenderObject>();
 		pbullets = new ArrayList<Bullet>();
 		patterns = new ArrayList<Pattern>();
-		abilities = new ArrayList<Ability>();
 		createEnemy();
 		paused = false;
 		dead = false;
@@ -169,34 +169,45 @@ public class GameplayState extends BasicGameState {
 		ArrayList<Integer> patternIds = new ArrayList<Integer>();
 		int pid =  -1;
 		Point enemyxy = new Point(200, 200);
-		for(int i=0; i<3; i++){
-			patternIds.add(pid);
-			while(patternIds.contains(pid))
-				pid = r.nextInt(17);
-			switch(pid){
-			//easy
-			case 0 : patterns.add(new PatternCircle(enemyxy)); break;
-			case 1 : patterns.add(new PatternSpiral(enemyxy)); break;
-			case 2 : patterns.add(new PatternCurve(enemyxy)); break;
-			case 3 : patterns.add(new PatternReverseCurve(enemyxy)); break;
-			case 4 : patterns.add(new PatternDoubleCurve(enemyxy)); break;
-			case 5 : patterns.add(new PatternBigExplodingCircle(enemyxy)); break;
-			//medium
-			case 6 : patterns.add(new PatternSinCurve(enemyxy)); break;
-			case 7 : patterns.add(new PatternReverseSinCurve(enemyxy)); break;
-			case 8 : patterns.add(new PatternDoubleSinCurve(enemyxy)); break;
-			case 9 : patterns.add(new PatternSinCircle(enemyxy)); break;
-			case 10: patterns.add(new PatternQuadSpiral(enemyxy)); break;
-			//hard
-			case 11: patterns.add(new PatternInitialHomingWide(enemyxy)); break;
-			case 12: patterns.add(new PatternInitialHomingLine(enemyxy)); break;
-			case 13: patterns.add(new PatternConstantHomingLine(enemyxy)); break;
-			case 14: patterns.add(new PatternConstantHomingWide(enemyxy)); break;
-			case 15: patterns.add(new PatternRotatingBeam(enemyxy)); break;
-			case 16: patterns.add(new PatternTrackingBeam(enemyxy)); break;
-			}
-		}
-		//patterns.add(new PatternTrackingBeam(enemyxy));
+//		for(int i=0; i<3; i++){
+//			patternIds.add(pid);
+//			while(patternIds.contains(pid))
+//				pid = r.nextInt(19);
+//			switch(pid){
+//
+//			//easy
+//			case 0 : patterns.add(new PatternCircle(enemyxy)); break;
+//			case 1 : patterns.add(new PatternSpiral(enemyxy)); break;
+//			case 2 : patterns.add(new PatternCurve(enemyxy)); break;
+//			case 3 : patterns.add(new PatternReverseCurve(enemyxy)); break;
+//			case 4 : patterns.add(new PatternDoubleCurve(enemyxy)); break;
+//			case 5 : patterns.add(new PatternBigExplodingCircle(enemyxy)); break;
+//
+//			//medium
+//			case 6 : patterns.add(new PatternSinCurve(enemyxy)); break;
+//			case 7 : patterns.add(new PatternReverseSinCurve(enemyxy)); break;
+//			case 8 : patterns.add(new PatternDoubleSinCurve(enemyxy)); break;
+//			case 9 : patterns.add(new PatternSinCircle(enemyxy)); break;
+//			case 10: patterns.add(new PatternQuadSpiral(enemyxy)); break;
+//			case 11: patterns.clear();
+//			patterns.add(new PatternDiamondBeam(enemyxy));
+//			i=3;break;
+//			case 12: patterns.clear();
+//			patterns.add(new PatternDoubleSinCurve(enemyxy)); 
+//			patterns.add(new PatternDoubleSinCurve(enemyxy)); 
+//			patterns.add(new PatternDoubleSinCurve(enemyxy)); 
+//			i=3;break;
+//
+//			//hard
+//			case 13: patterns.add(new PatternInitialHomingWide(enemyxy)); break;
+//			case 14: patterns.add(new PatternInitialHomingLine(enemyxy)); break;
+//			case 15: patterns.add(new PatternConstantHomingLine(enemyxy)); break;
+//			case 16: patterns.add(new PatternConstantHomingWide(enemyxy)); break;
+//			case 17: patterns.add(new PatternRotatingBeam(enemyxy)); break;
+//			case 18: patterns.add(new PatternTrackingBeam(enemyxy)); break;
+//			}
+//		}
+		patterns.add(new PatternRotatingBeam(enemyxy));
 		enemy = new Enemy( enemyxy, images[4], 15f);
 		//abilities.add(new AbilityLockOnMissiles(enemyxy));
 	}
@@ -301,15 +312,11 @@ public class GameplayState extends BasicGameState {
 
 			if(enemy != null){
 				enemy.update(delta);
-				enemy.updatePos(patterns, abilities);
+				enemy.updatePos(patterns);
 			}
 
 			for(Pattern p : patterns){
 				p.update(ebullets, delta);
-			}
-
-			for(Ability a: abilities){
-				a.update(delta);
 			}
 
 			ebullets.removeAll(bulletsToBeRemoved);
@@ -408,18 +415,15 @@ public class GameplayState extends BasicGameState {
 	public void render(GameContainer container,StateBasedGame sbg, Graphics g)  {
 		g.drawImage(images[7], 0, 0);
 		player.drawShip(g);
-		
-		
+
+
 		if(enemy!=null) enemy.draw(g);
 		for(Bullet b : ebullets){
-			if(!(b instanceof BulletBeamHitbox))
-				b.draw(g);
+			//if(!(b instanceof BulletBeamHitbox))
+			b.draw(g);
 		}
 		for(Bullet b : pbullets){
 			b.draw(g); //draws bullets
-		}
-		for(Ability a: abilities){
-			a.draw(g);
 		}
 
 		player.drawHitBox(g);
@@ -449,13 +453,8 @@ public class GameplayState extends BasicGameState {
 			Player died=new Player(new Point(deadx,deady));
 			died.drawShip(g);
 			died.drawHitBox(g);
-			if(deadBullet instanceof Bullet){
-				Bullet dBullet = (Bullet) deadBullet;
-				dBullet.draw(g);
-			}else if(deadBullet instanceof Missile){
-				Missile dMissile = (Missile) deadBullet;
-				dMissile.draw(g);
-			}
+			Bullet dBullet = (Bullet) deadBullet;
+			dBullet.draw(g);
 		}
 		g.setColor(Color.black);
 		g.fillRect(BulletHellGame.WIDTH, 0, BulletHellGame.APPWIDTH-BulletHellGame.WIDTH, BulletHellGame.HEIGHT);

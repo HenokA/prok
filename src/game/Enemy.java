@@ -6,8 +6,6 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 
-import ability.Ability;
-
 import pattern.Pattern;
 
 
@@ -38,12 +36,9 @@ public class Enemy {
 		rollNewDirection(0, 360);
 	}
 
-	public void updatePos(ArrayList<Pattern> bp, ArrayList<Ability> a){
+	public void updatePos(ArrayList<Pattern> bp){
 		for(Pattern p : bp){
 			p.setPosition(position);
-		}
-		for(Ability ia: a){
-			ia.setPosition(position);
 		}
 	}
 	
