@@ -112,7 +112,8 @@ public class GameplayState extends BasicGameState {
 				"HPBarOutline.png", "PowerUpTWarp.png", "BulletCyan.png", 
 				"LaserCenterLightBlue.png","LaserCenterLightBlue1.png", "LaserCenterLightBlue2.png",
 				"LaserCenterPink.png", "LaserCenterPink1.png", "LaserCenterPink2.png",
-				"LaserCenterPurple.png", "LaserCenterPurple1.png", "LaserCenterPurple2.png"
+				"LaserCenterPurple.png", "LaserCenterPurple1.png", "LaserCenterPurple2.png",
+				"Explosion.png", "Explosion1.png", "Explosion2.png"
 		};
 		images = new Image[files.length];
 		try {
@@ -213,7 +214,7 @@ public class GameplayState extends BasicGameState {
 			}
 		}
 		//patterns.add(new PatternRotatingBeam(enemyxy));
-		enemy = new Enemy( enemyxy, images[4], 1500f);
+		enemy = new Enemy( enemyxy, images[4], 500f);
 		//abilities.add(new AbilityLockOnMissiles(enemyxy));
 	}
 	/**
@@ -419,9 +420,11 @@ public class GameplayState extends BasicGameState {
 				patterns = new ArrayList<Pattern>();
 				respawnTimer = 2000;
 				levelUp();
+				renderObjs.clear();
+				for(Bullet b : ebullets)
+					renderObjs.add(new RenderObjectExplosion(b.getPosition(), b.img));
 				ebullets.clear();
 				ebullets.add(powup);
-				renderObjs.clear();
 			}
 
 			score += delta*.1*multiplier; //score increases
@@ -448,9 +451,15 @@ public class GameplayState extends BasicGameState {
 
 		player.drawHitBox(g);
 
-		for(RenderObject r: renderObjs){
-			r.draw(g);
+		Iterator<RenderObject> r = renderObjs.iterator();
+		while(r.hasNext()){
+			RenderObject ro = r.next();
+			ro.draw(g);
+			if(ro instanceof RenderObjectExplosion)
+				if(((RenderObjectExplosion) ro).exp.isStopped())
+					r.remove();
 		}
+
 		player.drawHitBox(g);	
 
 		g.setColor(Color.cyan);

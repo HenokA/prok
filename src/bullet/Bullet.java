@@ -1,5 +1,6 @@
 package bullet;
 import game.Point;
+import game.RenderObjectExplosion;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
@@ -17,7 +18,8 @@ public class Bullet {
 	protected float speed = 1;
 	protected int radius;
 	public boolean warp = false;
-	Image img;
+	public Image img;
+	RenderObjectExplosion ro;
 	
 	/**
 	 * Constructor
@@ -37,7 +39,15 @@ public class Bullet {
 	public Bullet(){
 		
 	}
+	
+	public Point getPosition(){
+		return position;
+	}
 
+	public void setRO(RenderObjectExplosion ro){
+		this.ro = ro;
+	}
+	
 	/**
 	 * Updates position
 	 */
