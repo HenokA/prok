@@ -30,6 +30,8 @@ public class Player {
 	public boolean dd = false;
 	public boolean invul = false;
 	public boolean twarp = false;
+	public boolean shield = false;
+	public int shieldcount = 5;
 	public float powerTime=1;
 	public Color colorBar;
 	boolean grazeMove1;
@@ -67,7 +69,7 @@ public class Player {
 			if(powerUpTimer>0){
 				switch(currPowerUp){
 				case 0: dd = true;break;
-				case 1: invul = true;break;
+				case 1: shield = true; shieldcount=5;break;
 				case 2: twarp = true;break;
 				}
 				powerUpTimer-=delta;
@@ -83,7 +85,11 @@ public class Player {
 		dd = false;
 		invul = false;
 		twarp = false;
+		shield = false;
+		shieldcount = 0;
 		currPowerUp = -1;
+		powerUpTimer = 0;
+		powerTime = 1;
 	}
 
 	public void increment(int direction){

@@ -68,6 +68,8 @@ public class GameplayState extends BasicGameState {
 	boolean paused;
 	int invulDisplayTimer =0;
 	Point invulDisplayPoint;
+	int shieldDisplayTimer =0;
+	Point shieldDisplayPoint;
 	int grazeDisplayTimer = 0;
 	Point grazeDisplayPoint;
 	int grazeBonus = 0;
@@ -109,7 +111,7 @@ public class GameplayState extends BasicGameState {
 				"LaserCenterLightBlue.png","LaserCenterLightBlue1.png", "LaserCenterLightBlue2.png",
 				"LaserCenterPink.png", "LaserCenterPink1.png", "LaserCenterPink2.png",
 				"LaserCenterPurple.png", "LaserCenterPurple1.png", "LaserCenterPurple2.png"
-				};
+		};
 		images = new Image[files.length];
 		try {
 			for(int i=0; i<files.length; i++){
@@ -169,45 +171,45 @@ public class GameplayState extends BasicGameState {
 		ArrayList<Integer> patternIds = new ArrayList<Integer>();
 		int pid =  -1;
 		Point enemyxy = new Point(200, 200);
-//		for(int i=0; i<3; i++){
-//			patternIds.add(pid);
-//			while(patternIds.contains(pid))
-//				pid = r.nextInt(19);
-//			switch(pid){
-//
-//			//easy
-//			case 0 : patterns.add(new PatternCircle(enemyxy)); break;
-//			case 1 : patterns.add(new PatternSpiral(enemyxy)); break;
-//			case 2 : patterns.add(new PatternCurve(enemyxy)); break;
-//			case 3 : patterns.add(new PatternReverseCurve(enemyxy)); break;
-//			case 4 : patterns.add(new PatternDoubleCurve(enemyxy)); break;
-//			case 5 : patterns.add(new PatternBigExplodingCircle(enemyxy)); break;
-//
-//			//medium
-//			case 6 : patterns.add(new PatternSinCurve(enemyxy)); break;
-//			case 7 : patterns.add(new PatternReverseSinCurve(enemyxy)); break;
-//			case 8 : patterns.add(new PatternDoubleSinCurve(enemyxy)); break;
-//			case 9 : patterns.add(new PatternSinCircle(enemyxy)); break;
-//			case 10: patterns.add(new PatternQuadSpiral(enemyxy)); break;
-//			case 11: patterns.clear();
-//			patterns.add(new PatternDiamondBeam(enemyxy));
-//			i=3;break;
-//			case 12: patterns.clear();
-//			patterns.add(new PatternDoubleSinCurve(enemyxy)); 
-//			patterns.add(new PatternDoubleSinCurve(enemyxy)); 
-//			patterns.add(new PatternDoubleSinCurve(enemyxy)); 
-//			i=3;break;
-//
-//			//hard
-//			case 13: patterns.add(new PatternInitialHomingWide(enemyxy)); break;
-//			case 14: patterns.add(new PatternInitialHomingLine(enemyxy)); break;
-//			case 15: patterns.add(new PatternConstantHomingLine(enemyxy)); break;
-//			case 16: patterns.add(new PatternConstantHomingWide(enemyxy)); break;
-//			case 17: patterns.add(new PatternRotatingBeam(enemyxy)); break;
-//			case 18: patterns.add(new PatternTrackingBeam(enemyxy)); break;
-//			}
-//		}
-		patterns.add(new PatternRotatingBeam(enemyxy));
+		for(int i=0; i<3; i++){
+			patternIds.add(pid);
+			while(patternIds.contains(pid))
+				pid = r.nextInt(19);
+			switch(pid){
+
+			//easy
+			case 0 : patterns.add(new PatternCircle(enemyxy)); break;
+			case 1 : patterns.add(new PatternSpiral(enemyxy)); break;
+			case 2 : patterns.add(new PatternCurve(enemyxy)); break;
+			case 3 : patterns.add(new PatternReverseCurve(enemyxy)); break;
+			case 4 : patterns.add(new PatternDoubleCurve(enemyxy)); break;
+			case 5 : patterns.add(new PatternBigExplodingCircle(enemyxy)); break;
+
+			//medium
+			case 6 : patterns.add(new PatternSinCurve(enemyxy)); break;
+			case 7 : patterns.add(new PatternReverseSinCurve(enemyxy)); break;
+			case 8 : patterns.add(new PatternDoubleSinCurve(enemyxy)); break;
+			case 9 : patterns.add(new PatternSinCircle(enemyxy)); break;
+			case 10: patterns.add(new PatternQuadSpiral(enemyxy)); break;
+			case 11: patterns.clear();
+			patterns.add(new PatternDiamondBeam(enemyxy));
+			i=3;break;
+			case 12: patterns.clear();
+			patterns.add(new PatternDoubleSinCurve(enemyxy)); 
+			patterns.add(new PatternDoubleSinCurve(enemyxy)); 
+			patterns.add(new PatternDoubleSinCurve(enemyxy)); 
+			i=3;break;
+
+			//hard
+			case 13: patterns.add(new PatternInitialHomingWide(enemyxy)); break;
+			case 14: patterns.add(new PatternInitialHomingLine(enemyxy)); break;
+			case 15: patterns.add(new PatternConstantHomingLine(enemyxy)); break;
+			case 16: patterns.add(new PatternConstantHomingWide(enemyxy)); break;
+			case 17: patterns.add(new PatternRotatingBeam(enemyxy)); break;
+			case 18: patterns.add(new PatternTrackingBeam(enemyxy)); break;
+			}
+		}
+		//patterns.add(new PatternRotatingBeam(enemyxy));
 		enemy = new Enemy( enemyxy, images[4], 15f);
 		//abilities.add(new AbilityLockOnMissiles(enemyxy));
 	}
@@ -290,11 +292,13 @@ public class GameplayState extends BasicGameState {
 			if (container.getInput().isKeyDown(Input.KEY_UP) && player.position.y>0) {player.increment(Player.UP);} //move player up
 			if (container.getInput().isKeyDown(Input.KEY_DOWN) && player.position.y<BulletHellGame.HEIGHT) {player.increment(Player.DOWN);} //move player down
 			if (container.getInput().isKeyDown(Input.KEY_SPACE)) {player.shoot(pbullets);}
-			if (container.getInput().isKeyDown(Input.KEY_ENTER )) {player.grazeMove(grazeMove); if(grazeMove){grazeMove=false; totalGraze=0;}}
+			if (container.getInput().isKeyDown(Input.KEY_Z )) {player.grazeMove(grazeMove); if(grazeMove){grazeMove=false; totalGraze=0;}}
 			player.setSpeed(3);
 
 			player.checkPowerUps(delta);
 
+			if(shieldDisplayTimer > 0)
+				shieldDisplayTimer -=delta;
 			if(invulDisplayTimer > 0)
 				invulDisplayTimer -=delta;
 			if(grazeDisplayTimer > 0)
@@ -334,7 +338,7 @@ public class GameplayState extends BasicGameState {
 				}
 				else{
 					if(bullet.checkCollision(player.position)){
-						if(!player.invul){
+						if(!player.invul && !player.shield){
 							dead = true;
 							deadBullet=bullet;
 							try {
@@ -345,9 +349,15 @@ public class GameplayState extends BasicGameState {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
-						}else{
+						}else if(player.invul){
 							invulDisplayTimer = 500;
 							invulDisplayPoint = player.position.addVector(new Point(5, 10));
+						}else if(player.shield){
+							player.shieldcount -= 1;
+							shieldDisplayTimer = 500;
+							shieldDisplayPoint = player.position.addVector(new Point(5, 10));
+							if(player.shieldcount==0)
+								player.turnOffPowerUps();
 						}
 					}else if(bullet.checkGraze(player.position, 7)){
 						score += 10*multiplier;
@@ -409,6 +419,7 @@ public class GameplayState extends BasicGameState {
 		}
 	}
 
+
 	/**
 	 * renders the high scores and images onto the container
 	 */
@@ -439,6 +450,8 @@ public class GameplayState extends BasicGameState {
 		g.setColor(Color.green);
 		if(invulDisplayTimer > 0)
 			g.drawString("INVUL!", (float)invulDisplayPoint.x, (float)invulDisplayPoint.y);
+		if(shieldDisplayTimer > 0)
+			g.drawString("SHIELD!", (float)shieldDisplayPoint.x, (float)shieldDisplayPoint.y);
 		if (paused) {
 			Color trans = new Color(0f,0f,0f,0.7f);
 			g.setColor(trans);
@@ -464,6 +477,7 @@ public class GameplayState extends BasicGameState {
 		drawGraze(g);
 		if(enemy!=null) enemy.drawHPBar(g);
 	}
+
 	public void drawGraze(Graphics g){
 		g.setColor(new Color(Color.pink));
 		if(totalGraze/300<=1)
@@ -476,6 +490,7 @@ public class GameplayState extends BasicGameState {
 			g.drawString("Graze Left: "+(300-(int)totalGraze)+"", BulletHellGame.WIDTH+15, 242);	
 		g.drawImage(images[14], BulletHellGame.WIDTH+11, 223);
 	}
+
 	@Override
 	public int getID() {
 		// TODO Auto-generated method stub
