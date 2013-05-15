@@ -90,7 +90,7 @@ public class GameplayState extends BasicGameState {
 	double deadx;
 	double deady;
 	public static Object deadBullet;
-	boolean grazeMove=false;
+	public boolean grazeMove=false;
 	BufferedWriter out;
 
 	public GameplayState( int stateID ) 
@@ -289,8 +289,8 @@ public class GameplayState extends BasicGameState {
 			if (container.getInput().isKeyDown(Input.KEY_RIGHT) && player.position.x<BulletHellGame.WIDTH) {player.increment(Player.RIGHT);} //move player right
 			if (container.getInput().isKeyDown(Input.KEY_UP) && player.position.y>0) {player.increment(Player.UP);} //move player up
 			if (container.getInput().isKeyDown(Input.KEY_DOWN) && player.position.y<BulletHellGame.HEIGHT) {player.increment(Player.DOWN);} //move player down
-			if (container.getInput().isKeyDown(Input.KEY_SPACE)) {player.shoot(pbullets);
-			if (container.getInput().isKeyDown(Input.KEY_ENTER )) {player.turnOffPowerUps(); player.currPowerUp=1; player.powerUpTimer = 10000; player.powerTime=10000; player.colorBar=new Color(Color.green);}}
+			if (container.getInput().isKeyDown(Input.KEY_SPACE)) {player.shoot(pbullets);}
+			if (container.getInput().isKeyDown(Input.KEY_ENTER )) {player.grazeMove(grazeMove); if(grazeMove){grazeMove=false; totalGraze=0;}}
 			player.setSpeed(3);
 
 			player.checkPowerUps(delta);
@@ -352,7 +352,7 @@ public class GameplayState extends BasicGameState {
 					}else if(bullet.checkGraze(player.position, 7)){
 						score += 10*multiplier;
 						totalGraze+=10*multiplier;
-						if(totalGraze==300)
+						if(totalGraze>=300)
 							grazeMove=true;
 						System.out.println(grazeMove);
 						grazeDisplayTimer = 500;

@@ -32,6 +32,7 @@ public class Player {
 	public boolean twarp = false;
 	public float powerTime=1;
 	public Color colorBar;
+	boolean grazeMove1;
 	public Player(Point p){
 		position = p;
 		img = GameplayState.images[0];
@@ -41,6 +42,7 @@ public class Player {
 		
 	}
 	public void grazeMove(boolean grazeMove){
+
 		if(grazeMove){
 			powerUpTimer=2000;
 			powerTime=2000;
@@ -71,6 +73,7 @@ public class Player {
 				powerUpTimer-=delta;
 			}
 			else{
+				
 				turnOffPowerUps();
 			}
 		}
