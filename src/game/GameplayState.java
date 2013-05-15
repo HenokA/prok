@@ -422,7 +422,8 @@ public class GameplayState extends BasicGameState {
 				levelUp();
 				renderObjs.clear();
 				for(Bullet b : ebullets)
-					renderObjs.add(new RenderObjectExplosion(b.getPosition(), b.img));
+					if(!(b instanceof BulletBeamHitbox))
+						renderObjs.add(new RenderObjectExplosion(b.getPosition(), b.img));
 				ebullets.clear();
 				ebullets.add(powup);
 			}
@@ -442,8 +443,8 @@ public class GameplayState extends BasicGameState {
 
 		if(enemy!=null) enemy.draw(g);
 		for(Bullet b : ebullets){
-			//if(!(b instanceof BulletBeamHitbox))
-			b.draw(g);
+			if(!(b instanceof BulletBeamHitbox))
+				b.draw(g);
 		}
 		for(Bullet b : pbullets){
 			b.draw(g); //draws bullets
