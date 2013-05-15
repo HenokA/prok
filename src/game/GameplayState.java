@@ -61,9 +61,11 @@ public class GameplayState extends BasicGameState {
 	public static Image[] images;
 	public static float BULLETSPEED = 1f;
 	public static float BULLETRATE = 2f;
-	int[] levelUps = {3, 6, 10, 15, 21};
+	int[] levelUps = {3, 6, 10, 15, 21, 27, 34};
+	//int[] enemyHP = {1000, 1000, 1500, 2000, 2500, 3000, 3500};
 	int level = 0, lvlIndex = 0;
 	int nextTier = levelUps[lvlIndex];
+	int plvl = 6;
 	Enemy enemy;
 	boolean paused;
 	int invulDisplayTimer =0;
@@ -152,6 +154,7 @@ public class GameplayState extends BasicGameState {
 		invulDisplayTimer = 0;
 		level=0;
 		lvlIndex=0;
+		plvl=6;
 	}
 	/**
 	 * run at the beginning of the program to instantiate everything
@@ -174,7 +177,7 @@ public class GameplayState extends BasicGameState {
 		for(int i=0; i<3; i++){
 			patternIds.add(pid);
 			while(patternIds.contains(pid))
-				pid = r.nextInt(19);
+				pid = r.nextInt(plvl);
 			switch(pid){
 
 			//easy
@@ -203,14 +206,14 @@ public class GameplayState extends BasicGameState {
 			//hard
 			case 13: patterns.add(new PatternInitialHomingWide(enemyxy)); break;
 			case 14: patterns.add(new PatternInitialHomingLine(enemyxy)); break;
-			case 15: patterns.add(new PatternConstantHomingLine(enemyxy)); break;
-			case 16: patterns.add(new PatternConstantHomingWide(enemyxy)); break;
-			case 17: patterns.add(new PatternRotatingBeam(enemyxy)); break;
-			case 18: patterns.add(new PatternTrackingBeam(enemyxy)); break;
+			case 15: patterns.add(new PatternRotatingBeam(enemyxy)); break;
+			case 16: patterns.add(new PatternTrackingBeam(enemyxy)); break;
+			case 17: patterns.add(new PatternConstantHomingLine(enemyxy)); break;
+			case 18: patterns.add(new PatternConstantHomingWide(enemyxy)); break;
 			}
 		}
 		//patterns.add(new PatternRotatingBeam(enemyxy));
-		enemy = new Enemy( enemyxy, images[4], 15f);
+		enemy = new Enemy( enemyxy, images[4], 1500f);
 		//abilities.add(new AbilityLockOnMissiles(enemyxy));
 	}
 	/**
@@ -219,9 +222,15 @@ public class GameplayState extends BasicGameState {
 	public void levelUp(){
 		level+=1;
 		if(level > nextTier){
-			BULLETSPEED += .3; //increases bullet speed across screen
-			BULLETRATE += .3; //increases bullet rate
 			lvlIndex++;
+			if(lvlIndex==1)
+				plvl=13;
+			else if(lvlIndex==2)
+				plvl=17;
+			else if(plvl>2){
+				BULLETSPEED += .3; //increases bullet speed across screen
+				BULLETRATE += .3; //increases bullet rate
+			}
 			nextTier = levelUps[lvlIndex];
 		}
 	}
@@ -359,7 +368,7 @@ public class GameplayState extends BasicGameState {
 							if(player.shieldcount==0)
 								player.turnOffPowerUps();
 						}
-					}else if(bullet.checkGraze(player.position, 7)){
+					}else if(!(bullet instanceof BulletBeamHitbox) && bullet.checkGraze(player.position, 7)){
 						score += 10*multiplier;
 						totalGraze+=10*multiplier;
 						if(totalGraze>=300)
@@ -408,7 +417,7 @@ public class GameplayState extends BasicGameState {
 				Bullet powup = new PowerUp(epos, new Point(0,1), 2);
 				enemy = null;
 				patterns = new ArrayList<Pattern>();
-				respawnTimer = 10;
+				respawnTimer = 2000;
 				levelUp();
 				ebullets.clear();
 				ebullets.add(powup);

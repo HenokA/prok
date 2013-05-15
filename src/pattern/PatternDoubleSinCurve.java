@@ -51,8 +51,8 @@ public class PatternDoubleSinCurve implements Pattern{
 				if(bulletTimer>bulletDelay){
 					Point posPosition = new Point(position.x-50, position.y);
 					Point negPosition = new Point(position.x+50, position.y);
-					bullets.add(new BulletSinCurve(posPosition, new Point(0,1).rotate(startAngle-90), img, 4, 5));
-					bullets.add(new BulletSinCurve(negPosition, new Point(0,1).rotate(-startAngle+90), img, 4, -5));
+					bullets.add(new BulletSinCurve(posPosition, new Point(0,1).rotate(startAngle-135), img, 4, 5));
+					bullets.add(new BulletSinCurve(negPosition, new Point(0,1).rotate(-startAngle+135), img, 4, -5));
 					count++;
 					bulletTimer = 0;
 				}
