@@ -34,6 +34,7 @@ public class Player {
 	public int shieldcount = 5;
 	public float powerTime=1;
 	public Color colorBar;
+	public boolean changePow = true;
 	boolean grazeMove1;
 	public Player(Point p){
 		position = p;
@@ -41,41 +42,46 @@ public class Player {
 		hitbox = GameplayState.images[8];
 		bulletImg = GameplayState.images[9];
 		time = System.currentTimeMillis();
-		
+
 	}
 	public void grazeMove(boolean grazeMove){
 
 		if(grazeMove){
+			turnOffPowerUps();
 			powerUpTimer=2000;
 			powerTime=2000;
-			currPowerUp=1;
+			currPowerUp=3;
 			invul = true;
+			colorBar = Color.cyan;
 		}
 	}
 	public void drawPowerUpBar(Graphics g){
 		g.setColor(colorBar);
-		
+
 		g.fillRect(BulletHellGame.WIDTH+15, 127, (150*(powerUpTimer/powerTime)), 13);
 		if(powerUpTimer<0)
-		g.drawString("Power Up Timer: "+0+"", BulletHellGame.WIDTH+15, 142);
+			g.drawString("Power Up Timer: "+0+"", BulletHellGame.WIDTH+15, 142);
 		else
 			g.drawString("Power Up Timer: "+(int)powerUpTimer+"", BulletHellGame.WIDTH+15, 142);	
 		g.drawImage(outline, BulletHellGame.WIDTH+11, 123);
-			
+
 	}
-	
+
 	public void checkPowerUps(int delta){
 		if(currPowerUp >= 0){
-			if(powerUpTimer>0){
-				switch(currPowerUp){
-				case 0: dd = true;break;
-				case 1: shield = true; shieldcount=5;break;
-				case 2: twarp = true;break;
+			if(powerUpTimer>0 ){
+				if(changePow){
+					switch(currPowerUp){
+					case 0: dd = true;break;
+					case 1: shield = true; shieldcount=5;break;
+					case 2: twarp = true;break;
+					case 3: invul = true;break;
+					}
+					changePow = false;
 				}
 				powerUpTimer-=delta;
 			}
 			else{
-				
 				turnOffPowerUps();
 			}
 		}
@@ -90,6 +96,7 @@ public class Player {
 		currPowerUp = -1;
 		powerUpTimer = 0;
 		powerTime = 1;
+		changePow=true;
 	}
 
 	public void increment(int direction){
@@ -113,10 +120,10 @@ public class Player {
 
 	public void drawHitBox(Graphics g){
 		g.drawImage(hitbox, (float)position.x-hitbox.getWidth()/2, (float)position.y-hitbox.getHeight()/2);
-		if(invul || twarp){
-			g.setColor(invul ? Color.green : Color.magenta);
+		if(shield || twarp || invul){
+			g.setColor(colorBar);
 			g.setLineWidth(3.0f);
-			g.draw(new Circle((float)position.x, (float)position.y, invul ? 15.0f : 45.0f));
+			g.draw(new Circle((float)position.x, (float)position.y, (invul||shield) ? 15.0f : 45.0f));
 		}
 	}
 

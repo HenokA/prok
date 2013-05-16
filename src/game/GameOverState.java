@@ -74,7 +74,7 @@ public class GameOverState extends BasicGameState{
 	public static boolean active = false;
 	int selection = 0;
 	int xselection=playAgainX;
-	String highScoreName= "";
+	String highScoreName= "Noobslayer";
 	float alphablock=(float).95;
 	boolean up=false;
 	int blinker=280;

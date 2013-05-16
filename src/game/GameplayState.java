@@ -12,6 +12,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.Sound;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
@@ -23,6 +24,7 @@ import pattern.PatternCircle;
 import pattern.PatternConstantHomingLine;
 import pattern.PatternConstantHomingWide;
 import pattern.PatternCurve;
+import pattern.PatternDiamondBeam;
 import pattern.PatternDoubleCurve;
 import pattern.PatternDoubleSinCurve;
 import pattern.PatternInitialHomingLine;
@@ -35,8 +37,6 @@ import pattern.PatternSinCircle;
 import pattern.PatternSinCurve;
 import pattern.PatternSpiral;
 import pattern.PatternTrackingBeam;
-import pattern.PatternDiamondBeam;
-
 import bullet.Bullet;
 import bullet.BulletBeamHitbox;
 import bullet.PowerUp;
@@ -96,6 +96,8 @@ public class GameplayState extends BasicGameState {
 	public static Object deadBullet;
 	public boolean grazeMove=false;
 	BufferedWriter out;
+	Sound fx=null;
+	int enemieskilled =0;
 
 	public GameplayState( int stateID ) 
 	{
@@ -133,8 +135,10 @@ public class GameplayState extends BasicGameState {
 	}
 	/**
 	 * resets everything to make it a new game when we click start game or play again
+	 * @throws SlickException 
 	 */
-	public void newGame(){
+	public void newGame() throws SlickException{
+		System.out.println("new game");
 		player = new Player(new Point(200,500));
 		ebullets = new ArrayList<Bullet>();
 		bulletsToBeAdded = new ArrayList<Bullet>();
@@ -155,7 +159,10 @@ public class GameplayState extends BasicGameState {
 		invulDisplayTimer = 0;
 		level=0;
 		lvlIndex=0;
+		nextTier = levelUps[lvlIndex];
 		plvl=6;
+		enemieskilled=0;
+		//fx.play();
 	}
 	/**
 	 * run at the beginning of the program to instantiate everything
@@ -165,6 +172,8 @@ public class GameplayState extends BasicGameState {
 		container.setTargetFrameRate(60);
 		loadImages(); // loads images from assets
 		score=0;
+		//fx=new Sound("assets/GameMusic.wav");
+		//fx.loop();
 	}
 
 	/**
@@ -214,8 +223,7 @@ public class GameplayState extends BasicGameState {
 			}
 		}
 		//patterns.add(new PatternRotatingBeam(enemyxy));
-		enemy = new Enemy( enemyxy, images[4], 500f);
-		//abilities.add(new AbilityLockOnMissiles(enemyxy));
+		enemy = new Enemy( enemyxy, images[4], 1500f);
 	}
 	/**
 	 * Allows the program to increase in difficulty by increasing bullet speed
@@ -229,8 +237,8 @@ public class GameplayState extends BasicGameState {
 			else if(lvlIndex==2)
 				plvl=17;
 			else if(plvl>2){
-				BULLETSPEED += .3; //increases bullet speed across screen
-				BULLETRATE += .3; //increases bullet rate
+				BULLETSPEED += .1; //increases bullet speed across screen
+				BULLETRATE += .1; //increases bullet rate
 			}
 			nextTier = levelUps[lvlIndex];
 		}
@@ -248,9 +256,13 @@ public class GameplayState extends BasicGameState {
 			if(deathTimer <= 0){
 				GameOverState.setCheckScore(true);
 				totalGraze=0;
+				level=0;
+				lvlIndex=0;
+				plvl=6;
 				sbg.enterState(BulletHellGame.GAMEOVERSTATE, new FadeOutTransition(Color.black, 100),new FadeInTransition(Color.black, 100));
 				GameOverState.active=true;
 				GameOverState.inputTimer= 250;
+				//fx.stop();
 			}
 		}
 		if(paused){
@@ -363,22 +375,25 @@ public class GameplayState extends BasicGameState {
 							invulDisplayTimer = 500;
 							invulDisplayPoint = player.position.addVector(new Point(5, 10));
 						}else if(player.shield){
-							player.shieldcount -= 1;
+							renderObjs.add(new RenderObjectExplosion(bullet.getPosition(), bullet.img));
+							i.remove();
+							player.shieldcount = player.shieldcount-1;
+							System.out.println(player.shieldcount);
 							shieldDisplayTimer = 500;
 							shieldDisplayPoint = player.position.addVector(new Point(5, 10));
 							if(player.shieldcount==0)
 								player.turnOffPowerUps();
 						}
 					}else if(!(bullet instanceof BulletBeamHitbox) && bullet.checkGraze(player.position, 7)){
-						score += 10*multiplier;
-						totalGraze+=10*multiplier;
-						if(totalGraze>=300)
-							grazeMove=true;
-						System.out.println(grazeMove);
-						grazeDisplayTimer = 500;
-						grazeBonus += 10*multiplier;
-						System.out.println(grazeBonus);
-						grazeDisplayPoint = player.position.addVector(new Point(5, -10));
+						if(!player.invul){
+							score += 10*multiplier;
+							totalGraze+=10*multiplier;
+							if(totalGraze>=1000)
+								grazeMove=true;
+							grazeDisplayTimer = 500;
+							grazeBonus += 10*multiplier;
+							grazeDisplayPoint = player.position.addVector(new Point(5, -10));
+						}
 					}else if(player.twarp && !bullet.warp && bullet.checkGraze(player.position, 45)){
 						bullet.setSpeed(bullet.getSpeed()*.5f);
 						bullet.warp = true;
@@ -390,8 +405,6 @@ public class GameplayState extends BasicGameState {
 					i.remove();
 				}
 			}
-
-			System.out.println("total graze: " +totalGraze);
 
 			i = pbullets.iterator(); 
 			while(i.hasNext()) {
@@ -416,6 +429,7 @@ public class GameplayState extends BasicGameState {
 				multiplier+=.5;
 				Point epos = enemy.position;
 				Bullet powup = new PowerUp(epos, new Point(0,1), 2);
+				enemieskilled++;
 				enemy = null;
 				patterns = new ArrayList<Pattern>();
 				respawnTimer = 2000;
@@ -492,21 +506,22 @@ public class GameplayState extends BasicGameState {
 		g.fillRect(BulletHellGame.WIDTH, 0, BulletHellGame.APPWIDTH-BulletHellGame.WIDTH, BulletHellGame.HEIGHT);
 		g.setColor(new Color(255, 200, 0));
 		g.drawString("SCORE: "+(int)Math.floor(score)+"", BulletHellGame.WIDTH+15, 5);
+		g.drawString("BOSSES DEFEATED: "+enemieskilled, BulletHellGame.WIDTH+15, 20);
 		player.drawPowerUpBar(g);
 		drawGraze(g);
 		if(enemy!=null) enemy.drawHPBar(g);
 	}
 
 	public void drawGraze(Graphics g){
-		g.setColor(new Color(Color.pink));
-		if(totalGraze/300<=1)
-			g.fillRect(BulletHellGame.WIDTH+15, 227, (150*(totalGraze/300)), 13);
+		g.setColor(new Color(Color.cyan));
+		if(totalGraze/1000<=1)
+			g.fillRect(BulletHellGame.WIDTH+15, 227, (150*(totalGraze/1000)), 13);
 		else
 			g.fillRect(BulletHellGame.WIDTH+15, 227, (150), 13);
-		if(300-totalGraze<0)
+		if(1000-totalGraze<0)
 			g.drawString("Graze Left: "+0+"", BulletHellGame.WIDTH+15, 242);
 		else
-			g.drawString("Graze Left: "+(300-(int)totalGraze)+"", BulletHellGame.WIDTH+15, 242);	
+			g.drawString("Graze Left: "+(1000-(int)totalGraze)+"", BulletHellGame.WIDTH+15, 242);	
 		g.drawImage(images[14], BulletHellGame.WIDTH+11, 223);
 	}
 

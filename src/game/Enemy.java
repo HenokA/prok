@@ -81,9 +81,9 @@ public class Enemy {
 
 	public void drawHPBar(Graphics g){
 		g.setColor(hpbar);
-		g.fillRect(BulletHellGame.WIDTH+15, 27, 150*(currentHP/maxHP), 13);
-		g.drawString("BOSS HP: "+(int)currentHP+"", BulletHellGame.WIDTH+15, 42);
-		g.drawImage(outline, BulletHellGame.WIDTH+11, 23);
+		g.fillRect(BulletHellGame.WIDTH+15, 45, 150*(currentHP/maxHP), 13);
+		g.drawString("BOSS HP: "+(int)currentHP+"", BulletHellGame.WIDTH+15, 60);
+		g.drawImage(outline, BulletHellGame.WIDTH+11, 41);
 	}
 
 	public void setHPBarColor(){
