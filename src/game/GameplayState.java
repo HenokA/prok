@@ -98,6 +98,16 @@ public class GameplayState extends BasicGameState {
 	BufferedWriter out;
 	Sound fx=null;
 	int enemieskilled =0;
+	boolean instate=false;
+	
+	public void enter(GameContainer container, StateBasedGame sbg){
+		instate = true;
+		container.getInput().clearControlPressedRecord();
+	}
+	
+	public void leave(GameContainer container, StateBasedGame sbg){
+		instate = false;
+	}
 
 	public GameplayState( int stateID ) 
 	{
@@ -138,7 +148,6 @@ public class GameplayState extends BasicGameState {
 	 * @throws SlickException 
 	 */
 	public void newGame() throws SlickException{
-		System.out.println("new game");
 		player = new Player(new Point(200,500));
 		ebullets = new ArrayList<Bullet>();
 		bulletsToBeAdded = new ArrayList<Bullet>();
@@ -260,8 +269,6 @@ public class GameplayState extends BasicGameState {
 				lvlIndex=0;
 				plvl=6;
 				sbg.enterState(BulletHellGame.GAMEOVERSTATE, new FadeOutTransition(Color.black, 100),new FadeInTransition(Color.black, 100));
-				GameOverState.active=true;
-				GameOverState.inputTimer= 250;
 				//fx.stop();
 			}
 		}
@@ -515,14 +522,14 @@ public class GameplayState extends BasicGameState {
 	public void drawGraze(Graphics g){
 		g.setColor(new Color(Color.cyan));
 		if(totalGraze/1000<=1)
-			g.fillRect(BulletHellGame.WIDTH+15, 227, (150*(totalGraze/1000)), 13);
+			g.fillRect(BulletHellGame.WIDTH+15, 215, (150*(totalGraze/1000)), 13);
 		else
-			g.fillRect(BulletHellGame.WIDTH+15, 227, (150), 13);
+			g.fillRect(BulletHellGame.WIDTH+15, 215, (150), 13);
 		if(1000-totalGraze<0)
-			g.drawString("Graze Left: "+0+"", BulletHellGame.WIDTH+15, 242);
+			g.drawString("Graze Left: "+0+"", BulletHellGame.WIDTH+15, 230);
 		else
-			g.drawString("Graze Left: "+(1000-(int)totalGraze)+"", BulletHellGame.WIDTH+15, 242);	
-		g.drawImage(images[14], BulletHellGame.WIDTH+11, 223);
+			g.drawString("Graze Left: "+(1000-(int)totalGraze)+"", BulletHellGame.WIDTH+15, 230);	
+		g.drawImage(images[14], BulletHellGame.WIDTH+11, 211);
 	}
 
 	@Override

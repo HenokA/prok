@@ -70,8 +70,6 @@ public class GameOverState extends BasicGameState{
 	ArrayList<String> names;
 	boolean highscore=false;
 	String nameHS=null;
-	public static int inputTimer = 250;
-	public static boolean active = false;
 	int selection = 0;
 	int xselection=playAgainX;
 	String highScoreName= "Noobslayer";
@@ -82,6 +80,16 @@ public class GameOverState extends BasicGameState{
 	boolean addName=false;
 	boolean firstChar=true;
 	boolean game=true;
+	boolean instate=false;
+
+	public void enter(GameContainer container, StateBasedGame sbg){
+		instate = true;
+		container.getInput().clearControlPressedRecord();
+	}
+
+	public void leave(GameContainer container, StateBasedGame sbg){
+		instate = false;
+	}
 
 	GameOverState( int stateID ) 
 	{
@@ -94,7 +102,6 @@ public class GameOverState extends BasicGameState{
 	}
 	public static void setCheckScore(boolean x){
 		checkScore=x;
-		inputTimer=1000;
 	}
 	/**
 	 * run at the beginning of the program to instantiate everything
@@ -128,7 +135,7 @@ public class GameOverState extends BasicGameState{
 									publishNames();
 									addName=false;
 									firstChar=true;
-									
+
 									game=true;
 								}
 							}
@@ -373,52 +380,49 @@ public class GameOverState extends BasicGameState{
 	 * A continously updated method that helps smoothly run the program
 	 */
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
-		
-			if(active){
-				if(alphablock<=.95 && up!=true)
-					alphablock-=.03;
-				if(alphablock<=.05&&up!=true){
-					up=true;
-					alphablock=(float).05;
-				}				
-				if(alphablock>=.05&& up==true)
-					alphablock+=.03;
-				if(alphablock>=.95 &&up==true){
-					up=false;
-					alphablock=(float).95;
-				}				
 
-				if(game){
+		if(instate){
+			if(alphablock<=.95 && up!=true)
+				alphablock-=.03;
+			if(alphablock<=.05&&up!=true){
+				up=true;
+				alphablock=(float).05;
+			}				
+			if(alphablock>=.05&& up==true)
+				alphablock+=.03;
+			if(alphablock>=.95 &&up==true){
+				up=false;
+				alphablock=(float).95;
+			}				
+
+			if(game){
 				Input input = gc.getInput();
-				inputTimer -= delta;
-				if(inputTimer <=  0){
-					if(input.isKeyPressed(Input.KEY_DOWN)){
-						if(selection<=1)
-							selection++;
-						if(selection==2)
-							selection=0;
+
+				if(input.isKeyPressed(Input.KEY_DOWN)){
+					if(selection<=1)
+						selection++;
+					if(selection==2)
+						selection=0;
+				}
+				if(input.isKeyPressed(Input.KEY_UP)){
+					if(selection>=0)
+						selection--;
+					if(selection==-1)
+						selection=1;
+				}
+				if(input.isKeyPressed(Input.KEY_ENTER)){
+					if(selection == 0){
+						GameplayState gs = (GameplayState) sbg.getState(BulletHellGame.GAMEPLAYSTATE);
+						//addName=true;
+						gs.newGame();
+						sbg.enterState(BulletHellGame.GAMEPLAYSTATE, new FadeOutTransition(Color.black,1000), new FadeInTransition(Color.black,500));
+					}else if(selection ==1){
+						//addName=true;
+						sbg.enterState(BulletHellGame.MAINMENUSTATE, new FadeOutTransition(Color.black,400), new FadeInTransition(Color.black,400));
 					}
-					if(input.isKeyPressed(Input.KEY_UP)){
-						if(selection>=0)
-							selection--;
-						if(selection==-1)
-							selection=1;
-					}
-					if(input.isKeyPressed(Input.KEY_ENTER)){
-						if(selection == 0){
-							GameplayState gs = (GameplayState) sbg.getState(BulletHellGame.GAMEPLAYSTATE);
-							//addName=true;
-							gs.newGame();
-							active = false;
-							sbg.enterState(BulletHellGame.GAMEPLAYSTATE, new FadeOutTransition(Color.black,1000), new FadeInTransition(Color.black,500));
-						}else if(selection ==1){
-							//addName=true;
-							active = false;
-							sbg.enterState(BulletHellGame.MAINMENUSTATE, new FadeOutTransition(Color.black,400), new FadeInTransition(Color.black,400));
-						}
-					}
-				}		
-			}
+				}
+			}		
+
 		}
 	}
 

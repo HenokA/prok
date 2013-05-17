@@ -40,7 +40,17 @@ public class MainMenuState extends BasicGameState {
 	boolean starting=true;
 	int selection = 0;
 	int[] hsposy= {300, 320, 340, 360, 380, 400, 420, 440,460,480,500};
-	
+	boolean instate=false;
+
+	public void enter(GameContainer container, StateBasedGame sbg){
+		instate = true;
+		container.getInput().clearControlPressedRecord();
+	}
+
+	public void leave(GameContainer container, StateBasedGame sbg){
+		instate = false;
+	}
+
 	MainMenuState( int stateID ) 
 	{
 		this.stateID = stateID;
@@ -55,7 +65,7 @@ public class MainMenuState extends BasicGameState {
 	 */
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {		
 		background = new Image("assets/b1.png");
-		
+
 		//fx= new Sound("assets/Kalimba.wav");
 		//fx1= new Sound("assets/standupEDIT.wav");
 		//fx1.loop();
@@ -67,12 +77,12 @@ public class MainMenuState extends BasicGameState {
 		startGameOption = startgameOptions.getSubImage(0, 0, 231, 39);
 		highscoreOption = highscoreOptions.getSubImage(0, 0, 200, 16);
 		exitOption = exitOptions.getSubImage(0, 0, 89, 29);
-	
-		
+
+
 	}
 	public void getHSX(){
 		try {
-			 new BufferedReader(new FileReader("assets/Highscores"));
+			new BufferedReader(new FileReader("assets/Highscores"));
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -85,10 +95,10 @@ public class MainMenuState extends BasicGameState {
 		// render the background
 		//background.setAlpha(.1f);
 		background.draw(BulletHellGame.OFFSET-17, 0);
-		
-		
+
+
 		//fx1.play();
-		 //Draw menu
+		//Draw menu
 		startGameOption.draw(BulletHellGame.OFFSET+startgameX, startgameY, startGameScale);
 		highscoreOption.draw(BulletHellGame.OFFSET+highscoreX, highscoreY);
 		exitOption.draw(BulletHellGame.OFFSET+endX, endY, exitScale);
@@ -118,7 +128,7 @@ public class MainMenuState extends BasicGameState {
 			}
 		}
 
-		
+
 
 	}
 	/**
@@ -127,14 +137,15 @@ public class MainMenuState extends BasicGameState {
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
 		Input input = gc.getInput();
 		//fx1.play();
-		
-		if(input.isKeyPressed(Input.KEY_ENTER)){
-			if(selection == 0){
-				GameplayState gs = (GameplayState) sbg.getState(BulletHellGame.GAMEPLAYSTATE);
-				gs.newGame();
-				sbg.enterState(BulletHellGame.GAMEPLAYSTATE, new FadeOutTransition(Color.black,1000), new FadeInTransition(Color.black,500));			
-			}else if(selection == 1){
-				gc.exit();
+		if(instate){
+			if(input.isKeyPressed(Input.KEY_ENTER)){
+				if(selection == 0){
+					GameplayState gs = (GameplayState) sbg.getState(BulletHellGame.GAMEPLAYSTATE);
+					gs.newGame();
+					sbg.enterState(BulletHellGame.GAMEPLAYSTATE, new FadeOutTransition(Color.black,1000), new FadeInTransition(Color.black,500));			
+				}else if(selection == 1){
+					gc.exit();
+				}
 			}
 		}
 	}
