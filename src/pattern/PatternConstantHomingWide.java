@@ -5,12 +5,11 @@ import game.Point;
 import java.util.ArrayList;
 import java.util.Random;
 
-import org.newdawn.slick.Color;
+
 import org.newdawn.slick.Image;
 
 import bullet.Bullet;
 import bullet.BulletConstantHoming;
-import bullet.BulletInitialHoming;
 
 
 public class PatternConstantHomingWide implements Pattern {

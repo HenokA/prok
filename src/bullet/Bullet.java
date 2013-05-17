@@ -2,10 +2,8 @@ package bullet;
 import game.Point;
 import game.RenderObjectExplosion;
 
-import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
-import org.newdawn.slick.geom.Circle;
 
 public class Bullet {
 	

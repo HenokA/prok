@@ -7,7 +7,6 @@ import java.util.Random;
 
 import org.newdawn.slick.Image;
 
-import bullet.BulletCurve;
 import bullet.Bullet;
 import bullet.BulletSinCurve;
 

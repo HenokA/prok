@@ -5,7 +5,6 @@ import game.Point;
 import game.RenderObjectBeam;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Color;

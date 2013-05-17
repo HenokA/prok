@@ -1,11 +1,5 @@
 package game;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.TextField;
-import java.awt.Window;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
@@ -13,19 +7,14 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import javax.swing.JTextField;
 
-import org.lwjgl.input.Keyboard;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
-import org.newdawn.slick.InputListener;
-import org.newdawn.slick.KeyListener;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
-import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.geom.Circle;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
@@ -184,7 +173,6 @@ public class GameOverState extends BasicGameState{
 	/**
 	 * renders the high scores and images onto the container
 	 */
-	@SuppressWarnings("deprecation")
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 		// render the background
 		background.draw(BulletHellGame.OFFSET, 0);
@@ -265,7 +253,6 @@ public class GameOverState extends BasicGameState{
 		BufferedReader hs = null;
 		highscores=new ArrayList<Integer>();
 		String x = null;
-		String y=null;
 		try {
 			hs = new BufferedReader(new FileReader("assets/Highscores"));
 			for(int i=0;i<10;i++){
@@ -289,7 +276,6 @@ public class GameOverState extends BasicGameState{
 		BufferedReader hs = null;
 		names=new ArrayList<String>();
 		String x = null;
-		String y=null;
 		try {
 			hs = new BufferedReader(new FileReader("assets/Names"));
 			for(int i=0;i<10;i++){

@@ -1,6 +1,5 @@
 package game;
 
-import java.awt.Font;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;

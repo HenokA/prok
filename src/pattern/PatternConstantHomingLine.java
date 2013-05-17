@@ -9,7 +9,6 @@ import org.newdawn.slick.Image;
 
 import bullet.Bullet;
 import bullet.BulletConstantHoming;
-import bullet.BulletInitialHoming;
 
 
 public class PatternConstantHomingLine implements Pattern{
