@@ -402,8 +402,7 @@ public class GameplayState extends BasicGameState {
 							grazeDisplayPoint = player.position.addVector(new Point(5, -10));
 						}
 					}else if(player.twarp && !bullet.warp && bullet.checkGraze(player.position, 45)){
-						bullet.setSpeed(bullet.getSpeed()*.5f);
-						bullet.warp = true;
+						bullet.warp();
 					}
 
 				}

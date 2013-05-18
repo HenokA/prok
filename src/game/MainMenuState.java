@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
+import org.newdawn.slick.Animation;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -40,6 +41,7 @@ public class MainMenuState extends BasicGameState {
 	int selection = 0;
 	int[] hsposy= {300, 320, 340, 360, 380, 400, 420, 440,460,480,500};
 	boolean instate=false;
+	Animation select;
 
 	public void enter(GameContainer container, StateBasedGame sbg){
 		instate = true;
@@ -72,6 +74,12 @@ public class MainMenuState extends BasicGameState {
 		Image startgameOptions = new Image("assets/startgame1.png");
 		Image exitOptions = new Image("assets/exit1.png");
 		Image highscoreOptions = new Image("assets/highscore1.png");
+		select = new Animation(new Image[]{
+		new Image("assets/selector1.png"),
+		new Image("assets/selector2.png"),
+		new Image("assets/selector.png"),
+		}, 100);
+		select.start();
 
 		startGameOption = startgameOptions.getSubImage(0, 0, 231, 39);
 		highscoreOption = highscoreOptions.getSubImage(0, 0, 200, 16);
@@ -98,6 +106,8 @@ public class MainMenuState extends BasicGameState {
 
 		//fx1.play();
 		//Draw menu
+		int[] offsets = {startgameX, highscoreX};
+		select.draw(BulletHellGame.OFFSET+offsets[selection]-16, 168+50*selection, 16, 16);
 		startGameOption.draw(BulletHellGame.OFFSET+startgameX, startgameY, startGameScale);
 		highscoreOption.draw(BulletHellGame.OFFSET+highscoreX, highscoreY);
 		exitOption.draw(BulletHellGame.OFFSET+endX, endY, exitScale);
@@ -137,6 +147,18 @@ public class MainMenuState extends BasicGameState {
 		Input input = gc.getInput();
 		//fx1.play();
 		if(instate){
+			if(input.isKeyPressed(Input.KEY_DOWN)){
+				if(selection<=1)
+					selection++;
+				if(selection==2)
+					selection=0;
+			}
+			if(input.isKeyPressed(Input.KEY_UP)){
+				if(selection>=0)
+					selection--;
+				if(selection==-1)
+					selection=1;
+			}
 			if(input.isKeyPressed(Input.KEY_ENTER)){
 				if(selection == 0){
 					GameplayState gs = (GameplayState) sbg.getState(BulletHellGame.GAMEPLAYSTATE);

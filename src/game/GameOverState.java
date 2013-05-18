@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 
+import org.newdawn.slick.Animation;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -15,7 +16,6 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
-import org.newdawn.slick.geom.Circle;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
@@ -70,6 +70,7 @@ public class GameOverState extends BasicGameState{
 	boolean firstChar=true;
 	boolean game=true;
 	boolean instate=false;
+	Animation select;
 
 	public void enter(GameContainer container, StateBasedGame sbg){
 		instate = true;
@@ -102,6 +103,12 @@ public class GameOverState extends BasicGameState{
 		Image exitOptions = new Image("assets/exit.png");
 		Image highscoreOptions = new Image("assets/highscore1.png");
 		//Image menuOptions = new Image("assets/menu.png");
+		select = new Animation(new Image[]{
+		new Image("assets/selector1.png"),
+		new Image("assets/selector2.png"),
+		new Image("assets/selector.png"),
+		}, 100);
+		select.start();
 
 		gc.getInput().addPrimaryListener(new InputAdapter(){
 			public void keyPressed(int key, char c){
@@ -195,7 +202,7 @@ public class GameOverState extends BasicGameState{
 		break;
 		}
 		g.setColor(Color.cyan);
-		g.draw(new Circle(BulletHellGame.OFFSET+xselection-5, 145+80*selection, 10));
+		select.draw(BulletHellGame.OFFSET+xselection-24, 140+70*selection, 16, 16);
 		playAgainOption.draw(BulletHellGame.OFFSET+playAgainX, playAgainY, playAgainScale);
 		highscoreOption.draw(BulletHellGame.OFFSET+highscoreX, highscoreY);
 		exitOption.draw(BulletHellGame.OFFSET+endX, endY, exitScale);

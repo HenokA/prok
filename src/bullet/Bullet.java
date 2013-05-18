@@ -72,6 +72,11 @@ public class Bullet {
 		return speed;
 	}
 	
+	public void warp(){
+		warp = true;
+		speed = speed*.5f;
+	}
+	
 	/**
 	 * Sets direction vector
 	 * @param v - Unit vector

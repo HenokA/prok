@@ -6,7 +6,7 @@ import org.newdawn.slick.Image;
 
 public class BulletSinCurve extends Bullet{
 
-	private int angle;
+	private double angle;
 	private boolean increasing;
 	private int totalAngle=0;
 
@@ -35,5 +35,10 @@ public class BulletSinCurve extends Bullet{
 				increasing = true;
 			}
 		}
+	}
+	
+	public void warp(){
+		super.warp();
+		angle = angle*.5;
 	}
 }
