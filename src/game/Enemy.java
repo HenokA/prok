@@ -8,6 +8,11 @@ import org.newdawn.slick.Image;
 
 import pattern.Pattern;
 
+/**
+ * Enemy class - holds data for the Enemy and provides methods for interaction
+ * @author prashan
+ *
+ */
 
 public class Enemy {
 
@@ -27,6 +32,12 @@ public class Enemy {
 	private static int YUPPERBOUND = 200;
 	private Image outline = GameplayState.images[14];
 
+	/**
+	 * Constructor
+	 * @param position - starting position
+	 * @param img - sprite
+	 * @param hp - starting hp
+	 */
 	public Enemy(Point position, Image img, float hp){
 		this.position = position;
 		this.img = img;
@@ -36,6 +47,10 @@ public class Enemy {
 		rollNewDirection(0, 360);
 	}
 
+	/**
+	 * Update the position of the patterns to match the enemy's movement
+	 * @param bp
+	 */
 	public void updatePos(ArrayList<Pattern> bp){
 		for(Pattern p : bp){
 			p.setPosition(position);
@@ -44,8 +59,8 @@ public class Enemy {
 	
 	/**
 	 * Randomly chooses a direction between min and max degrees
-	 * @param min
-	 * @param max
+	 * @param min - minimum angle
+	 * @param max - max angle
 	 */
 	public void rollNewDirection(double min, double max){
 		dAngle = min+r.nextDouble()*(max-min);
@@ -53,6 +68,10 @@ public class Enemy {
 		mvtimer = 1000 + r.nextInt(4000); 
 	}
 
+	/**
+	 * Updates position and other game logic related to the enemy
+	 * @param delta - time in ms since last call
+	 */
 	public void update(int delta){
 		mvtimer -=delta;
 		position = position.addVector(vector.mult(speed));
@@ -69,6 +88,10 @@ public class Enemy {
 		}
 	}
 
+	/**
+	 * Draws the enemy to the screen
+	 * @param g - the Graphics object
+	 */
 	public void draw(Graphics g){
 		g.drawImage(img, (int)position.x-img.getWidth()/2, (int)position.y-img.getHeight()/2);
 		g.setColor(Color.cyan);
@@ -79,6 +102,10 @@ public class Enemy {
 //				g.drawRect((float) position.x+50, (float) position.y-25, 50, 75);
 	}
 
+	/**
+	 * Draws the enemy's hp bar on the side of the screen
+	 * @param g - Graphics object
+	 */
 	public void drawHPBar(Graphics g){
 		g.setColor(hpbar);
 		g.fillRect(BulletHellGame.WIDTH+15, 50, 150*(currentHP/maxHP), 13);
@@ -86,6 +113,9 @@ public class Enemy {
 		g.drawImage(outline, BulletHellGame.WIDTH+11, 46);
 	}
 
+	/**
+	 * Sets the color of the HP bar depending on % current health
+	 */
 	public void setHPBarColor(){
 		if(currentHP>(.75*maxHP))
 			hpbar = Color.green;
@@ -95,6 +125,9 @@ public class Enemy {
 			hpbar = Color.red;
 	}
 
+	/**
+	 * inflict damage to the enemy
+	 */
 	public void takeDamage(){
 		currentHP-=15;
 		setHPBarColor();

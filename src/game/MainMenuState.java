@@ -18,6 +18,11 @@ import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
+/**
+ * Main Menu class
+ * @author prashan
+ *
+ */
 
 public class MainMenuState extends BasicGameState {
 	Image background = null;
@@ -43,13 +48,20 @@ public class MainMenuState extends BasicGameState {
 	boolean instate=false;
 	Animation select;
 
+	/**
+	 * Code when entering the state
+	 */
 	public void enter(GameContainer container, StateBasedGame sbg){
 		instate = true;
-		container.getInput().clearControlPressedRecord();
+		container.getInput().clearKeyPressedRecord();
 	}
 
+	/**
+	 * Code when leaving the state
+	 */
 	public void leave(GameContainer container, StateBasedGame sbg){
 		instate = false;
+		container.getInput().clearKeyPressedRecord();
 	}
 
 	MainMenuState( int stateID ) 
@@ -87,6 +99,10 @@ public class MainMenuState extends BasicGameState {
 
 
 	}
+	
+	/**
+	 * Get highscores from file to display them
+	 */
 	public void getHSX(){
 		try {
 			new BufferedReader(new FileReader("assets/Highscores"));
@@ -95,6 +111,7 @@ public class MainMenuState extends BasicGameState {
 			e.printStackTrace();
 		}
 	}
+	
 	/**
 	 * renders the high scores and images onto the container
 	 */
@@ -140,6 +157,7 @@ public class MainMenuState extends BasicGameState {
 
 
 	}
+	
 	/**
 	 * A continously updated method that helps smoothly run the program
 	 */

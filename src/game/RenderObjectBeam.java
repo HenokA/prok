@@ -7,6 +7,12 @@ import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Transform;
 
+/**
+ * A RenderObject to display the beams of a laser
+ * @author prashan
+ *
+ */
+
 public class RenderObjectBeam implements RenderObject{
 
 	private Color color;
@@ -16,6 +22,12 @@ public class RenderObjectBeam implements RenderObject{
 	private boolean beam = false;
 	private Animation center;
 
+	/**
+	 * Constructor
+	 * @param p - position
+	 * @param c - color
+	 * @param img - animation for center piece
+	 */
 	public RenderObjectBeam(Point p, Color c, Animation img){
 		position = p;
 		color = c;
@@ -23,19 +35,37 @@ public class RenderObjectBeam implements RenderObject{
 		center.start();
 	}
 
+	/**
+	 * Increase the angle of rotation of the beam(s)
+	 * @param d - angle to increment
+	 */
 	public void increaseAngle(double d) {
 		this.angle += d;
 	}
 
+	/**
+	 * Set true to render
+	 * @param r 
+	 */
 	public void setRender(boolean r){
 		render = r;
 	}
 
+	/**
+	 * Set if the entire laser should be drawn or only the targeting lasers
+	 * @param b
+	 */
 	public void setBeam(boolean b){
 		beam = b;
 	}
 
 	@Override
+	/**
+	 * Where the magic happens:
+	 * Create two rectangles per laser - the white part and the color part
+	 * Rotate the rectangles by the desired angle
+	 * Draw them!
+	 */
 	public void draw(Graphics g) {
 		if(render){
 			if(beam){
@@ -72,7 +102,6 @@ public class RenderObjectBeam implements RenderObject{
 						(float)Math.toRadians(angle), (float) position.x, (float) position.y));		
 				g.draw(rotatedLaser2);
 			}
-			//g.drawImage(center, (float) position.x-center.getWidth()/2, (float) position.y-center.getHeight()/2);
 			center.draw((float) position.x-center.getWidth()/2, (float) position.y-center.getHeight()/2);
 		}
 	}

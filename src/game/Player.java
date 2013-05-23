@@ -8,6 +8,11 @@ import org.newdawn.slick.geom.Circle;
 
 import bullet.Bullet;
 
+/**
+ * Player class - holds data for the player
+ * @author prashan
+ *
+ */
 
 public class Player {
 
@@ -34,6 +39,11 @@ public class Player {
 	public Color colorBar;
 	public boolean changePow = true;
 	boolean grazeMove1;
+	
+	/**
+	 * Constructor
+	 * @param p - starting position
+	 */
 	public Player(Point p){
 		position = p;
 		img = GameplayState.images[0];
@@ -42,6 +52,11 @@ public class Player {
 		time = System.currentTimeMillis();
 
 	}
+	
+	/**
+	 * Activates invulnerability 
+	 * @param grazeMove
+	 */
 	public void grazeMove(boolean grazeMove){
 
 		if(grazeMove){
@@ -53,9 +68,13 @@ public class Player {
 			colorBar = Color.cyan;
 		}
 	}
+	
+	/**
+	 * Draws the power up bar on the side of the screen
+	 * @param g
+	 */
 	public void drawPowerUpBar(Graphics g){
 		g.setColor(colorBar);
-
 		g.fillRect(BulletHellGame.WIDTH+15, 127, (150*(powerUpTimer/powerTime)), 13);
 		if(powerUpTimer<0)
 			g.drawString("Power Up Timer: "+0+"", BulletHellGame.WIDTH+15, 142);
@@ -65,6 +84,10 @@ public class Player {
 
 	}
 
+	/**
+	 * Checks current power ups and turns them on if their timers have expired
+	 * @param delta
+	 */
 	public void checkPowerUps(int delta){
 		if(currPowerUp >= 0){
 			if(powerUpTimer>0 ){
@@ -85,6 +108,9 @@ public class Player {
 		}
 	}
 
+	/**
+	 * Turns off all powerups
+	 */
 	public void turnOffPowerUps(){
 		dd = false;
 		invul = false;
@@ -97,6 +123,10 @@ public class Player {
 		changePow=true;
 	}
 
+	/**
+	 * Increments position in the given direction
+	 * @param direction - the desired direction to move
+	 */
 	public void increment(int direction){
 		if(direction == LEFT)
 			position.x-=speed;
@@ -108,14 +138,26 @@ public class Player {
 			position.y+=speed;
 	}
 
+	/**
+	 * Sets the player's speed
+	 * @param s - desired speed
+	 */
 	public void setSpeed(float s){
 		speed = s;
 	}
 
+	/**
+	 * Draws the player's ship to the screen
+	 * @param g
+	 */
 	public void drawShip(Graphics g){
 		g.drawImage(img, (float)position.x-img.getWidth()/2, (float)position.y-img.getHeight()/2);
 	}
 
+	/**
+	 * Draws the player's hitbox as well as any powerup graphics
+	 * @param g
+	 */
 	public void drawHitBox(Graphics g){
 		g.drawImage(hitbox, (float)position.x-hitbox.getWidth()/2, (float)position.y-hitbox.getHeight()/2);
 		if(shield || twarp || invul){
@@ -125,6 +167,10 @@ public class Player {
 		}
 	}
 
+	/**
+	 * Shoots bullets by adding to the pbullets ArrayList in GameplayState.
+	 * @param bullets
+	 */
 	public void shoot(ArrayList<Bullet> bullets){
 		if(System.currentTimeMillis() -time > delay){
 			if(dd){

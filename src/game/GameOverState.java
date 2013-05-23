@@ -74,11 +74,12 @@ public class GameOverState extends BasicGameState{
 
 	public void enter(GameContainer container, StateBasedGame sbg){
 		instate = true;
-		container.getInput().clearControlPressedRecord();
+		container.getInput().clearKeyPressedRecord();
 	}
 
 	public void leave(GameContainer container, StateBasedGame sbg){
 		instate = false;
+		container.getInput().clearKeyPressedRecord();
 	}
 
 	GameOverState( int stateID ) 

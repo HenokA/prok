@@ -100,15 +100,26 @@ public class GameplayState extends BasicGameState {
 	int enemieskilled =0;
 	boolean instate=false;
 	
+	/**
+	 * Code when the state is entered
+	 */
 	public void enter(GameContainer container, StateBasedGame sbg){
 		instate = true;
-		container.getInput().clearControlPressedRecord();
+		container.getInput().clearKeyPressedRecord();
 	}
 	
+	/**
+	 * Code to run when the state is left
+	 */
 	public void leave(GameContainer container, StateBasedGame sbg){
 		instate = false;
+		container.getInput().clearKeyPressedRecord();
 	}
 
+	/**
+	 * Constructor
+	 * @param stateID - state id
+	 */
 	public GameplayState( int stateID ) 
 	{
 		this.stateID = stateID;
@@ -143,6 +154,7 @@ public class GameplayState extends BasicGameState {
 			e.printStackTrace();
 		}
 	}
+	
 	/**
 	 * resets everything to make it a new game when we click start game or play again
 	 * @throws SlickException 
@@ -173,6 +185,7 @@ public class GameplayState extends BasicGameState {
 		enemieskilled=0;
 		//fx.play();
 	}
+	
 	/**
 	 * run at the beginning of the program to instantiate everything
 	 */
@@ -193,6 +206,11 @@ public class GameplayState extends BasicGameState {
 		ArrayList<Integer> patternIds = new ArrayList<Integer>();
 		int pid =  -1;
 		Point enemyxy = new Point(200, 200);
+		
+		/**
+		 * How patterns are chosen: depending on difficulty (plvl), 
+		 * 3 patterns are randomly chosen and added to the patterns ArrayList
+		 */
 		for(int i=0; i<3; i++){
 			patternIds.add(pid);
 			while(patternIds.contains(pid))
@@ -231,9 +249,9 @@ public class GameplayState extends BasicGameState {
 			case 18: patterns.add(new PatternConstantHomingWide(enemyxy)); break;
 			}
 		}
-		//patterns.add(new PatternRotatingBeam(enemyxy));
 		enemy = new Enemy( enemyxy, images[4], 1500f);
 	}
+	
 	/**
 	 * Allows the program to increase in difficulty by increasing bullet speed
 	 */
@@ -272,6 +290,7 @@ public class GameplayState extends BasicGameState {
 				//fx.stop();
 			}
 		}
+		//If paused, draw the pause menu
 		if(paused){
 			int mouseX = input.getMouseX();
 			int mouseY = input.getMouseY();
@@ -314,6 +333,7 @@ public class GameplayState extends BasicGameState {
 			}
 
 		}
+		//If not paused, update the game
 		if(!paused && !dead){		
 			if (container.getInput().isKeyDown(Input.KEY_LSHIFT)){player.setSpeed(1f);}
 			if (container.getInput().isKeyDown(Input.KEY_LEFT) && player.position.x>0) {player.increment(Player.LEFT);} // move player left
@@ -323,9 +343,9 @@ public class GameplayState extends BasicGameState {
 			if (container.getInput().isKeyDown(Input.KEY_SPACE)) {player.shoot(pbullets);}
 			if (container.getInput().isKeyDown(Input.KEY_Z )) {player.grazeMove(grazeMove); if(grazeMove){grazeMove=false; totalGraze=0;}}
 			player.setSpeed(3);
-
 			player.checkPowerUps(delta);
 
+			//Update display timers
 			if(shieldDisplayTimer > 0)
 				shieldDisplayTimer -=delta;
 			if(invulDisplayTimer > 0)
@@ -334,24 +354,34 @@ public class GameplayState extends BasicGameState {
 				grazeDisplayTimer -=delta;
 			if(grazeDisplayTimer <= 0)
 				grazeBonus = 0;
+			
+			//Check enemy respawn
 			if(enemy == null){
 				if(respawnTimer <= 0){
 					createEnemy(); //creates enemy
-
 				}
 				else
 					respawnTimer -= delta;
 			}
 
+			//Update the enemy
 			if(enemy != null){
 				enemy.update(delta);
 				enemy.updatePos(patterns);
 			}
 
+			//Update patterns
 			for(Pattern p : patterns){
 				p.update(ebullets, delta);
 			}
 
+			/*
+			 * Update bullets:
+			 * Remove bullets that have been destroyed
+			 * Add new bullets that have been created
+			 * Update positions
+			 * Check for collision
+			 */
 			ebullets.removeAll(bulletsToBeRemoved);
 			bulletsToBeRemoved.clear();
 			ebullets.addAll(bulletsToBeAdded);
@@ -412,6 +442,7 @@ public class GameplayState extends BasicGameState {
 				}
 			}
 
+			//Check player bullets
 			i = pbullets.iterator(); 
 			while(i.hasNext()) {
 				Bullet bullet = i.next();
@@ -425,12 +456,14 @@ public class GameplayState extends BasicGameState {
 				}
 			}			
 
+			//Check if dead
 			if(dead){
 				deadx=player.position.x; //stores position of death
 				deady=player.position.y;
 				deathTimer = 1000; //time until the game over screen is made
 			}
 
+			//Check if enemy has been destroyed
 			if(enemy != null && enemy.currentHP<=0){
 				multiplier+=.5;
 				Point epos = enemy.position;

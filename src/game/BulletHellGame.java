@@ -3,7 +3,12 @@ import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
- 
+
+/**
+ * Main game class - Contains code for initializing and starting the game
+ * @author prashan
+ *
+ */
 
 public class BulletHellGame extends StateBasedGame {
  
@@ -18,18 +23,25 @@ public class BulletHellGame extends StateBasedGame {
     
     public BulletHellGame()
     {
-        super("Bullet Hell Game");
+        super("PROK");
     }
  
+    /**
+     * Main method - runs the game
+     * @param args
+     * @throws SlickException
+     */
     public static void main(String[] args) throws SlickException
     {
          AppGameContainer app = new AppGameContainer(new BulletHellGame());
          app.setDisplayMode(APPWIDTH, HEIGHT, false);
          app.setShowFPS(false);
-         //make non resizable
          app.start();
     }
  
+    /**
+     * Initialize the game states
+     */
     @Override
     public void initStatesList(GameContainer gameContainer) throws SlickException {
         this.addState(new MainMenuState(MAINMENUSTATE));
