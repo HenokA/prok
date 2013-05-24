@@ -14,7 +14,9 @@ import bullet.Bullet;
 import bullet.BulletBeamHitbox;
 
 public class PatternDiamondBeam implements Pattern{
-
+	/**
+	 * Diamond laser pattern
+	 */
 	private boolean created=false;
 	private boolean started=false;
 	private Point position;
@@ -30,7 +32,10 @@ public class PatternDiamondBeam implements Pattern{
 	private Image hitboxImg = GameplayState.images[11];
 	private ArrayList<BulletBeamHitbox> hitboxes = new ArrayList<BulletBeamHitbox>();
 	private RenderObjectBeam[] ro;
-
+/**
+ * Constructor
+ * @param position
+ */
 	public PatternDiamondBeam(Point position){
 		this.position = position;
 		ro = new RenderObjectBeam[4];
@@ -42,14 +47,14 @@ public class PatternDiamondBeam implements Pattern{
 	}
 
 	@Override
+	/**
+	 * Updates the pattern, creates laser from multiple bullets shot at a small rate
+	 */
 	public void update(ArrayList<Bullet> bullets, int delta) {
-		// TODO Auto-generated method stub
 		if(timer>0)
 			timer-=delta;
 		if(!started){
 			for(int k=0; k< initial.length; k++){
-		//		startBullet[k] = new Bullet(initial[k], new Point(0,0), frames[3], 0);
-		//		bullets.add(startBullet[k]);
 				GameplayState.renderObjs.add(ro[k]);
 				ro[k].setRender(true);
 				if(k==3)

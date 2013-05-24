@@ -14,7 +14,9 @@ import bullet.Bullet;
 import bullet.BulletBeamHitbox;
 
 public class PatternTrackingBeam implements Pattern{
-
+/**
+ * Creates a laser pattern that follows the player, for example if they use invincibility and go through the laser will change directions
+ */
 	private boolean created=false;
 	private boolean started=false;
 	private Point position;
@@ -26,13 +28,18 @@ public class PatternTrackingBeam implements Pattern{
 	private Image hitboxImg = GameplayState.images[11];
 	private ArrayList<BulletBeamHitbox> hitboxes = new ArrayList<BulletBeamHitbox>();
 	private RenderObjectBeam ro;
-
+/**
+ * Constructor
+ * @param position
+ */
 	public PatternTrackingBeam(Point position){
 		this.position = position;
 		initial = position;
 		beamImg = new Animation(frames, 100);
 	}
-
+/**
+ * Updates pattern and bullet rendering based on a delay
+ */
 	@Override
 	public void update(ArrayList<Bullet> bullets, int delta) {
 		// TODO Auto-generated method stub
@@ -88,7 +95,9 @@ public class PatternTrackingBeam implements Pattern{
 				}
 		}
 	}
-
+/**
+ * Sets position
+ */
 	@Override
 	public void setPosition(Point position) {
 		// TODO Auto-generated method stub

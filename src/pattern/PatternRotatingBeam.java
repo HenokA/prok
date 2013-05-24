@@ -14,7 +14,9 @@ import bullet.Bullet;
 import bullet.BulletBeamHitbox;
 
 public class PatternRotatingBeam implements Pattern{
-
+/**
+ * This pattern creates a laser that rotates (while remaining a straight laser). Similar to the frames within a bicycle wheel.
+ */
 	private boolean created=false;
 	private boolean started=false;
 	private Point position;
@@ -26,13 +28,18 @@ public class PatternRotatingBeam implements Pattern{
 	private Image hitboxImg = GameplayState.images[1];
 	private ArrayList<BulletBeamHitbox> hitboxes = new ArrayList<BulletBeamHitbox>();
 	private RenderObjectBeam ro;
-	
+	/**
+	 * Constructor
+	 * @param position
+	 */
 	public PatternRotatingBeam(Point position){
 		this.position = position;
 		initial = position;
 		beamImg = new Animation(frames, 100);
 	}
-
+/**
+ * Updates the pattern continuously, creates the laser and rotates it based on a delay
+ */
 	@Override
 	public void update(ArrayList<Bullet> bullets, int delta) {
 		// TODO Auto-generated method stub

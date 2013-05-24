@@ -27,22 +27,27 @@ public class PatternReverseCurve implements Pattern{
 	private Point position;
 	Image img;
 	Random r = new Random();
-
+/**
+ * Constructor
+ * @param position
+ */
 	public PatternReverseCurve(Point position){
 		this.position = position;
 		img = GameplayState.images[5];
 		startAngle = r.nextInt(90);
 	}
-
+/**
+ * Updates the pattern continuously, creats the curve based on a delay
+ */
 	public void update(ArrayList<Bullet> bullets, int delta) {
 		time+=delta;
 		bulletTimer+=delta;
 		if(time>delay){
 			if(count<max){
 				if(bulletTimer>bulletDelay){
-					bullets.add(new BulletCurve(position, new Point(0,1).rotate(-startAngle+45), img, 5, -1));
+					bullets.add(new BulletCurve(position, new Point(0,1).rotate(-startAngle+45), img, 5, -1)); // adds bullet
 					count++;
-					bulletTimer = 0;
+					bulletTimer = 0; //resets timer
 				}
 			}else{
 				time=0;
@@ -51,7 +56,9 @@ public class PatternReverseCurve implements Pattern{
 			}
 		}
 	}
-
+/** 
+ * Sets the position
+ */
 	public void setPosition(Point position) {
 		this.position = position;
 	}
