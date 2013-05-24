@@ -5,12 +5,26 @@ import game.Point;
 
 import org.newdawn.slick.Image;
 
+/**
+ * A bullet that constantly follows the player and loses velocity
+ * It is destroyed when velocity < 2
+ * @author prashan
+ *
+ */
+
 public class BulletConstantHoming extends Bullet{
 	
 	private float vf; //velocity final
 	private float accel;
 	private float time;
 
+	/**
+	 * Constructor 
+	 * @param p - initial position
+	 * @param img - sprite
+	 * @param speed - initial speed
+	 * @param accel - acceleration (should be negative)
+	 */
 	public BulletConstantHoming(Point p, Image img, float speed, float accel) {
 		this.position = p;
 		this.img = img;
@@ -21,6 +35,11 @@ public class BulletConstantHoming extends Bullet{
 		this.radius = img.getHeight()/2;
 	}
 	
+	/**
+	 * Increments game logic.
+	 * Algorithm works by physics.
+	 * Recalculates velocity everytime and uses that as speed
+	 */
 	public void increment(int delta){
 		time += (float) delta;
 		float timeSeconds = time/1000;

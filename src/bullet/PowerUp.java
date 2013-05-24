@@ -9,6 +9,12 @@ import java.util.Random;
 
 import org.newdawn.slick.Image;
 
+/**
+ * A bullet that isn't actually a bullet.
+ * It's a powerup
+ * @author prashan
+ *
+ */
 
 public class PowerUp extends Bullet{
 
@@ -20,16 +26,27 @@ public class PowerUp extends Bullet{
 	private Random r = new Random();
 	private int powerUpNum = 0;
 
+	/**
+	 * Constructor
+	 * @param p - position
+	 * @param vector - vector 
+	 * @param speed - speed
+	 */
 	public PowerUp(Point p, Point vector, float speed) {
 		this.position = p;
 		this.speed = speed;
 		this.vector = vector;
-		powerUpNum = r.nextInt(NUMPOWERUPS);
-		this.img = sprites[powerUpNum];
+		powerUpNum = r.nextInt(NUMPOWERUPS);	// randomly choose a powerup
+		this.img = sprites[powerUpNum];		//set the image for the powerup
 		this.radius = img.getHeight()/2;
 	}
 
 
+	/**
+	 * Called once the player collides with the powerup
+	 * Applies the set powerup to the player
+	 * @param p
+	 */
 	public void applyPowerUp(Player p){
 		p.turnOffPowerUps();		//Reset powerups
 		p.currPowerUp = powerUpNum;
