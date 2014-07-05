@@ -9,5 +9,5 @@ There is a quick turn over after a death to the next game to encourage continuou
 
 #DEMO
 
-Video:http://www.youtube.com/watch?v=x6kexNY7eo4
+Video: http://www.youtube.com/watch?v=x6kexNY7eo4
 
